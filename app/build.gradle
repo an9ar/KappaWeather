@@ -42,6 +42,8 @@ android {
 
 //Deps versions
 def compose_navigation = "1.0.0-alpha04"
+def retrofit_version = "2.9.0"
+def okhttp_loging_interceptor = "4.2.1"
 
 dependencies {
 
@@ -59,4 +61,10 @@ dependencies {
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
     implementation "androidx.navigation:navigation-compose:$compose_navigation"
+
+    //Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_loging_interceptor"
 }
