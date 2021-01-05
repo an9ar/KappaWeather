@@ -1,5 +1,6 @@
 package com.an9ar.kappaweather.network
 
+import com.an9ar.kappaweather.data.models.CountryModel
 import com.an9ar.kappaweather.network.retrofit_result.Result
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -15,3 +16,10 @@ data class CountriesListResponse(
     @SerialName("name") val name: String,
     @SerialName("flag") val flagUrl: String
 )
+
+fun CountriesListResponse.toCountryModel(): CountryModel {
+    return CountryModel(
+        name = this.name,
+        flagUrl = this.flagUrl
+    )
+}

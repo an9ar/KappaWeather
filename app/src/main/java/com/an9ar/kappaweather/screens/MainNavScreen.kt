@@ -15,7 +15,6 @@ fun MainNavScreen(
 ) {
     KappaWeatherTheme {
         Surface(color = AppTheme.colors.success) {
-            //mainViewModel.getCountriesList()
             val navHostController = rememberNavController()
             val navItems = listOf(
                 Screens.WeatherScreen,
@@ -32,13 +31,13 @@ fun MainNavScreen(
             ) {
                 NavHost(navController = navHostController, startDestination = Screens.WeatherScreen.routeName) {
                     composable(Screens.WeatherScreen.routeName) {
-                        ColorScreen(color = Color.Red)
+                        ColorScreen(color = AppTheme.colors.background)
                     }
                     composable(Screens.LocationScreen.routeName) {
-                        ColorScreen(color = Color.Magenta)
+                        LocationScreen(mainViewModel = mainViewModel)
                     }
                     composable(Screens.SettingsScreen.routeName) {
-                        ColorScreen(color = Color.Blue)
+                        ColorScreen(color = AppTheme.colors.background)
                     }
                 }
             }

@@ -8,6 +8,8 @@ object AppColors {
     val primary = Color(0xFF3366FF)
     val background = Color(0xFFE7E7E7)
     val backgroundReverse = Color(0xFF141414)
+    val card = Color(0xFFFFFFFF)
+    val cardReverse = Color(0xFF252525)
     val text = Color(0xFF192038)
     val textReverse = Color(0xFFEEEEEE)
     val bottomNavItem = Color(0xFF000000)
@@ -23,6 +25,7 @@ object AppColors {
 interface ColorPalette {
     val primary: Color
     val background: Color
+    val card: Color
     val text: Color
     val bottomNavItem: Color
     val success: Color
@@ -38,6 +41,7 @@ interface ColorPalette {
 fun lightColorPalette(): ColorPalette = object : ColorPalette {
     override val primary: Color = AppColors.primary
     override val background: Color = AppColors.background
+    override val card: Color = AppColors.card
     override val text: Color = AppColors.text
     override val bottomNavItem: Color = AppColors.bottomNavItem
     override val success: Color = AppColors.success
@@ -57,6 +61,7 @@ fun lightColorPalette(): ColorPalette = object : ColorPalette {
 fun darkColorPalette(): ColorPalette = object : ColorPalette {
     override val primary: Color = AppColors.primary
     override val background: Color = AppColors.backgroundReverse
+    override val card: Color = AppColors.cardReverse
     override val text: Color = AppColors.textReverse
     override val bottomNavItem: Color = AppColors.bottomNavItemReverse
     override val success: Color = AppColors.success
