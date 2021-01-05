@@ -6,7 +6,7 @@ import retrofit2.http.GET
 
 interface CountriesApi {
     @GET("rest/v2/all")
-    fun getCountriesList(): Deferred<List<CountriesListResponse>>
+    suspend fun getCountriesList(): List<CountriesListResponse>
 }
 
 data class CountriesListResponse(
