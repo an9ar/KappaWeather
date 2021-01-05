@@ -7,11 +7,15 @@ import androidx.navigation.compose.*
 import com.an9ar.kappaweather.theme.AppTheme
 import com.an9ar.kappaweather.theme.KappaWeatherTheme
 import com.an9ar.kappaweather.ui.KappaWeatherBottomNavigation
+import com.an9ar.kappaweather.viewmodels.MainViewModel
 
 @Composable
-fun MainNavScreen() {
+fun MainNavScreen(
+    mainViewModel: MainViewModel
+) {
     KappaWeatherTheme {
         Surface(color = AppTheme.colors.success) {
+            //mainViewModel.getCountriesList()
             val navHostController = rememberNavController()
             val navItems = listOf(
                 Screens.WeatherScreen,
