@@ -1,7 +1,8 @@
 package com.an9ar.kappaweather.network
 
 import com.an9ar.kappaweather.network.retrofit_result.Result
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import retrofit2.http.GET
 
 interface CountriesApi {
@@ -9,7 +10,8 @@ interface CountriesApi {
     suspend fun getCountriesList(): Result<List<CountriesListResponse>>
 }
 
+@Serializable
 data class CountriesListResponse(
-        @SerializedName("name") val name: String,
-        @SerializedName("flag") val flagUrl: String
+    @SerialName("name") val name: String,
+    @SerialName("flag") val flagUrl: String
 )
