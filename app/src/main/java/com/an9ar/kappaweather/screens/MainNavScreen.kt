@@ -37,7 +37,7 @@ fun MainNavScreen(
                         LocationScreen(mainViewModel = mainViewModel)
                     }
                     composable(Screens.SettingsScreen.routeName) {
-                        ColorScreen(color = AppTheme.colors.background)
+                        SettingsScreen()
                     }
                 }
             }
