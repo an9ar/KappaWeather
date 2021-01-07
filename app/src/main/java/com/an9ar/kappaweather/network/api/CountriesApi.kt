@@ -1,4 +1,4 @@
-package com.an9ar.kappaweather.network
+package com.an9ar.kappaweather.network.api
 
 import com.an9ar.kappaweather.data.models.CountryModel
 import com.an9ar.kappaweather.network.retrofit_result.Result

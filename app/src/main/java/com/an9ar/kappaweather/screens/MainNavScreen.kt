@@ -11,23 +11,23 @@ import com.an9ar.kappaweather.viewmodels.MainViewModel
 
 @Composable
 fun MainNavScreen(
-    mainViewModel: MainViewModel
+        mainViewModel: MainViewModel
 ) {
     KappaWeatherTheme {
         Surface(color = AppTheme.colors.success) {
             val navHostController = rememberNavController()
             val navItems = listOf(
-                Screens.WeatherScreen,
-                Screens.LocationScreen,
-                Screens.SettingsScreen
+                    Screens.WeatherScreen,
+                    Screens.LocationScreen,
+                    Screens.SettingsScreen
             )
             Scaffold(
-                bottomBar = {
-                    KappaWeatherBottomNavigation(
-                        navHostController = navHostController,
-                        navItems = navItems
-                    )
-                }
+                    bottomBar = {
+                        KappaWeatherBottomNavigation(
+                                navHostController = navHostController,
+                                navItems = navItems
+                        )
+                    }
             ) {
                 NavHost(navController = navHostController, startDestination = Screens.WeatherScreen.routeName) {
                     composable(Screens.WeatherScreen.routeName) {

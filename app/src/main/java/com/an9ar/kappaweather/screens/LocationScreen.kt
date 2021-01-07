@@ -15,15 +15,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.an9ar.kappaweather.data.models.CountryModel
-import com.an9ar.kappaweather.network.CountriesListResponse
-import com.an9ar.kappaweather.network.toCountryModel
+import com.an9ar.kappaweather.network.api.CountriesListResponse
+import com.an9ar.kappaweather.network.api.toCountryModel
 import com.an9ar.kappaweather.theme.AppTheme
 import com.an9ar.kappaweather.viewmodels.MainViewModel
 import dev.chrisbanes.accompanist.glide.GlideImage
 
 @Composable
 fun LocationScreen(
-    mainViewModel: MainViewModel
+        mainViewModel: MainViewModel
 ) {
     mainViewModel.getCountriesList()
     val listOfCountries = mainViewModel.countriesList.observeAsState(initial = emptyList())
@@ -32,7 +32,7 @@ fun LocationScreen(
 
 @Composable
 fun LocationScreenContent(
-    items: List<CountriesListResponse>
+        items: List<CountriesListResponse>
 ) {
     LazyColumn {
         items(items) { country ->
@@ -43,38 +43,38 @@ fun LocationScreenContent(
 
 @Composable
 fun CountryListItem(
-    country: CountryModel
+        country: CountryModel
 ) {
     Card(
-        backgroundColor = AppTheme.colors.card,
-        shape = RoundedCornerShape(8.dp),
-        modifier = Modifier
-            .padding(horizontal = 8.dp, vertical = 4.dp)
-            .clickable(onClick = {
+            backgroundColor = AppTheme.colors.card,
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
+                    .clickable(onClick = {
 
-            })
-            .fillMaxWidth()
+                    })
+                    .fillMaxWidth()
     ) {
         Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
             GlideImage(
-                data = country.flagUrl,
-                fadeIn = true,
-                contentScale = ContentScale.FillBounds,
-                loading = {
-                    Box(Modifier.fillMaxSize()) {
-                        CircularProgressIndicator(
-                            color = AppTheme.colors.text,
-                            modifier = Modifier.align(Alignment.Center)
-                        )
-                    }
-                },
-                modifier = Modifier.height(90.dp).width(120.dp)
+                    data = country.flagUrl,
+                    fadeIn = true,
+                    contentScale = ContentScale.FillBounds,
+                    loading = {
+                        Box(Modifier.fillMaxSize()) {
+                            CircularProgressIndicator(
+                                    color = AppTheme.colors.text,
+                                    modifier = Modifier.align(Alignment.Center)
+                            )
+                        }
+                    },
+                    modifier = Modifier.height(90.dp).width(120.dp)
             )
             Text(
-                text = country.name,
-                color = AppTheme.colors.text,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxSize()
+                    text = country.name,
+                    color = AppTheme.colors.text,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxSize()
             )
         }
     }

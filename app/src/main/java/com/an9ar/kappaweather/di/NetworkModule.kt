@@ -1,7 +1,7 @@
 package com.an9ar.kappaweather.di
 
 import com.an9ar.kappaweather.BuildConfig
-import com.an9ar.kappaweather.network.CountriesApi
+import com.an9ar.kappaweather.network.api.CountriesApi
 import com.an9ar.kappaweather.network.retrofit_result.ResultAdapterFactory
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module

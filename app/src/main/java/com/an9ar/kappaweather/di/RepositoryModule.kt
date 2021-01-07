@@ -1,6 +1,6 @@
 package com.an9ar.kappaweather.di
 
-import com.an9ar.kappaweather.data.WeatherRepositoryImpl
+import com.an9ar.kappaweather.data.repository.WeatherRepositoryImpl
 import com.an9ar.kappaweather.domain.WeatherRepository
 import dagger.Binds
 import dagger.Module

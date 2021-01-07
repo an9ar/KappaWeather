@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.an9ar.kappaweather.domain.WeatherRepository
 import com.an9ar.kappaweather.log
-import com.an9ar.kappaweather.network.CountriesListResponse
+import com.an9ar.kappaweather.network.api.CountriesListResponse
 import com.an9ar.kappaweather.network.retrofit_result.*
 import kotlinx.coroutines.runBlocking
 
