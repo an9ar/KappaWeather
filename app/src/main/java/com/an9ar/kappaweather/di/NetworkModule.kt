@@ -1,6 +1,7 @@
 package com.an9ar.kappaweather.di
 
 import com.an9ar.kappaweather.BuildConfig
+import com.an9ar.kappaweather.network.api.CitiesApi
 import com.an9ar.kappaweather.network.api.CountriesApi
 import com.an9ar.kappaweather.network.retrofit_result.ResultAdapterFactory
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -41,5 +42,29 @@ class NetworkModule {
             .client(httpClient)
             .build()
             .create(CountriesApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCitiesApi(): CitiesApi {
+        val httpClient = OkHttpClient.Builder()
+            .apply {
+                if (BuildConfig.DEBUG) {
+                    addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                }
+            }
+            .build()
+
+        val json = Json {
+            ignoreUnknownKeys = true
+        }
+
+        return Retrofit.Builder()
+            .baseUrl(BuildConfig.GITHUB_STORAGE_URL)
+            .addCallAdapterFactory(ResultAdapterFactory())
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+            .client(httpClient)
+            .build()
+            .create(CitiesApi::class.java)
     }
 }
