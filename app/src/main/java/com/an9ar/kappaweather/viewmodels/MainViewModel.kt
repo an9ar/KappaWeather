@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class MainViewModel @ViewModelInject constructor(
-    //private val weatherRepository: WeatherRepository
+    private val weatherRepository: WeatherRepository
 ) : ViewModel() {
 
     private val _countriesList: MutableLiveData<List<CountriesListResponse>> = MutableLiveData()
@@ -38,16 +38,18 @@ class MainViewModel @ViewModelInject constructor(
         )*/
     }
 
-    fun getCitiesList() = viewModelScope.launch {
-        /*val citiesList: Result<List<CityDTO>> = weatherRepository.getCitiesList()
+    fun getCitiesList(onFinish: () -> Unit) = viewModelScope.launch {
+        val citiesList: Result<List<CityDTO>> = weatherRepository.getCitiesList()
         citiesList.onResult(
             onSuccess = {
                 log("LIST OF CITIES - ${it.asSuccess().value}")
                 _citiesList.value = it.asSuccess().value.sortedBy { city -> city.country }.take(5)
+                onFinish()
             },
             onFailure = {
                 log("LIST OF CITIES ERROR - ${it.asFailure()}")
+                onFinish()
             }
-        )*/
+        )
     }
 }

@@ -20,6 +20,14 @@ fun SplashScreen(
     mainViewModel: MainViewModel,
     onDataReceivingFinish: () -> Unit
 ) {
+    mainViewModel.getCitiesList (
+        onFinish = { onDataReceivingFinish() }
+    )
+    SplashScreenContent()
+}
+
+@Composable
+fun SplashScreenContent() {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize().background(AppTheme.colors.background)

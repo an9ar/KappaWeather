@@ -22,14 +22,13 @@ import com.an9ar.kappaweather.viewmodels.MainViewModel
 fun LocationScreen(
         mainViewModel: MainViewModel
 ) {
-    mainViewModel.getCitiesList()
-    val listOfCities = mainViewModel.citiesList.observeAsState(initial = emptyList())
-    LocationScreenContent(items = listOfCities.value)
+
+    //LocationScreenContent(items = listOfCities.value)
 }
 
 @Composable
 fun LocationScreenContent(
-        items: List<CityDTO>
+        items: List<CityDTO> = emptyList()
 ) {
     LazyColumn {
         items(items) { city ->
