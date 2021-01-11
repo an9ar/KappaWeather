@@ -1,5 +1,6 @@
 package com.an9ar.kappaweather.network.dto
 
+import com.an9ar.kappaweather.data.db.entity.CityEntity
 import com.an9ar.kappaweather.data.models.CityModel
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -14,6 +15,16 @@ data class CityDTO (
 
 fun CityDTO.toCityModel(): CityModel {
     return CityModel(
+        city = this.city,
+        lat = this.lat,
+        lng = this.lng,
+        country = this.country
+    )
+}
+
+fun CityDTO.toCityEntity(): CityEntity {
+    return CityEntity(
+        id = null,
         city = this.city,
         lat = this.lat,
         lng = this.lng,
