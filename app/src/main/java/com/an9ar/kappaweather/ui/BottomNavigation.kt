@@ -42,7 +42,7 @@ fun KappaWeatherBottomNavigation(
         val currentRoute = navBackStackEntry?.arguments?.getString(KEY_ROUTE)
         navItems.forEach { screen ->
             BottomNavigationItem(
-                icon = { Icon(imageVector = screen.screenIcon) },
+                icon = { screen.screenIcon?.let { Icon(imageVector = it) } },
                 selectedContentColor = AppTheme.colors.bottomNavItem,
                 label = { Text(text = screen.screenName) },
                 selected = currentRoute == screen.routeName,
