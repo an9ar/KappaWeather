@@ -18,7 +18,7 @@ fun MainNavScreen(
             val navHostController = rememberNavController()
             val navItems = listOf(
                     Screens.WeatherScreen,
-                    Screens.LocationScreen,
+                    Screens.CountryChooseScreen,
                     Screens.SettingsScreen
             )
             Scaffold(
@@ -33,8 +33,8 @@ fun MainNavScreen(
                     composable(Screens.WeatherScreen.routeName) {
                         ColorScreen(color = AppTheme.colors.background)
                     }
-                    composable(Screens.LocationScreen.routeName) {
-                        LocationScreen(mainViewModel = mainViewModel)
+                    composable(Screens.CountryChooseScreen.routeName) {
+                        CountryChooseScreen(mainViewModel = mainViewModel)
                     }
                     composable(Screens.SettingsScreen.routeName) {
                         SettingsScreen()

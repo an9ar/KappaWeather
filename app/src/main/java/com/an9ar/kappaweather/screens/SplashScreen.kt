@@ -25,19 +25,13 @@ fun SplashScreen(
 ) {
     val listOfCities = mainViewModel.splashStatus.observeAsState()
     when (listOfCities.value) {
-        Resource.Status.COMPLETED -> { log("SPLASH - COMPLETED") }
+        Resource.Status.COMPLETED -> {
+            log("SPLASH - COMPLETED")
+            onDataReceivingFinish()
+        }
         Resource.Status.LOADING -> { log("SPLASH - LOADING") }
         Resource.Status.ERROR -> { log("SPLASH - ERROR") }
     }
-    /*CoroutineScope(Dispatchers.IO).launch {
-        mainViewModel.cities.collect { result ->
-            when (result) {
-                is Result.Success -> onDataReceivingFinish()
-                is Result.Failure<*> -> onDataReceivingFinish()
-            }
-        }
-    }*/
-
     SplashScreenContent()
 }
 

@@ -14,9 +14,9 @@ class MainViewModel @ViewModelInject constructor(
     private val weatherRepository: WeatherRepository
 ) : ViewModel() {
 
-    private val _countriesList: MutableLiveData<List<CountriesListResponse>> = MutableLiveData()
+    /*private val _countriesList: MutableLiveData<List<CountriesListResponse>> = MutableLiveData()
     val countriesList: LiveData<List<CountriesListResponse>>
-        get() = _countriesList
+        get() = _countriesList*/
 
     private val _citiesList: MutableLiveData<List<CityDTO>> = MutableLiveData()
     val citiesList: LiveData<List<CityDTO>>
@@ -51,5 +51,5 @@ class MainViewModel @ViewModelInject constructor(
     }*/
 
     val splashStatus = weatherRepository.getCountriesList()
-    val citiesList2 = weatherRepository.updateCitiesList()
+    val countriesList = weatherRepository.updateCountriesList()
 }

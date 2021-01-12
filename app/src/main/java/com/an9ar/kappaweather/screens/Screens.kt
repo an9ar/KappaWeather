@@ -11,6 +11,6 @@ import androidx.compose.ui.unit.dp
 sealed class Screens(val routeName: String, val screenName: String = "", val screenIcon: ImageVector? = null) {
     object SplashScreen : Screens(routeName = "SplashScreen")
     object WeatherScreen : Screens(routeName = "WeatherScreen", "Weather", Icons.Outlined.Refresh)
-    object LocationScreen : Screens(routeName = "LocationScreen", "Location", Icons.Outlined.LocationOn)
+    object CountryChooseScreen : Screens(routeName = "CountryChooseScreen", "CountryChoose", Icons.Outlined.LocationOn)
     object SettingsScreen : Screens(routeName = "SettingsScreen", "Settings", Icons.Outlined.Settings)
 }

@@ -17,9 +17,9 @@ interface CitiesApi {
         "X-Parse-Application-Id: mOITO6uEQyMcX9uXIUZ5gbjcjaAlPKcl4nfuTD46",
         "X-Parse-REST-API-Key: b1tqOKQJ9gTyiJsbQYdj5yuXRvLyuaxM4MdgAPpD"
     )
-    @GET("Continentscountriescities_Country")
+    @GET("Continentscountriescities_Country?order=name")
     suspend fun getCountriesList(
-        @Query("limit") limit: Int = 10
+        @Query("limit") limit: Int = 250
     ): Response<CountriesListResponse>
 }
 
