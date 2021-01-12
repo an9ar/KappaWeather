@@ -23,6 +23,15 @@ fun SplashScreen(
     mainViewModel.getCitiesList (
         onFinish = { onDataReceivingFinish() }
     )
+    /*CoroutineScope(Dispatchers.IO).launch {
+        mainViewModel.cities.collect { result ->
+            when (result) {
+                is Result.Success -> onDataReceivingFinish()
+                is Result.Failure<*> -> onDataReceivingFinish()
+            }
+        }
+    }*/
+
     SplashScreenContent()
 }
 

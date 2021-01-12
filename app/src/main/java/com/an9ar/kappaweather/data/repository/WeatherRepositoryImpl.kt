@@ -6,8 +6,10 @@ import com.an9ar.kappaweather.network.api.CitiesApi
 import com.an9ar.kappaweather.network.api.CountriesApi
 import com.an9ar.kappaweather.network.dto.CityDTO
 import com.an9ar.kappaweather.network.dto.CountriesListResponse
-import com.an9ar.kappaweather.network.dto.toCityEntity
+import com.an9ar.kappaweather.network.dto.toCityModel
 import com.an9ar.kappaweather.network.retrofit_result.Result
+import com.an9ar.kappaweather.network.utils.getResult
+import com.an9ar.kappaweather.network.utils.performGetOperation
 import javax.inject.Inject
 
 class WeatherRepositoryImpl @Inject constructor(
@@ -20,17 +22,15 @@ class WeatherRepositoryImpl @Inject constructor(
         return countriesApi.getCountriesList()
     }
 
-    override suspend fun getCitiesList(): Result<List<CityDTO>> {
-        return citiesApi.getCitiesList()
-    }
-
-    private fun refreshCitiesList() {
-        
-    }
+    override fun getCitiesList() = performGetOperation(
+            databaseQuery = { citiesDao.getCitiesList() },
+            networkCall = { getResult { citiesApi.getCitiesList() } },
+            saveCallResult = { citiesDao.insertAll(it.map { it.toCityModel() }) },
+    )
 
     override suspend fun setCitiesList(citiesList: List<CityDTO>) {
         citiesList.forEach {
-            citiesDao.insert(it.toCityEntity())
+            citiesDao.insert(it.toCityModel())
         }
     }
 }

@@ -1,27 +1,28 @@
 package com.an9ar.kappaweather.data.db.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.an9ar.kappaweather.data.db.entity.CityEntity
+import com.an9ar.kappaweather.data.models.CityModel
 
 @Dao
 interface CitiesDao {
 
-    @Query("SELECT * FROM cityentity")
-    suspend fun getDepartmentsList(): List<CityEntity>
+    @Query("SELECT * FROM citymodel")
+    fun getCitiesList(): LiveData<List<CityModel>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(city: CityEntity)
+    suspend fun insert(city: CityModel)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(cityList: List<CityEntity>)
+    suspend fun insertAll(cityList: List<CityModel>)
 
     @Update
-    suspend fun update(city: CityEntity)
+    suspend fun update(city: CityModel)
 
     @Delete
-    suspend fun delete(city: CityEntity)
+    suspend fun delete(city: CityModel)
 
-    @Query("DELETE FROM cityentity")
+    @Query("DELETE FROM citymodel")
     suspend fun clearTable()
 
 }

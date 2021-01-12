@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            log("CITIES - ${mainViewModel.citiesList.value}")
             MainNavScreen(
                 mainViewModel = mainViewModel
             )

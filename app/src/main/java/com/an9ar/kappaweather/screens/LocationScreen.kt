@@ -13,8 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.an9ar.kappaweather.data.models.CityModel
+import com.an9ar.kappaweather.log
 import com.an9ar.kappaweather.network.dto.CityDTO
 import com.an9ar.kappaweather.network.dto.toCityModel
+import com.an9ar.kappaweather.network.utils.Resource
 import com.an9ar.kappaweather.theme.AppTheme
 import com.an9ar.kappaweather.viewmodels.MainViewModel
 
@@ -23,12 +25,18 @@ fun LocationScreen(
         mainViewModel: MainViewModel
 ) {
 
-    //LocationScreenContent(items = listOfCities.value)
+    val listOfCities = mainViewModel.citiesList2.observeAsState()
+    when (listOfCities.value?.status) {
+        Resource.Status.SUCCESS -> { log("SUCCESS") }
+        Resource.Status.LOADING -> { log("LOADING") }
+        Resource.Status.ERROR -> { log("ERROR") }
+    }
+    //listOfCities.value?.let { LocationScreenContent(items = it) }
 }
 
 @Composable
 fun LocationScreenContent(
-        items: List<CityDTO> = emptyList()
+        items: List<CityDTO>
 ) {
     LazyColumn {
         items(items) { city ->
