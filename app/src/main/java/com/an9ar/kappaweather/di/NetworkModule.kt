@@ -31,14 +31,6 @@ class NetworkModule {
             .apply {
                 if (BuildConfig.DEBUG) {
                     addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-                    addInterceptor { chain ->
-                        val request = chain.request().newBuilder()
-                            .addHeader("X-Parse-Application-Id","mOITO6uEQyMcX9uXIUZ5gbjcjaAlPKcl4nfuTD46")
-                            .addHeader("X-Parse-REST-API-Key","b1tqOKQJ9gTyiJsbQYdj5yuXRvLyuaxM4MdgAPpD")
-                            .method(chain.request().method, chain.request().body)
-                            .build()
-                        return@addInterceptor chain.proceed(request)
-                    }
                 }
             }
             .build()
