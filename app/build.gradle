@@ -23,8 +23,8 @@ android {
 
     buildTypes {
         debug{
-            buildConfigField "String", "COUNTRIES_SERVER_URL", "\"https://restcountries.eu/\""
-            buildConfigField "String", "GITHUB_STORAGE_URL", "\"https://raw.githubusercontent.com/an9ar/an9ar.github.io/master/\""
+            buildConfigField "String", "COUNTRIES_SERVER_URL", "\"https://parseapi.back4app.com/classes/\""
+            buildConfigField "String", "GITHUB_STORAGE_URL", "\"https://parseapi.back4app.com/classes/\""
         }
         release {
             minifyEnabled false

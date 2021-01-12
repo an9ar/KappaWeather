@@ -6,12 +6,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.preferredSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.an9ar.kappaweather.R
+import com.an9ar.kappaweather.log
+import com.an9ar.kappaweather.network.utils.Resource
 import com.an9ar.kappaweather.theme.AppTheme
 import com.an9ar.kappaweather.viewmodels.MainViewModel
 
@@ -20,9 +23,12 @@ fun SplashScreen(
     mainViewModel: MainViewModel,
     onDataReceivingFinish: () -> Unit
 ) {
-    mainViewModel.getCitiesList (
-        onFinish = { onDataReceivingFinish() }
-    )
+    val listOfCities = mainViewModel.splashStatus.observeAsState()
+    when (listOfCities.value) {
+        Resource.Status.COMPLETED -> { log("SPLASH - COMPLETED") }
+        Resource.Status.LOADING -> { log("SPLASH - LOADING") }
+        Resource.Status.ERROR -> { log("SPLASH - ERROR") }
+    }
     /*CoroutineScope(Dispatchers.IO).launch {
         mainViewModel.cities.collect { result ->
             when (result) {

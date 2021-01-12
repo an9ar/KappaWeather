@@ -3,9 +3,26 @@ package com.an9ar.kappaweather.network.utils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
+import com.an9ar.kappaweather.network.retrofit_result.Result
 import kotlinx.coroutines.Dispatchers
 
-fun <T, A> performGetOperation(
+fun <T> performGetOperation(
+    networkCall: suspend () -> Resource<T>,
+    saveCallResult: suspend (T) -> Unit
+): LiveData<Resource.Status> =
+    liveData(Dispatchers.IO) {
+        emit(Resource.Status.LOADING)
+        val responseStatus = networkCall.invoke()
+
+        if (responseStatus.status == Resource.Status.SUCCESS) {
+            saveCallResult(responseStatus.data!!)
+            emit(Resource.Status.COMPLETED)
+        } else if (responseStatus.status == Resource.Status.ERROR) {
+            emit(Resource.Status.ERROR)
+        }
+    }
+
+fun <T, A> performUpdateOperation(
     databaseQuery: () -> LiveData<T>,
     networkCall: suspend () -> Resource<A>,
     saveCallResult: suspend (A) -> Unit
@@ -18,13 +35,9 @@ fun <T, A> performGetOperation(
         val responseStatus = networkCall.invoke()
         if (responseStatus.status == Resource.Status.SUCCESS) {
             saveCallResult(responseStatus.data!!)
-
         } else if (responseStatus.status == Resource.Status.ERROR) {
             emit(Resource.error(responseStatus.message!!))
             emitSource(source)
         }
     }
 
-fun toResource () {
-
-}

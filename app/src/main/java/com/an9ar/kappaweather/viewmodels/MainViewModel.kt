@@ -1,10 +1,7 @@
 package com.an9ar.kappaweather.viewmodels
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.an9ar.kappaweather.domain.WeatherRepository
 import com.an9ar.kappaweather.log
 import com.an9ar.kappaweather.network.dto.CityDTO
@@ -14,7 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class MainViewModel @ViewModelInject constructor(
-    weatherRepository: WeatherRepository
+    private val weatherRepository: WeatherRepository
 ) : ViewModel() {
 
     private val _countriesList: MutableLiveData<List<CountriesListResponse>> = MutableLiveData()
@@ -53,5 +50,6 @@ class MainViewModel @ViewModelInject constructor(
         )
     }*/
 
-    val citiesList2 = weatherRepository.getCitiesList()
+    val splashStatus = weatherRepository.getCountriesList()
+    val citiesList2 = weatherRepository.updateCitiesList()
 }

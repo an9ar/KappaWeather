@@ -3,12 +3,15 @@ package com.an9ar.kappaweather.data.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.an9ar.kappaweather.data.db.dao.CitiesDao
+import com.an9ar.kappaweather.data.db.dao.CountriesDao
 import com.an9ar.kappaweather.data.models.CityModel
+import com.an9ar.kappaweather.data.models.CountryModel
 
 
 @Database(
     entities = [
-        CityModel::class
+        CityModel::class,
+        CountryModel::class
     ],
     version = 8
 )
@@ -19,5 +22,6 @@ abstract class AppDatabase : RoomDatabase() {
     }
 
     abstract fun getCitiesDao(): CitiesDao
+    abstract fun getCountriesDao(): CountriesDao
 
 }

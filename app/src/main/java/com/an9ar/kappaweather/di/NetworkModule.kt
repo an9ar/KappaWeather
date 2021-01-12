@@ -10,10 +10,14 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import kotlinx.serialization.json.Json
+import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.Response
+import okhttp3.internal.addHeaderLenient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @InstallIn(ApplicationComponent::class)
@@ -27,6 +31,14 @@ class NetworkModule {
             .apply {
                 if (BuildConfig.DEBUG) {
                     addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                    addInterceptor { chain ->
+                        val request = chain.request().newBuilder()
+                            .addHeader("X-Parse-Application-Id","mOITO6uEQyMcX9uXIUZ5gbjcjaAlPKcl4nfuTD46")
+                            .addHeader("X-Parse-REST-API-Key","b1tqOKQJ9gTyiJsbQYdj5yuXRvLyuaxM4MdgAPpD")
+                            .method(chain.request().method, chain.request().body)
+                            .build()
+                        return@addInterceptor chain.proceed(request)
+                    }
                 }
             }
             .build()
@@ -62,7 +74,7 @@ class NetworkModule {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.GITHUB_STORAGE_URL)
             .addCallAdapterFactory(ResultAdapterFactory())
-            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+            .addConverterFactory(GsonConverterFactory.create())
             .client(httpClient)
             .build()
             .create(CitiesApi::class.java)
