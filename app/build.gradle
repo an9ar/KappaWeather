@@ -25,6 +25,8 @@ android {
         debug{
             buildConfigField "String", "COUNTRIES_SERVER_URL", "\"https://parseapi.back4app.com/classes/\""
             buildConfigField "String", "GITHUB_STORAGE_URL", "\"https://parseapi.back4app.com/classes/\""
+            buildConfigField "String", "X_Parse_Application_Id", "\"mOITO6uEQyMcX9uXIUZ5gbjcjaAlPKcl4nfuTD46\""
+            buildConfigField "String", "X_Parse_REST_API_Key", "\"b1tqOKQJ9gTyiJsbQYdj5yuXRvLyuaxM4MdgAPpD\""
         }
         release {
             minifyEnabled false
@@ -75,7 +77,10 @@ dependencies {
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
     implementation "androidx.navigation:navigation-compose:$compose_navigation"
+
+    //Accompanist
     implementation "dev.chrisbanes.accompanist:accompanist-glide:$accompanist_version"
+    implementation "dev.chrisbanes.accompanist:accompanist-insets:$accompanist_version"
 
     //Network
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"

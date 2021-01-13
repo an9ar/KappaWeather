@@ -5,8 +5,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.platform.setContent
 import com.an9ar.kappaweather.screens.MainNavScreen
+import com.an9ar.kappaweather.theme.KappaWeatherTheme
 import com.an9ar.kappaweather.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -16,10 +18,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            log("CITIES - ${mainViewModel.citiesList.value}")
-            MainNavScreen(
-                mainViewModel = mainViewModel
-            )
+            KappaWeatherTheme{
+                ProvideWindowInsets {
+                    MainNavScreen(mainViewModel = mainViewModel)
+                }
+            }
         }
     }
 }

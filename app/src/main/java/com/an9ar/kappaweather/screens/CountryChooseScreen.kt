@@ -20,6 +20,9 @@ import com.an9ar.kappaweather.log
 import com.an9ar.kappaweather.network.utils.Resource
 import com.an9ar.kappaweather.theme.AppTheme
 import com.an9ar.kappaweather.viewmodels.MainViewModel
+import dev.chrisbanes.accompanist.insets.AmbientWindowInsets
+import dev.chrisbanes.accompanist.insets.add
+import dev.chrisbanes.accompanist.insets.toPaddingValues
 
 @Composable
 fun CountryChooseScreen(
@@ -62,7 +65,11 @@ fun CountryChooseScreenContent(
 fun CountryChooseSuccessScreen(
     items: List<CountryModel>
 ) {
-    LazyColumn {
+    LazyColumn(
+        contentPadding = AmbientWindowInsets.current.systemBars
+            .toPaddingValues(bottom = false)
+            .add(bottom = AppTheme.sizes.bottomNavigationHeight)
+    ) {
         items(items) { country ->
             CountryListItem(country = country)
         }

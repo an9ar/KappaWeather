@@ -1,5 +1,6 @@
 package com.an9ar.kappaweather.network.api
 
+import com.an9ar.kappaweather.BuildConfig
 import com.an9ar.kappaweather.network.dto.CityDTO
 import com.an9ar.kappaweather.network.dto.CountryDTO
 import retrofit2.Response
@@ -14,8 +15,8 @@ interface CitiesApi {
     ): Response<CitiesListResponse>
 
     @Headers(
-        "X-Parse-Application-Id: mOITO6uEQyMcX9uXIUZ5gbjcjaAlPKcl4nfuTD46",
-        "X-Parse-REST-API-Key: b1tqOKQJ9gTyiJsbQYdj5yuXRvLyuaxM4MdgAPpD"
+        "X-Parse-Application-Id: ${BuildConfig.X_Parse_Application_Id}",
+        "X-Parse-REST-API-Key: ${BuildConfig.X_Parse_REST_API_Key}"
     )
     @GET("Continentscountriescities_Country?order=name")
     suspend fun getCountriesList(

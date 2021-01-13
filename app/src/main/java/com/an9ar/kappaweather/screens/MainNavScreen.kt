@@ -13,32 +13,30 @@ import com.an9ar.kappaweather.viewmodels.MainViewModel
 fun MainNavScreen(
         mainViewModel: MainViewModel
 ) {
-    KappaWeatherTheme {
-        Surface(color = AppTheme.colors.success) {
-            val navHostController = rememberNavController()
-            val navItems = listOf(
-                    Screens.WeatherScreen,
-                    Screens.CountryChooseScreen,
-                    Screens.SettingsScreen
-            )
-            Scaffold(
-                    bottomBar = {
-                        KappaWeatherBottomNavigation(
-                                navHostController = navHostController,
-                                navItems = navItems
-                        )
-                    }
-            ) {
-                NavHost(navController = navHostController, startDestination = Screens.WeatherScreen.routeName) {
-                    composable(Screens.WeatherScreen.routeName) {
-                        ColorScreen(color = AppTheme.colors.background)
-                    }
-                    composable(Screens.CountryChooseScreen.routeName) {
-                        CountryChooseScreen(mainViewModel = mainViewModel)
-                    }
-                    composable(Screens.SettingsScreen.routeName) {
-                        SettingsScreen()
-                    }
+    Surface(color = AppTheme.colors.success) {
+        val navHostController = rememberNavController()
+        val navItems = listOf(
+            Screens.WeatherScreen,
+            Screens.CountryChooseScreen,
+            Screens.SettingsScreen
+        )
+        Scaffold(
+            bottomBar = {
+                KappaWeatherBottomNavigation(
+                    navHostController = navHostController,
+                    navItems = navItems
+                )
+            }
+        ) {
+            NavHost(navController = navHostController, startDestination = Screens.WeatherScreen.routeName) {
+                composable(Screens.WeatherScreen.routeName) {
+                    ColorScreen(color = AppTheme.colors.background)
+                }
+                composable(Screens.CountryChooseScreen.routeName) {
+                    CountryChooseScreen(mainViewModel = mainViewModel)
+                }
+                composable(Screens.SettingsScreen.routeName) {
+                    SettingsScreen()
                 }
             }
         }
