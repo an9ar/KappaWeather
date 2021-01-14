@@ -30,7 +30,7 @@ fun MainNavScreen(
         ) {
             NavHost(navController = navHostController, startDestination = Screens.WeatherScreen.routeName) {
                 composable(Screens.WeatherScreen.routeName) {
-                    ColorScreen(color = AppTheme.colors.background)
+                    TestScreen(color = AppTheme.colors.background)
                 }
                 composable(Screens.CountryChooseScreen.routeName) {
                     CountryChooseScreen(mainViewModel = mainViewModel)

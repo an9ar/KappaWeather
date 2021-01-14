@@ -9,6 +9,7 @@ import com.an9ar.kappaweather.screens.CreditsScreen
 import com.an9ar.kappaweather.theme.KappaWeatherTheme
 import com.an9ar.kappaweather.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
 
 @AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
@@ -28,7 +29,9 @@ class SplashActivity : AppCompatActivity() {
                         this.finish()
                     }
                 )*/
-                CreditsScreen()
+                ProvideWindowInsets {
+                    CreditsScreen()
+                }
             }
         }
     }
