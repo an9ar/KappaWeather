@@ -50,17 +50,19 @@ data class AppTypography internal constructor(
                 fontSize = 20.sp,
                 letterSpacing = 0.sp
         ),
-        val subtitle1: TextStyle = TextStyle(
-                fontFamily = fontFamily(font(R.font.nunito_light)),
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 16.sp,
-                letterSpacing = 0.sp
-        ),
-        val subtitle2: TextStyle = TextStyle(
+        val listHeader: TextStyle = TextStyle(
                 fontFamily = fontFamily(font(R.font.nunito_light)),
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
-                letterSpacing = 0.1.sp
+                letterSpacing = 0.sp,
+                lineHeight = 24.sp
+        ),
+        val listItem: TextStyle = TextStyle(
+                fontFamily = fontFamily(font(R.font.nunito_light)),
+                fontWeight = FontWeight.Medium,
+                fontSize = 16.sp,
+                letterSpacing = 0.sp,
+                lineHeight = 24.sp
         ),
         val body1: TextStyle = TextStyle(
                 fontFamily = fontFamily(font(R.font.nunito_light)),

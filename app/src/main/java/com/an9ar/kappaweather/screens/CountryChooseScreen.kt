@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
@@ -33,14 +35,49 @@ fun CountryChooseScreen(
             message = ""
         )
     )
-    CountryChooseScreenContent(listOfCountries)
+    Scaffold(
+        topBar = {
+            TopAppBar(backgroundColor = AppTheme.colors.toolbar) {
+                ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+                    val (screenTitle, backButton) = createRefs()
+                    Text(
+                        text = "Choose a country",
+                        style = AppTheme.typography.h6,
+                        color = AppTheme.colors.text,
+                        modifier = Modifier.constrainAs(screenTitle) {
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
+                            start.linkTo(parent.start)
+                            end.linkTo(parent.end)
+                        }
+                    )
+                    IconButton(
+                        onClick = { /*navHostController.navigateUp()*/ },
+                        modifier = Modifier
+                            .constrainAs(backButton) {
+                                top.linkTo(parent.top)
+                                bottom.linkTo(parent.bottom)
+                                start.linkTo(parent.start)
+                            }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            tint = AppTheme.colors.uiSurface
+                        )
+                    }
+                }
+            }
+        }
+    ) {
+        CountryChooseScreenContent(listOfCountries)
+    }
 }
 
 @Composable
 fun CountryChooseScreenContent(
     listOfCountries: State<Resource<List<CountryModel>>>
 ) {
-    Surface(color = AppTheme.colors.warning) {
+    Surface(color = AppTheme.colors.background) {
         when (listOfCountries.value.status) {
             Resource.Status.SUCCESS -> {
                 listOfCountries.value.data?.let {
@@ -116,6 +153,7 @@ fun CountryListItemHeader(
                     text = title,
                     color = AppTheme.colors.text,
                     textAlign = TextAlign.Center,
+                    style = AppTheme.typography.listHeader,
                     modifier = Modifier.padding(16.dp)
                 )
             }
@@ -146,6 +184,7 @@ fun CountryListItem(
                 text = title,
                 color = AppTheme.colors.text,
                 textAlign = TextAlign.Center,
+                style = AppTheme.typography.listItem,
                 modifier = Modifier.fillMaxSize().padding(16.dp)
             )
         }
