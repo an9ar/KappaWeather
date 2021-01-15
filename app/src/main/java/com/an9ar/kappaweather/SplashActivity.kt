@@ -5,11 +5,10 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.platform.setContent
-import com.an9ar.kappaweather.screens.CreditsScreen
+import com.an9ar.kappaweather.screens.SplashScreen
 import com.an9ar.kappaweather.theme.KappaWeatherTheme
 import com.an9ar.kappaweather.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
 
 @AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
@@ -20,7 +19,7 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             KappaWeatherTheme {
-                /*SplashScreen(
+                SplashScreen(
                     mainViewModel = mainViewModel,
                     onDataReceivingFinish = {
                         val intent = Intent(this@SplashActivity, MainActivity::class.java)
@@ -28,10 +27,7 @@ class SplashActivity : AppCompatActivity() {
                         startActivity(intent)
                         this.finish()
                     }
-                )*/
-                ProvideWindowInsets {
-                    CreditsScreen()
-                }
+                )
             }
         }
     }
