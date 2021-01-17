@@ -6,7 +6,7 @@ import com.an9ar.kappaweather.data.models.CountryModel
 import com.an9ar.kappaweather.network.dto.CityDTO
 import com.an9ar.kappaweather.network.utils.Resource
 
-interface WeatherRepository {
+interface LocationRepository {
     fun getCountriesList(): LiveData<Resource.Status>
     fun updateCountriesList(): LiveData<Resource<List<CountryModel>>>
 

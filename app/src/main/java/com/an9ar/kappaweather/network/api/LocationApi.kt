@@ -8,10 +8,14 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query
 
-interface CitiesApi {
+interface LocationApi {
+    @Headers(
+        "X-Parse-Application-Id: ${BuildConfig.X_Parse_Application_Id}",
+        "X-Parse-REST-API-Key: ${BuildConfig.X_Parse_REST_API_Key}"
+    )
     @GET("Continentscountriescities_City")
     suspend fun getCitiesList(
-        @Query("limit") limit: Int = 10
+        /*@Query("limit") limit: Int = 10*/
     ): Response<CitiesListResponse>
 
     @Headers(
