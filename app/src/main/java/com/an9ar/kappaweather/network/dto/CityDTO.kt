@@ -6,18 +6,32 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CityDTO (
-    @SerialName("city") val city: String,
-    @SerialName("lat") val lat: Double,
-    @SerialName("lng") val lng: Double,
-    @SerialName("country") val country: String
+    @SerialName("objectId") val objectId: String,
+    @SerialName("location") val location: CityLocationDTO,
+    @SerialName("country") val country: CityCountryDTO,
+    @SerialName("name") val name: String
+)
+
+@Serializable
+data class CityCountryDTO (
+    @SerialName("__type") val type: String,
+    @SerialName("className") val className: String,
+    @SerialName("objectId") val objectId: String
+)
+
+@Serializable
+data class CityLocationDTO (
+    @SerialName("__type") val type: String,
+    @SerialName("latitude") val latitude: Double,
+    @SerialName("longitude") val longitude: Double
 )
 
 fun CityDTO.toCityModel(): CityModel {
     return CityModel(
         id = null,
-        city = this.city,
-        lat = this.lat,
-        lng = this.lng,
-        country = this.country
+        objectId = this.objectId,
+        lat = this.location.latitude,
+        lng = this.location.longitude,
+        name = this.name
     )
 }

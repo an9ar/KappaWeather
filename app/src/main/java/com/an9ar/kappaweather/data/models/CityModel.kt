@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey
 data class CityModel (
     @PrimaryKey(autoGenerate = true)
     val id: Long?,
-    val city: String,
+    val objectId: String,
     val lat: Double,
     val lng: Double,
-    val country: String
+    val name: String
 )
