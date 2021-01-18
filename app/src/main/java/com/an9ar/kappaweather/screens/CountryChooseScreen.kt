@@ -15,6 +15,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.navigate
 import com.an9ar.kappaweather.data.models.CountryModel
 import com.an9ar.kappaweather.log
 import com.an9ar.kappaweather.network.utils.Resource
@@ -26,7 +28,8 @@ import dev.chrisbanes.accompanist.insets.toPaddingValues
 
 @Composable
 fun CountryChooseScreen(
-    mainViewModel: MainViewModel
+    mainViewModel: MainViewModel,
+    navHostController: NavHostController
 ) {
     val listOfCountries = mainViewModel.countriesList.observeAsState(
         initial = Resource(
@@ -69,19 +72,20 @@ fun CountryChooseScreen(
             }
         }
     ) {
-        CountryChooseScreenContent(listOfCountries)
+        CountryChooseScreenContent(listOfCountries, navHostController)
     }
 }
 
 @Composable
 fun CountryChooseScreenContent(
-    listOfCountries: State<Resource<List<CountryModel>>>
+    listOfCountries: State<Resource<List<CountryModel>>>,
+    navHostController: NavHostController
 ) {
     Surface(color = AppTheme.colors.background) {
         when (listOfCountries.value.status) {
             Resource.Status.SUCCESS -> {
                 listOfCountries.value.data?.let {
-                    CountryChooseSuccessScreen(items = it)
+                    CountryChooseSuccessScreen(items = it, navHostController = navHostController)
                 }
                 log("SUCCESS")
             }
@@ -99,7 +103,8 @@ fun CountryChooseScreenContent(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CountryChooseSuccessScreen(
-    items: List<CountryModel>
+    items: List<CountryModel>,
+    navHostController: NavHostController
 ) {
     val alphabeticalList = items.groupBy { it.name.first() }
     LazyColumn(
@@ -112,7 +117,7 @@ fun CountryChooseSuccessScreen(
                 CountryListItemHeader(title = countryMapItem.key.toString())
             }
             items(countryMapItem.value) { country ->
-                CountryListItem(title = country.name)
+                CountryListItem(country = country, navHostController = navHostController)
             }
         }
     }
@@ -167,7 +172,8 @@ fun CountryListItemHeader(
 
 @Composable
 fun CountryListItem(
-    title: String
+    country: CountryModel,
+    navHostController: NavHostController
 ) {
     Card(
         backgroundColor = AppTheme.colors.card,
@@ -175,13 +181,13 @@ fun CountryListItem(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .clickable(onClick = {
-
+                navHostController.navigate("${Screens.CityChooseScreen.routeName}/${country.objectId}")
             })
             .fillMaxWidth()
     ) {
         Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = title,
+                text = country.name,
                 color = AppTheme.colors.text,
                 textAlign = TextAlign.Center,
                 style = AppTheme.typography.listItem,

@@ -33,7 +33,12 @@ fun MainNavScreen(
                     TestScreen(color = AppTheme.colors.background)
                 }
                 composable(Screens.CountryChooseScreen.routeName) {
-                    CountryChooseScreen(mainViewModel = mainViewModel)
+                    CountryChooseScreen(mainViewModel = mainViewModel, navHostController = navHostController)
+                }
+                composable("${Screens.CityChooseScreen.routeName}/{countryId}") { backStackEntry ->
+                    backStackEntry.arguments?.getString("countryId")?.let { countryId ->
+                        CityChooseScreen(mainViewModel = mainViewModel, navHostController = navHostController, countryId = countryId)
+                    }
                 }
                 composable(Screens.SettingsScreen.routeName) {
                     SettingsScreen()
