@@ -7,13 +7,12 @@ import com.an9ar.kappaweather.data.models.CityModel
 import com.an9ar.kappaweather.data.models.CountryModel
 import com.an9ar.kappaweather.domain.LocationRepository
 import com.an9ar.kappaweather.network.api.LocationApi
+import com.an9ar.kappaweather.network.dto.CityCountryDTO
 import com.an9ar.kappaweather.network.dto.CityDTO
 import com.an9ar.kappaweather.network.dto.toCityModel
 import com.an9ar.kappaweather.network.dto.toCountryModel
-import com.an9ar.kappaweather.network.utils.Resource
-import com.an9ar.kappaweather.network.utils.getResult
-import com.an9ar.kappaweather.network.utils.performGetOperation
-import com.an9ar.kappaweather.network.utils.performUpdateOperation
+import com.an9ar.kappaweather.network.utils.*
+import com.an9ar.kappaweather.network.utils.performFetchOperation
 import javax.inject.Inject
 
 class LocationRepositoryImpl @Inject constructor(
@@ -22,7 +21,7 @@ class LocationRepositoryImpl @Inject constructor(
     private val citiesDao: CitiesDao
 ) : LocationRepository {
 
-    override fun getCountriesList(): LiveData<Resource.Status> = performGetOperation(
+    override fun getCountriesList(): LiveData<Resource.Status> = performFetchOperation(
         networkCall = { getResult { locationApi.getCountriesList() } },
         saveCallResult = { countriesDao.insertAll(it.results.map { it.toCountryModel() }) }
     )
@@ -33,14 +32,35 @@ class LocationRepositoryImpl @Inject constructor(
         saveCallResult = { countriesDao.insertAll(it.results.map { it.toCountryModel() }) },
     )
 
-    override fun getCitiesList(): LiveData<Resource.Status> = performGetOperation(
-        networkCall = { getResult { locationApi.getCitiesList() } },
+    override fun getCitiesList(countryId: String): LiveData<Resource<List<CityModel>>> = performGetOperation(
+        databaseQuery = { citiesDao.getCitiesList() },
+        networkCall = {
+            getResult {
+                locationApi.getCitiesList(
+                    countryDTO = CityCountryDTO(
+                        type = "Pointer",
+                        className = "Continentscountriescities_Country",
+                        objectId = countryId
+                    )
+                )
+            }
+        },
         saveCallResult = { citiesDao.insertAll(it.results.map { it.toCityModel() }) }
     )
 
-    override fun updateCitiesList(): LiveData<Resource<List<CityModel>>> = performUpdateOperation(
+    override fun updateCitiesList(countryId: String): LiveData<Resource<List<CityModel>>> = performUpdateOperation(
         databaseQuery = { citiesDao.getCitiesList() },
-        networkCall = { getResult { locationApi.getCitiesList() } },
+        networkCall = {
+            getResult {
+                locationApi.getCitiesList(
+                    countryDTO = CityCountryDTO(
+                        type = "Pointer",
+                        className = "Continentscountriescities_Country",
+                        objectId = countryId
+                    )
+                )
+            }
+        },
         saveCallResult = { citiesDao.insertAll(it.results.map { it.toCityModel() }) },
     )
 

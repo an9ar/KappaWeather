@@ -6,19 +6,20 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import com.an9ar.kappaweather.data.models.CountryModel
-import com.an9ar.kappaweather.log
+import androidx.navigation.NavHostController
 import com.an9ar.kappaweather.network.utils.Resource
 import com.an9ar.kappaweather.theme.AppTheme
 import com.an9ar.kappaweather.viewmodels.MainViewModel
 
 @Composable
 fun CityChooseScreen(
-    mainViewModel: MainViewModel
+    mainViewModel: MainViewModel,
+    navHostController: NavHostController,
+    countryId: String
 ) {
+    mainViewModel.getCitiesList(countryId = countryId)
     val listOfCities = mainViewModel.countriesList.observeAsState(
         initial = Resource(
             status = Resource.Status.LOADING,

@@ -1,6 +1,7 @@
 package com.an9ar.kappaweather.network.api
 
 import com.an9ar.kappaweather.BuildConfig
+import com.an9ar.kappaweather.network.dto.CityCountryDTO
 import com.an9ar.kappaweather.network.dto.CityDTO
 import com.an9ar.kappaweather.network.dto.CountryDTO
 import retrofit2.Response
@@ -15,7 +16,8 @@ interface LocationApi {
     )
     @GET("Continentscountriescities_City")
     suspend fun getCitiesList(
-        /*@Query("limit") limit: Int = 10*/
+        @Query("limit") limit: Int = 10,
+        @Query("where") countryDTO: CityCountryDTO
     ): Response<CitiesListResponse>
 
     @Headers(

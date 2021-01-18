@@ -10,8 +10,8 @@ interface LocationRepository {
     fun getCountriesList(): LiveData<Resource.Status>
     fun updateCountriesList(): LiveData<Resource<List<CountryModel>>>
 
-    fun getCitiesList(): LiveData<Resource.Status>
-    fun updateCitiesList(): LiveData<Resource<List<CityModel>>>
+    fun getCitiesList(countryId: String): LiveData<Resource<List<CityModel>>>
+    fun updateCitiesList(countryId: String): LiveData<Resource<List<CityModel>>>
 
     suspend fun setCitiesList(citiesList: List<CityDTO>)
 }
