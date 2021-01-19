@@ -182,7 +182,7 @@ fun CityListItem(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .clickable(onClick = {
-                /*navHostController.navigate("${Screens.CityChooseScreen.routeName}/${city.objectId}")*/
+
             })
             .fillMaxWidth()
     ) {

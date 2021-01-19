@@ -7,7 +7,6 @@ import com.an9ar.kappaweather.data.models.CityModel
 import com.an9ar.kappaweather.data.models.CountryModel
 import com.an9ar.kappaweather.domain.LocationRepository
 import com.an9ar.kappaweather.network.api.LocationApi
-import com.an9ar.kappaweather.network.dto.CityCountryDTO
 import com.an9ar.kappaweather.network.dto.CityDTO
 import com.an9ar.kappaweather.network.dto.toCityModel
 import com.an9ar.kappaweather.network.dto.toCountryModel
@@ -44,22 +43,6 @@ class LocationRepositoryImpl @Inject constructor(
         },
         saveCallResult = { citiesDao.insertAll(it.results.map { it.toCityModel() }) }
     )
-
-    /*override fun updateCitiesList(countryId: String): LiveData<Resource<List<CityModel>>> = performUpdateOperation(
-        databaseQuery = { citiesDao.getCitiesList() },
-        networkCall = {
-            getResult {
-                locationApi.getCitiesList(
-                    countryDTO = CityCountryDTO(
-                        type = "Pointer",
-                        className = "Continentscountriescities_Country",
-                        objectId = countryId
-                    )
-                )
-            }
-        },
-        saveCallResult = { citiesDao.insertAll(it.results.map { it.toCityModel() }) },
-    )*/
 
     override suspend fun setCitiesList(citiesList: List<CityDTO>) {
         citiesList.forEach {
