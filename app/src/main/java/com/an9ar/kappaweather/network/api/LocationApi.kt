@@ -9,21 +9,18 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query
 
+private const val HEADER_APPLICATION_ID = "X-Parse-Application-Id: ${BuildConfig.X_Parse_Application_Id}"
+private const val HEADER_CLIENT_KEY = "X-Parse-REST-API-Key: ${BuildConfig.X_Parse_REST_API_Key}"
+
 interface LocationApi {
-    @Headers(
-        "X-Parse-Application-Id: ${BuildConfig.X_Parse_Application_Id}",
-        "X-Parse-REST-API-Key: ${BuildConfig.X_Parse_REST_API_Key}"
-    )
-    @GET("Continentscountriescities_City")
+    @Headers(HEADER_APPLICATION_ID, HEADER_CLIENT_KEY)
+    @GET("Continentscountriescities_City?order=name")
     suspend fun getCitiesList(
-        @Query("limit") limit: Int = 10,
-        @Query("where") countryDTO: CityCountryDTO
+        @Query("limit") limit: Int = 100,
+        @Query("where") countryDTO: String
     ): Response<CitiesListResponse>
 
-    @Headers(
-        "X-Parse-Application-Id: ${BuildConfig.X_Parse_Application_Id}",
-        "X-Parse-REST-API-Key: ${BuildConfig.X_Parse_REST_API_Key}"
-    )
+    @Headers(HEADER_APPLICATION_ID, HEADER_CLIENT_KEY)
     @GET("Continentscountriescities_Country?order=name")
     suspend fun getCountriesList(
         @Query("limit") limit: Int = 250

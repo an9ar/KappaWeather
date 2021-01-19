@@ -13,6 +13,7 @@ import com.an9ar.kappaweather.network.dto.toCityModel
 import com.an9ar.kappaweather.network.dto.toCountryModel
 import com.an9ar.kappaweather.network.utils.*
 import com.an9ar.kappaweather.network.utils.performFetchOperation
+import java.net.URLEncoder
 import javax.inject.Inject
 
 class LocationRepositoryImpl @Inject constructor(
@@ -37,18 +38,14 @@ class LocationRepositoryImpl @Inject constructor(
         networkCall = {
             getResult {
                 locationApi.getCitiesList(
-                    countryDTO = CityCountryDTO(
-                        type = "Pointer",
-                        className = "Continentscountriescities_Country",
-                        objectId = countryId
-                    )
+                        countryDTO = """{"country": {"__type": "Pointer","className": "Continentscountriescities_Country","objectId": "$countryId"}}"""
                 )
             }
         },
         saveCallResult = { citiesDao.insertAll(it.results.map { it.toCityModel() }) }
     )
 
-    override fun updateCitiesList(countryId: String): LiveData<Resource<List<CityModel>>> = performUpdateOperation(
+    /*override fun updateCitiesList(countryId: String): LiveData<Resource<List<CityModel>>> = performUpdateOperation(
         databaseQuery = { citiesDao.getCitiesList() },
         networkCall = {
             getResult {
@@ -62,7 +59,7 @@ class LocationRepositoryImpl @Inject constructor(
             }
         },
         saveCallResult = { citiesDao.insertAll(it.results.map { it.toCityModel() }) },
-    )
+    )*/
 
     override suspend fun setCitiesList(citiesList: List<CityDTO>) {
         citiesList.forEach {

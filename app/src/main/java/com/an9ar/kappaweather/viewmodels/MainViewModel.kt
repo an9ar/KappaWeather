@@ -15,11 +15,11 @@ class MainViewModel @ViewModelInject constructor(
     val splashStatus = locationRepository.getCountriesList()
     val countriesList = locationRepository.updateCountriesList()
 
-    fun getCitiesList(countryId: String) {
-        citiesList.value = locationRepository.getCitiesList(countryId = countryId).value
+    fun getCitiesList(countryId: String): LiveData<Resource<List<CityModel>>> {
+        return locationRepository.getCitiesList(countryId = countryId)
     }
 
-    fun updateCitiesList(countryId: String) {
+    /*fun updateCitiesList(countryId: String) {
         citiesList.value = locationRepository.updateCitiesList(countryId = countryId).value
-    }
+    }*/
 }

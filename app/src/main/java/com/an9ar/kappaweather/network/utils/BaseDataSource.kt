@@ -10,8 +10,10 @@ suspend fun <T> getResult(call: suspend () -> Response<T>): Resource<T> {
             val body = response.body()
             if (body != null) return Resource.success(body)
         }
+        log("ERROR CALL - ${response.code()}")
         return error(" ${response.code()} ${response.message()}")
     } catch (e: Exception) {
+        log("ERROR CALL - $e")
         return error(e.message ?: e.toString())
     }
 }
