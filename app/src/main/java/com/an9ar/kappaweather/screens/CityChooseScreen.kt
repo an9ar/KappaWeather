@@ -81,7 +81,10 @@ fun CityChooseScreen(
 fun CityChooseScreenContent(
     listOfCities: State<Resource<List<CityModel>>>
 ) {
-    Surface(color = AppTheme.colors.background) {
+    Surface(
+            color = AppTheme.colors.background,
+            modifier = Modifier.fillMaxSize()
+    ) {
         when (listOfCities.value.status) {
             Resource.Status.SUCCESS -> {
                 listOfCities.value.data?.let {
@@ -182,7 +185,7 @@ fun CityListItem(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .clickable(onClick = {
-
+                log("CLICKED - $city")
             })
             .fillMaxWidth()
     ) {

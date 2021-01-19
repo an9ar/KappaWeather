@@ -16,7 +16,7 @@ interface LocationApi {
     @Headers(HEADER_APPLICATION_ID, HEADER_CLIENT_KEY)
     @GET("Continentscountriescities_City?order=name")
     suspend fun getCitiesList(
-        @Query("limit") limit: Int = 100,
+        @Query("limit") limit: Int = 5000,
         @Query("where") countryDTO: String
     ): Response<CitiesListResponse>
 

@@ -40,6 +40,21 @@ fun <T, A> performGetOperation(
         }
     }
 
+fun <T, A> performGetNetworkOperation(
+        networkCall: suspend () -> Resource<A>,
+        convertResponseTo: suspend (A) -> T
+): LiveData<Resource<T>> =
+        liveData(Dispatchers.IO) {
+            emit(Resource.loading())
+            val responseStatus = networkCall.invoke()
+            if (responseStatus.status == Resource.Status.SUCCESS) {
+                val convertedResponse = convertResponseTo(responseStatus.data!!)
+                emit(Resource.success(convertedResponse))
+            } else if (responseStatus.status == Resource.Status.ERROR) {
+                emit(Resource.error(responseStatus.message!!))
+            }
+        }
+
 fun <T, A> performUpdateOperation(
     databaseQuery: () -> LiveData<T>,
     networkCall: suspend () -> Resource<A>,
