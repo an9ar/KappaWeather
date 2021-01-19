@@ -41,7 +41,9 @@ class LocationRepositoryImpl @Inject constructor(
                 }
             },
             convertResponseTo = { response ->
-                response.results.map { it.toCityModel() }
+                response.results
+                        .map { it.toCityModel() }
+                        .sortedBy { it.name }
             }
     )
 

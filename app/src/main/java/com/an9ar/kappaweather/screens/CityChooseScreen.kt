@@ -31,7 +31,7 @@ fun CityChooseScreen(
     navHostController: NavHostController,
     countryId: String
 ) {
-    val listOfCities = mainViewModel.getCitiesList(countryId = countryId).observeAsState(
+    val listOfLargestCities = mainViewModel.getCitiesList(countryId = countryId).observeAsState(
         initial = Resource(
             status = Resource.Status.LOADING,
             data = emptyList(),
@@ -73,34 +73,34 @@ fun CityChooseScreen(
             }
         }
     ) {
-        CityChooseScreenContent(listOfCities)
+        CityChooseScreenContent(listOfLargestCities)
     }
 }
 
 @Composable
 fun CityChooseScreenContent(
-    listOfCities: State<Resource<List<CityModel>>>
+        listOfLargestCities: State<Resource<List<CityModel>>>
 ) {
     Surface(
             color = AppTheme.colors.background,
             modifier = Modifier.fillMaxSize()
     ) {
-        when (listOfCities.value.status) {
+        when (listOfLargestCities.value.status) {
             Resource.Status.SUCCESS -> {
-                listOfCities.value.data?.let {
+                listOfLargestCities.value.data?.let {
                     CityChooseSuccessScreen(items = it)
                 }
-                log("SUCCESS - ${listOfCities.value.data}")
-                log("SUCCESS MSG - ${listOfCities.value.message}")
+                log("SUCCESS - ${listOfLargestCities.value.data}")
+                log("SUCCESS MSG - ${listOfLargestCities.value.message}")
             }
             Resource.Status.LOADING -> {
                 CityChooseLoadingScreen()
                 log("LOADING")
-                log("LOADING MSG - ${listOfCities.value.message}")
+                log("LOADING MSG - ${listOfLargestCities.value.message}")
             }
             Resource.Status.ERROR -> {
                 log("ERROR")
-                log("ERROR MSG - ${listOfCities.value.message}")
+                log("ERROR MSG - ${listOfLargestCities.value.message}")
             }
         }
     }
@@ -111,19 +111,16 @@ fun CityChooseScreenContent(
 fun CityChooseSuccessScreen(
     items: List<CityModel>
 ) {
-    val alphabeticalList = items.groupBy { it.name.first() }
     LazyColumn(
         contentPadding = AmbientWindowInsets.current.systemBars
             .toPaddingValues(bottom = false)
             .add(bottom = AppTheme.sizes.bottomNavigationHeight)
     ) {
-        alphabeticalList.forEach { countryMapItem ->
-            stickyHeader {
-                CityListItemHeader(title = countryMapItem.key.toString())
-            }
-            items(countryMapItem.value) { city ->
-                CityListItem(city = city)
-            }
+        stickyHeader {
+            CityListItemHeader(title = "Top 50 largest cities")
+        }
+        items(items = items) { city ->
+            CityListItem(city = city)
         }
     }
 }
@@ -191,7 +188,7 @@ fun CityListItem(
     ) {
         Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = city.name,
+                text = "${city.name} - ${city.population}",
                 color = AppTheme.colors.text,
                 textAlign = TextAlign.Center,
                 style = AppTheme.typography.listItem,

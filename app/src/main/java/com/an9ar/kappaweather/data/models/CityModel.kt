@@ -10,5 +10,6 @@ data class CityModel (
     val objectId: String,
     val lat: Double,
     val lng: Double,
-    val name: String
+    val name: String,
+    val population: Long,
 )
