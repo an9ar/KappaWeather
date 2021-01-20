@@ -1,8 +1,11 @@
 package com.an9ar.kappaweather.screens
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
@@ -10,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -19,8 +23,17 @@ import com.an9ar.kappaweather.theme.AppTheme
 import com.an9ar.kappaweather.viewmodels.MainViewModel
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.unit.dp
+import com.an9ar.kappaweather.data.models.CityModel
+import com.an9ar.kappaweather.log
+import com.an9ar.kappaweather.network.utils.Resource
+import dev.chrisbanes.accompanist.insets.AmbientWindowInsets
+import dev.chrisbanes.accompanist.insets.add
+import dev.chrisbanes.accompanist.insets.toPaddingValues
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -32,10 +45,18 @@ fun CitySearchScreen(
         navHostController: NavHostController,
         countryId: String
 ) {
-    val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Main)
+    val coroutineScope = CoroutineScope(Dispatchers.Main)
+    var searchedCityQuery by remember { mutableStateOf("") }
+    val listOfSearchedCities = mainViewModel.getCitiesListBySearch(countryId = countryId, searchedCityQuery).observeAsState(
+            initial = Resource(
+                    status = Resource.Status.COMPLETED,
+                    data = emptyList(),
+                    message = ""
+            )
+    )
     Scaffold(
             topBar = {
-                Column() {
+                Column {
                     TopAppBar(backgroundColor = AppTheme.colors.toolbar) {
                         ConstraintLayout(modifier = Modifier.fillMaxSize()) {
                             val (screenTitle, backButton) = createRefs()
@@ -70,14 +91,18 @@ fun CitySearchScreen(
                             scope = coroutineScope,
                             onDebouncingQueryTextChange = { queryText ->
                                 if (!queryText.isNullOrEmpty()) {
-
+                                    log("typed - $queryText")
+                                    searchedCityQuery = queryText
                                 }
                             }
                     )
                 }
             }
     ) {
-        CitySearchScreenContent()
+        CitySearchScreenContent(
+                listOfSearchedCities = listOfSearchedCities,
+                navHostController = navHostController
+        )
     }
 }
 
@@ -99,27 +124,34 @@ fun SearchBar(
     ) {
         val (searchBar, clearButton) = createRefs()
         var searchedCity by remember { mutableStateOf(TextFieldValue("")) }
-        BasicTextField(
-                value = searchedCity,
-                onValueChange = {
-                    searchedCity = it
-                    scope.launch {
-                        delay(500)
-                        onDebouncingQueryTextChange(it.text)
-                    }
-                },
-                singleLine = true,
-                textStyle = AppTheme.typography.queryText,
-                modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                        .constrainAs(searchBar) {
-                            top.linkTo(parent.top)
-                            start.linkTo(parent.start, 8.dp)
-                            end.linkTo(parent.end)
-                            bottom.linkTo(parent.bottom)
+        val focusRequester = remember { FocusRequester() }
+        Row(modifier = Modifier
+                .fillMaxWidth()
+                .clickable{
+                    focusRequester.requestFocus()
+                }
+                .padding(16.dp)
+                .constrainAs(searchBar) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start, 8.dp)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                }) {
+            BasicTextField(
+                    value = searchedCity,
+                    onValueChange = {
+                        searchedCity = it
+                        scope.launch {
+                            delay(500)
+                            onDebouncingQueryTextChange(it.text)
                         }
-        )
+                    },
+                    singleLine = true,
+                    textStyle = AppTheme.typography.queryText,
+                    modifier = Modifier.focusRequester(focusRequester = focusRequester)
+            )
+        }
+
         IconButton(
                 onClick = { searchedCity = TextFieldValue("") },
                 modifier = Modifier
@@ -138,27 +170,50 @@ fun SearchBar(
 }
 
 @Composable
-fun CitySearchScreenContent() {
+fun CitySearchScreenContent(
+        listOfSearchedCities: State<Resource<List<CityModel>>>,
+        navHostController: NavHostController
+) {
     Column(
             modifier = Modifier.fillMaxSize().background(AppTheme.colors.background)
     ) {
-        /*when (listOfLargestCities.value.status) {
+        when (listOfSearchedCities.value.status) {
             Resource.Status.SUCCESS -> {
-                listOfLargestCities.value.data?.let {
-                    //CityChooseSuccessScreen(items = it)
+                listOfSearchedCities.value.data?.let {
+                    SearchedCitiesSuccessScreen(items = it, navHostController = navHostController)
                 }
-                log("SUCCESS - ${listOfLargestCities.value.data}")
-                log("SUCCESS MSG - ${listOfLargestCities.value.message}")
+                log("SUCCESS - ${listOfSearchedCities.value.data}")
+                log("SUCCESS MSG - ${listOfSearchedCities.value.message}")
             }
             Resource.Status.LOADING -> {
-                //CityChooseLoadingScreen()
+                CityChooseLoadingScreen()
                 log("LOADING")
-                log("LOADING MSG - ${listOfLargestCities.value.message}")
+                log("LOADING MSG - ${listOfSearchedCities.value.message}")
             }
             Resource.Status.ERROR -> {
                 log("ERROR")
-                log("ERROR MSG - ${listOfLargestCities.value.message}")
+                log("ERROR MSG - ${listOfSearchedCities.value.message}")
             }
-        }*/
+            Resource.Status.COMPLETED -> {
+                log("EMPTY LIST")
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun SearchedCitiesSuccessScreen(
+        items: List<CityModel>,
+        navHostController: NavHostController
+) {
+    LazyColumn(
+            contentPadding = AmbientWindowInsets.current.systemBars
+                    .toPaddingValues(bottom = false)
+                    .add(bottom = AppTheme.sizes.bottomNavigationHeight)
+    ) {
+        items(items = items) { city ->
+            LargeCityListItem(city = city)
+        }
     }
 }

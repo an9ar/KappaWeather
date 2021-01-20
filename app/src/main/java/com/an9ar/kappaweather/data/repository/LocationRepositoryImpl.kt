@@ -6,6 +6,7 @@ import com.an9ar.kappaweather.data.db.dao.CountriesDao
 import com.an9ar.kappaweather.data.models.CityModel
 import com.an9ar.kappaweather.data.models.CountryModel
 import com.an9ar.kappaweather.domain.LocationRepository
+import com.an9ar.kappaweather.log
 import com.an9ar.kappaweather.network.api.LocationApi
 import com.an9ar.kappaweather.network.dto.CityDTO
 import com.an9ar.kappaweather.network.dto.toCityModel
@@ -31,15 +32,31 @@ class LocationRepositoryImpl @Inject constructor(
             saveCallResult = { countriesDao.insertAll(it.results.map { it.toCountryModel() }) },
     )
 
-    override fun getCitiesList(countryId: String): LiveData<Resource<List<CityModel>>> = performGetNetworkOperation(
+    override fun getCitiesListByCountry(countryId: String): LiveData<Resource<List<CityModel>>> = performGetNetworkOperation(
             networkCall = {
                 getResult {
-                    locationApi.getCitiesList(
-                            countryDTO = """{"country": {"__type": "Pointer","className": "Continentscountriescities_Country","objectId": "$countryId"}}"""
+                    locationApi.getCitiesListByCountry(
+                            whereCondition = """{"country": {"__type": "Pointer","className": "Continentscountriescities_Country","objectId": "$countryId"}}"""
                     )
                 }
             },
             convertResponseTo = { response ->
+                response.results
+                        .map { it.toCityModel() }
+                        .sortedBy { it.name }
+            }
+    )
+
+    override fun getCitiesListBySearch(countryId: String, searchQuery: String): LiveData<Resource<List<CityModel>>> = performGetNetworkOperation(
+            networkCall = {
+                getResult {
+                    locationApi.getCitiesListBySearch(
+                            whereCondition = """{"country": {"__type": "Pointer","className": "Continentscountriescities_Country","objectId": "$countryId"}, "name": {"${'$'}gt": "${searchQuery.capitalize()}"}}"""
+                    )
+                }
+            },
+            convertResponseTo = { response ->
+                log("response - $response")
                 response.results
                         .map { it.toCityModel() }
                         .sortedBy { it.name }

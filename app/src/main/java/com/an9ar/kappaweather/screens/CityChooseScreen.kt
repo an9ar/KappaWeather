@@ -32,7 +32,7 @@ fun CityChooseScreen(
     navHostController: NavHostController,
     countryId: String
 ) {
-    val listOfLargestCities = mainViewModel.getCitiesList(countryId = countryId).observeAsState(
+    val listOfLargestCities = mainViewModel.getCitiesListByCountry(countryId = countryId).observeAsState(
         initial = Resource(
             status = Resource.Status.LOADING,
             data = emptyList(),

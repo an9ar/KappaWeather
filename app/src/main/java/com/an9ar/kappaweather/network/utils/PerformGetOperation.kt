@@ -3,6 +3,7 @@ package com.an9ar.kappaweather.network.utils
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
+import com.an9ar.kappaweather.log
 import kotlinx.coroutines.Dispatchers
 
 fun <T> performFetchOperation(
@@ -51,6 +52,7 @@ fun <T, A> performGetNetworkOperation(
                 val convertedResponse = convertResponseTo(responseStatus.data!!)
                 emit(Resource.success(convertedResponse))
             } else if (responseStatus.status == Resource.Status.ERROR) {
+                log("call error - ${responseStatus.message}")
                 emit(Resource.error(responseStatus.message!!))
             }
         }

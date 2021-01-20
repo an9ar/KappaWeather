@@ -15,9 +15,15 @@ private const val HEADER_CLIENT_KEY = "X-Parse-REST-API-Key: ${BuildConfig.X_Par
 interface LocationApi {
     @Headers(HEADER_APPLICATION_ID, HEADER_CLIENT_KEY)
     @GET("Continentscountriescities_City?order=-population")
-    suspend fun getCitiesList(
+    suspend fun getCitiesListByCountry(
         @Query("limit") limit: Int = 25,
-        @Query("where") countryDTO: String
+        @Query("where") whereCondition: String
+    ): Response<CitiesListResponse>
+
+    @Headers(HEADER_APPLICATION_ID, HEADER_CLIENT_KEY)
+    @GET("Continentscountriescities_City?order=name")
+    suspend fun getCitiesListBySearch(
+            @Query("where") whereCondition: String
     ): Response<CitiesListResponse>
 
     @Headers(HEADER_APPLICATION_ID, HEADER_CLIENT_KEY)
