@@ -9,9 +9,11 @@ import androidx.compose.ui.graphics.vector.VectorGroup
 import androidx.compose.ui.unit.dp
 
 sealed class Screens(val routeName: String, val screenName: String = "", val screenIcon: ImageVector? = null) {
-    object SplashScreen : Screens(routeName = "SplashScreen")
+    //Tab screens
     object WeatherScreen : Screens(routeName = "WeatherScreen", "Weather", Icons.Outlined.Refresh)
+    object SettingsScreen : Screens(routeName = "SettingsScreen", "Settings", Icons.Outlined.Settings)
+    //Other screens
     object CountryChooseScreen : Screens(routeName = "CountryChooseScreen", "CountryChoose", Icons.Outlined.LocationOn)
     object CityChooseScreen : Screens(routeName = "CityChooseScreen")
-    object SettingsScreen : Screens(routeName = "SettingsScreen", "Settings", Icons.Outlined.Settings)
+    object CreditsScreen : Screens(routeName = "CreditsScreen")
 }

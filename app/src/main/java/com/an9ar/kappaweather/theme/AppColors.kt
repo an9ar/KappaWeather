@@ -9,7 +9,7 @@ object AppColors {
     val background = Color(0xFFE7E7E7)
     val backgroundReverse = Color(0xFF141414)
     val toolbar = Color(0xFFE7E7E7)
-    val toolbarReverse = Color(0xFFE7E7E7)
+    val toolbarReverse = Color(0xFF141414)
     val card = Color(0xFFFFFFFF)
     val cardReverse = Color(0xFF252525)
     val text = Color(0xFF192038)

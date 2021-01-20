@@ -30,7 +30,7 @@ import dev.chrisbanes.accompanist.insets.statusBarsPadding
 
 @Composable
 fun CreditsScreen(
-    navHostController: NavHostController = rememberNavController()
+    navHostController: NavHostController
 ) {
     Column(modifier = Modifier.fillMaxSize().background(AppTheme.colors.background)) {
         AuthorCard(this, navHostController = navHostController)
@@ -139,7 +139,7 @@ fun SocialMediaButton(
             .clip(RoundedCornerShape(8.dp))
             .background(AppTheme.colors.card)
             .clickable(onClick = onClick)
-            .padding(8.dp)
+            .padding(16.dp)
     ) {
         Image(
             imageVector = buttonImage,

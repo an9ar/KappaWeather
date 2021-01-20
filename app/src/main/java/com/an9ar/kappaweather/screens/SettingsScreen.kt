@@ -17,11 +17,15 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.navigate
 import com.an9ar.kappaweather.R
 import com.an9ar.kappaweather.theme.AppTheme
 
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(
+        navHostController: NavHostController
+) {
     Column(modifier = Modifier.fillMaxSize().background(AppTheme.colors.background)) {
         Box(
                 contentAlignment = Alignment.Center,
@@ -53,15 +57,18 @@ fun SettingsScreen() {
         ) {
             SettingListItem(
                     vectorImage = vectorResource(id = R.drawable.ic_kappa_sign),
-                    itemTitle = "Credits"
+                    itemTitle = "Credits",
+                    onClickAction = { navHostController.navigate(Screens.CreditsScreen.routeName) }
             )
             SettingListItem(
                     vectorImage = vectorResource(id = R.drawable.ic_kappa_sign),
-                    itemTitle = "Colors"
+                    itemTitle = "Colors",
+                    onClickAction = {  }
             )
             SettingListItem(
                     vectorImage = vectorResource(id = R.drawable.ic_kappa_sign),
-                    itemTitle = "Credits"
+                    itemTitle = "Credits",
+                    onClickAction = {  }
             )
         }
     }
@@ -70,7 +77,8 @@ fun SettingsScreen() {
 @Composable
 fun SettingListItem(
         vectorImage: ImageVector,
-        itemTitle: String
+        itemTitle: String,
+        onClickAction: () -> Unit
 ) {
     Card(
             backgroundColor = AppTheme.colors.card,
@@ -78,7 +86,7 @@ fun SettingListItem(
             modifier = Modifier
                     .padding(horizontal = 4.dp, vertical = 4.dp)
                     .clickable(onClick = {
-
+                        onClickAction()
                     })
                     .fillMaxWidth()
     ) {

@@ -12,7 +12,6 @@ import com.an9ar.kappaweather.network.dto.toCityModel
 import com.an9ar.kappaweather.network.dto.toCountryModel
 import com.an9ar.kappaweather.network.utils.*
 import com.an9ar.kappaweather.network.utils.performFetchOperation
-import java.net.URLEncoder
 import javax.inject.Inject
 
 class LocationRepositoryImpl @Inject constructor(

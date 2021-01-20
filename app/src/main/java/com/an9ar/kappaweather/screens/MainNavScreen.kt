@@ -29,9 +29,14 @@ fun MainNavScreen(
             }
         ) {
             NavHost(navController = navHostController, startDestination = Screens.WeatherScreen.routeName) {
+                //Tab screens
                 composable(Screens.WeatherScreen.routeName) {
                     TestScreen(color = AppTheme.colors.background)
                 }
+                composable(Screens.SettingsScreen.routeName) {
+                    SettingsScreen(navHostController = navHostController)
+                }
+                //Other screens
                 composable(Screens.CountryChooseScreen.routeName) {
                     CountryChooseScreen(mainViewModel = mainViewModel, navHostController = navHostController)
                 }
@@ -40,8 +45,8 @@ fun MainNavScreen(
                         CityChooseScreen(mainViewModel = mainViewModel, navHostController = navHostController, countryId = countryId)
                     }
                 }
-                composable(Screens.SettingsScreen.routeName) {
-                    SettingsScreen()
+                composable(Screens.CreditsScreen.routeName) {
+                    CreditsScreen(navHostController = navHostController)
                 }
             }
         }
