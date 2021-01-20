@@ -120,7 +120,13 @@ fun CityChooseSuccessScreen(
             CityListItemHeader(title = "Top 50 largest cities")
         }
         items(items = items) { city ->
-            CityListItem(city = city)
+            LargeCityListItem(city = city)
+        }
+        stickyHeader {
+            CityListItemHeader(title = "Other cities")
+        }
+        items(items = listOf(items.first())) { city ->
+            OtherCityListItem(countryId = city.countryId)
         }
     }
 }
@@ -173,7 +179,7 @@ fun CityListItemHeader(
 }
 
 @Composable
-fun CityListItem(
+fun LargeCityListItem(
     city: CityModel
 ) {
     Card(
@@ -193,6 +199,32 @@ fun CityListItem(
                 textAlign = TextAlign.Center,
                 style = AppTheme.typography.listItem,
                 modifier = Modifier.fillMaxSize().padding(16.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun OtherCityListItem(
+        countryId: String
+) {
+    Card(
+            backgroundColor = AppTheme.colors.card,
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 4.dp)
+                    .clickable(onClick = {
+                        log("countryId - $countryId")
+                    })
+                    .fillMaxWidth()
+    ) {
+        Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                    text = "Choose another city",
+                    color = AppTheme.colors.text,
+                    textAlign = TextAlign.Center,
+                    style = AppTheme.typography.listItem,
+                    modifier = Modifier.fillMaxSize().padding(16.dp)
             )
         }
     }

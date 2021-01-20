@@ -34,6 +34,7 @@ fun CityDTO.toCityModel(): CityModel {
             lat = this.location.latitude,
             lng = this.location.longitude,
             name = this.name,
-            population = this.population
+            population = this.population,
+            countryId = this.country.objectId
     )
 }

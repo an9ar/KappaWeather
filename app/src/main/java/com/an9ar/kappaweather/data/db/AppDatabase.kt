@@ -13,7 +13,7 @@ import com.an9ar.kappaweather.data.models.CountryModel
         CityModel::class,
         CountryModel::class
     ],
-    version = 11
+    version = 12
 )
 abstract class AppDatabase : RoomDatabase() {
 
