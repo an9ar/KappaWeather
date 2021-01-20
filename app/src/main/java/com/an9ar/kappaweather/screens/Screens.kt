@@ -15,5 +15,6 @@ sealed class Screens(val routeName: String, val screenName: String = "", val scr
     //Other screens
     object CountryChooseScreen : Screens(routeName = "CountryChooseScreen", "CountryChoose", Icons.Outlined.LocationOn)
     object CityChooseScreen : Screens(routeName = "CityChooseScreen")
+    object CitySearchScreen : Screens(routeName = "CitySearchScreen")
     object CreditsScreen : Screens(routeName = "CreditsScreen")
 }

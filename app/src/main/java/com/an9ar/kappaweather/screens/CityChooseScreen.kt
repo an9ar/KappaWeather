@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.navigate
 import com.an9ar.kappaweather.data.models.CityModel
 import com.an9ar.kappaweather.log
 import com.an9ar.kappaweather.network.utils.Resource
@@ -73,13 +74,14 @@ fun CityChooseScreen(
             }
         }
     ) {
-        CityChooseScreenContent(listOfLargestCities)
+        CityChooseScreenContent(listOfLargestCities = listOfLargestCities, navHostController = navHostController)
     }
 }
 
 @Composable
 fun CityChooseScreenContent(
-        listOfLargestCities: State<Resource<List<CityModel>>>
+        listOfLargestCities: State<Resource<List<CityModel>>>,
+        navHostController: NavHostController
 ) {
     Surface(
             color = AppTheme.colors.background,
@@ -88,7 +90,7 @@ fun CityChooseScreenContent(
         when (listOfLargestCities.value.status) {
             Resource.Status.SUCCESS -> {
                 listOfLargestCities.value.data?.let {
-                    CityChooseSuccessScreen(items = it)
+                    CityChooseSuccessScreen(items = it, navHostController = navHostController)
                 }
                 log("SUCCESS - ${listOfLargestCities.value.data}")
                 log("SUCCESS MSG - ${listOfLargestCities.value.message}")
@@ -109,7 +111,8 @@ fun CityChooseScreenContent(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CityChooseSuccessScreen(
-    items: List<CityModel>
+    items: List<CityModel>,
+    navHostController: NavHostController
 ) {
     LazyColumn(
         contentPadding = AmbientWindowInsets.current.systemBars
@@ -126,7 +129,7 @@ fun CityChooseSuccessScreen(
             CityListItemHeader(title = "Other cities")
         }
         items(items = listOf(items.first())) { city ->
-            OtherCityListItem(countryId = city.countryId)
+            OtherCityListItem(countryId = city.countryId, navHostController = navHostController)
         }
     }
 }
@@ -206,7 +209,8 @@ fun LargeCityListItem(
 
 @Composable
 fun OtherCityListItem(
-        countryId: String
+        countryId: String,
+        navHostController: NavHostController
 ) {
     Card(
             backgroundColor = AppTheme.colors.card,
@@ -214,7 +218,7 @@ fun OtherCityListItem(
             modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 4.dp)
                     .clickable(onClick = {
-                        log("countryId - $countryId")
+                        navHostController.navigate("${Screens.CitySearchScreen.routeName}/$countryId")
                     })
                     .fillMaxWidth()
     ) {

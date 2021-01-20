@@ -45,6 +45,11 @@ fun MainNavScreen(
                         CityChooseScreen(mainViewModel = mainViewModel, navHostController = navHostController, countryId = countryId)
                     }
                 }
+                composable("${Screens.CitySearchScreen.routeName}/{countryId}") { backStackEntry ->
+                    backStackEntry.arguments?.getString("countryId")?.let { countryId ->
+                        CitySearchScreen(mainViewModel = mainViewModel, navHostController = navHostController, countryId = countryId)
+                    }
+                }
                 composable(Screens.CreditsScreen.routeName) {
                     CreditsScreen(navHostController = navHostController)
                 }
