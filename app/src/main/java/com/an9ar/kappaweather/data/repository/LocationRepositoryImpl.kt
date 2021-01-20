@@ -51,7 +51,7 @@ class LocationRepositoryImpl @Inject constructor(
             networkCall = {
                 getResult {
                     locationApi.getCitiesListBySearch(
-                            whereCondition = """{"country": {"__type": "Pointer","className": "Continentscountriescities_Country","objectId": "$countryId"}, "name": {"${'$'}gt": "${searchQuery.capitalize()}"}}"""
+                            whereCondition = """{"country": {"__type": "Pointer","className": "Continentscountriescities_Country","objectId": "$countryId"}, "name": {"${'$'}regex": "${searchQuery.capitalize()}"}}"""
                     )
                 }
             },
