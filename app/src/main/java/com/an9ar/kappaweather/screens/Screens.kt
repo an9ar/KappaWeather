@@ -1,19 +1,19 @@
 package com.an9ar.kappaweather.screens
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material.icons.outlined.Refresh
-import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.graphics.vector.VectorGroup
-import androidx.compose.ui.unit.dp
+import androidx.compose.material.Icon
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.vectorResource
+import com.an9ar.kappaweather.R
 
-sealed class Screens(val routeName: String, val screenName: String = "", val screenIcon: ImageVector? = null) {
-
+sealed class Screens(
+        val routeName: String,
+        val screenName: String = "",
+        val screenIcon: @Composable () -> Unit = {}
+) {
     //Containers
-    object WeatherContainer : Screens(routeName = "WeatherContainer", "Weather", Icons.Outlined.Refresh)
-    object LocationsContainer : Screens(routeName = "LocationsContainer", "Locations", Icons.Outlined.LocationOn)
-    object SettingsContainer : Screens(routeName = "SettingsContainer", "Settings", Icons.Outlined.Settings)
+    object WeatherContainer : Screens(routeName = "WeatherContainer", "Weather", { Icon(imageVector = vectorResource(id = R.drawable.ic_weather)) })
+    object LocationsContainer : Screens(routeName = "LocationsContainer", "Locations", { Icon(imageVector = vectorResource(id = R.drawable.ic_locations)) })
+    object SettingsContainer : Screens(routeName = "SettingsContainer", "Settings", { Icon(imageVector = vectorResource(id = R.drawable.ic_settings)) })
 
     //Weather Tab screens
     object WeatherScreen : Screens(routeName = "WeatherScreen")
