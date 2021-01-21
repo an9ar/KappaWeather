@@ -27,4 +27,8 @@ class MainViewModel @ViewModelInject constructor(
     fun getCitiesListBySearch(countryId: String, searchQuery: String): LiveData<Resource<List<CityModel>>> {
         return locationRepository.getCitiesListBySearch(countryId = countryId, searchQuery = searchQuery)
     }
+
+    fun addLocationCity(city: CityModel) {
+        locationRepository.addLocationCity(city = city)
+    }
 }

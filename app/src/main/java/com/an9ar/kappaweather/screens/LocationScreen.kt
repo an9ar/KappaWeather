@@ -14,10 +14,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigate
-import com.an9ar.kappaweather.App
 import com.an9ar.kappaweather.data.models.CityModel
-import com.an9ar.kappaweather.log
-import com.an9ar.kappaweather.network.utils.Resource
 import com.an9ar.kappaweather.theme.AppTheme
 import com.an9ar.kappaweather.viewmodels.MainViewModel
 import dev.chrisbanes.accompanist.insets.AmbientWindowInsets
@@ -76,20 +73,15 @@ fun LocationsScreenContent(
                 CityListItemHeader(title = "New locations")
             }
             item {
-                ListItem(navHostController = navHostController)
+                AddNewListItem(navHostController = navHostController)
             }
 
-            if (selectedCities.isEmpty()) {
-                item {
-                    EmptyListScreen()
-                }
-            }
-            else {
+            if (selectedCities.isNotEmpty()) {
                 stickyHeader {
                     CityListItemHeader(title = "Selected cities")
                 }
-                items(items = listOf(selectedCities.first())) { city ->
-                    OtherCityListItem(countryId = city.countryId, navHostController = navHostController)
+                items(items = selectedCities) { city ->
+                    ListItem(cityModel = city)
                 }
             }
         }
@@ -97,7 +89,7 @@ fun LocationsScreenContent(
 }
 
 @Composable
-fun ListItem(navHostController: NavHostController) {
+fun AddNewListItem(navHostController: NavHostController) {
     Card(
             backgroundColor = AppTheme.colors.card,
             shape = RoundedCornerShape(8.dp),
@@ -121,15 +113,27 @@ fun ListItem(navHostController: NavHostController) {
 }
 
 @Composable
-fun EmptyListScreen() {
-    Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
+fun ListItem(
+        cityModel: CityModel
+) {
+    Card(
+            backgroundColor = AppTheme.colors.card,
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 4.dp)
+                    .clickable(onClick = {
+
+                    })
+                    .fillMaxWidth()
     ) {
-        Text(
-                text = "No locations added",
-                style = AppTheme.typography.h5,
-                color = AppTheme.colors.text
-        )
+        Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                    text = cityModel.name,
+                    color = AppTheme.colors.text,
+                    textAlign = TextAlign.Center,
+                    style = AppTheme.typography.listItem,
+                    modifier = Modifier.fillMaxSize().padding(16.dp)
+            )
+        }
     }
 }

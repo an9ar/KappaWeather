@@ -18,14 +18,7 @@ import kotlinx.coroutines.Dispatchers
 @Composable
 fun TestScreen(color: Color) {
     Box(modifier = Modifier.fillMaxSize().background(color), contentAlignment = Alignment.Center) {
-        SearchBar(
-                scope = CoroutineScope(Dispatchers.Default),
-                onDebouncingQueryTextChange = { queryText ->
-                    if (!queryText.isNullOrEmpty()) {
-                        log("LOG - $queryText")
-                    }
-                }
-        )
+
     }
 }
 

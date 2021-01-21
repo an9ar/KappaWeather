@@ -76,13 +76,18 @@ fun CityChooseScreen(
             }
         }
     ) {
-        CityChooseScreenContent(listOfLargestCities = listOfLargestCities, navHostController = navHostController)
+        CityChooseScreenContent(
+                listOfLargestCities = listOfLargestCities,
+                mainViewModel = mainViewModel,
+                navHostController = navHostController
+        )
     }
 }
 
 @Composable
 fun CityChooseScreenContent(
         listOfLargestCities: State<Resource<List<CityModel>>>,
+        mainViewModel: MainViewModel,
         navHostController: NavHostController
 ) {
     Surface(
@@ -92,7 +97,11 @@ fun CityChooseScreenContent(
         when (listOfLargestCities.value.status) {
             Resource.Status.SUCCESS -> {
                 listOfLargestCities.value.data?.let {
-                    CityChooseSuccessScreen(items = it, navHostController = navHostController)
+                    CityChooseSuccessScreen(
+                            items = it,
+                            mainViewModel = mainViewModel,
+                            navHostController = navHostController
+                    )
                 }
                 log("SUCCESS - ${listOfLargestCities.value.data}")
                 log("SUCCESS MSG - ${listOfLargestCities.value.message}")
@@ -114,6 +123,7 @@ fun CityChooseScreenContent(
 @Composable
 fun CityChooseSuccessScreen(
     items: List<CityModel>,
+    mainViewModel: MainViewModel,
     navHostController: NavHostController
 ) {
     LazyColumn(
@@ -125,7 +135,11 @@ fun CityChooseSuccessScreen(
             CityListItemHeader(title = "Top 50 largest cities")
         }
         items(items = items) { city ->
-            LargeCityListItem(city = city, navHostController = navHostController)
+            LargeCityListItem(
+                    city = city,
+                    mainViewModel = mainViewModel,
+                    navHostController = navHostController
+            )
         }
         stickyHeader {
             CityListItemHeader(title = "Other cities")
@@ -186,6 +200,7 @@ fun CityListItemHeader(
 @Composable
 fun LargeCityListItem(
     city: CityModel,
+    mainViewModel: MainViewModel,
     navHostController: NavHostController
 ) {
     Card(
@@ -195,8 +210,10 @@ fun LargeCityListItem(
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .clickable(onClick = {
                 log("CLICKED - $city")
+                mainViewModel.addLocationCity(city = city)
                 navHostController.navigate(Screens.LocationsScreen.routeName) {
-                    popUpTo(Screens.CityChooseScreen.routeName) { inclusive = true }
+                    launchSingleTop = true
+                    popUpTo = navHostController.graph.startDestination
                 }
             })
             .fillMaxWidth()

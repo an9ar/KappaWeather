@@ -106,6 +106,7 @@ fun CitySearchScreen(
     ) {
         CitySearchScreenContent(
                 listOfSearchedCities = listOfSearchedCities,
+                mainViewModel = mainViewModel,
                 navHostController = navHostController
         )
     }
@@ -179,6 +180,7 @@ fun SearchBar(
 @Composable
 fun CitySearchScreenContent(
         listOfSearchedCities: State<Resource<List<CityModel>>>,
+        mainViewModel: MainViewModel,
         navHostController: NavHostController
 ) {
     Column(
@@ -187,7 +189,11 @@ fun CitySearchScreenContent(
         when (listOfSearchedCities.value.status) {
             Resource.Status.SUCCESS -> {
                 listOfSearchedCities.value.data?.let {
-                    SearchedCitiesSuccessScreen(items = it, navHostController = navHostController)
+                    SearchedCitiesSuccessScreen(
+                            items = it,
+                            mainViewModel = mainViewModel,
+                            navHostController = navHostController
+                    )
                 }
                 log("SUCCESS - ${listOfSearchedCities.value.data}")
                 log("SUCCESS MSG - ${listOfSearchedCities.value.message}")
@@ -212,6 +218,7 @@ fun CitySearchScreenContent(
 @Composable
 fun SearchedCitiesSuccessScreen(
         items: List<CityModel>,
+        mainViewModel: MainViewModel,
         navHostController: NavHostController
 ) {
     LazyColumn(
@@ -220,7 +227,11 @@ fun SearchedCitiesSuccessScreen(
                     .add(bottom = AppTheme.sizes.bottomNavigationHeight)
     ) {
         items(items = items) { city ->
-            SearchedCityListItem(city = city, navHostController = navHostController)
+            SearchedCityListItem(
+                    city = city,
+                    mainViewModel = mainViewModel,
+                    navHostController = navHostController
+            )
         }
     }
 }
@@ -228,6 +239,7 @@ fun SearchedCitiesSuccessScreen(
 @Composable
 fun SearchedCityListItem(
         city: CityModel,
+        mainViewModel: MainViewModel,
         navHostController: NavHostController
 ) {
     Card(
@@ -237,8 +249,10 @@ fun SearchedCityListItem(
                     .padding(horizontal = 16.dp, vertical = 4.dp)
                     .clickable(onClick = {
                         log("CLICKED - $city")
+                        mainViewModel.addLocationCity(city = city)
                         navHostController.navigate(Screens.LocationsScreen.routeName) {
-                            popUpTo(Screens.CitySearchScreen.routeName) { inclusive = true }
+                            launchSingleTop = true
+                            popUpTo = navHostController.graph.startDestination
                         }
                     })
                     .fillMaxWidth()
