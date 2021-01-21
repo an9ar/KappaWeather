@@ -16,7 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.navigate
+import androidx.navigation.compose.popUpTo
 import com.an9ar.kappaweather.data.models.CityModel
 import com.an9ar.kappaweather.log
 import com.an9ar.kappaweather.network.utils.Resource
@@ -123,7 +125,7 @@ fun CityChooseSuccessScreen(
             CityListItemHeader(title = "Top 50 largest cities")
         }
         items(items = items) { city ->
-            LargeCityListItem(city = city)
+            LargeCityListItem(city = city, navHostController = navHostController)
         }
         stickyHeader {
             CityListItemHeader(title = "Other cities")
@@ -183,7 +185,8 @@ fun CityListItemHeader(
 
 @Composable
 fun LargeCityListItem(
-    city: CityModel
+    city: CityModel,
+    navHostController: NavHostController
 ) {
     Card(
         backgroundColor = AppTheme.colors.card,
@@ -192,6 +195,9 @@ fun LargeCityListItem(
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .clickable(onClick = {
                 log("CLICKED - $city")
+                navHostController.navigate(Screens.LocationsScreen.routeName) {
+                    popUpTo(Screens.CityChooseScreen.routeName) { inclusive = true }
+                }
             })
             .fillMaxWidth()
     ) {

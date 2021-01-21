@@ -13,6 +13,7 @@ import com.an9ar.kappaweather.network.dto.toCityModel
 import com.an9ar.kappaweather.network.dto.toCountryModel
 import com.an9ar.kappaweather.network.utils.*
 import com.an9ar.kappaweather.network.utils.performFetchOperation
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 class LocationRepositoryImpl @Inject constructor(
@@ -63,9 +64,11 @@ class LocationRepositoryImpl @Inject constructor(
             }
     )
 
-    override suspend fun setCitiesList(citiesList: List<CityDTO>) {
-        citiesList.forEach {
-            citiesDao.insert(it.toCityModel())
-        }
+    override fun addLocationCity(city: CityModel) = runBlocking(Dispatchers.IO) {
+        citiesDao.insert(city = city)
+    }
+
+    override fun getLocationCitiesList(): LiveData<List<CityModel>> {
+        return citiesDao.getCitiesList()
     }
 }

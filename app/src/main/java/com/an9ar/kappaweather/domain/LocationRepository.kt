@@ -12,7 +12,7 @@ interface LocationRepository {
 
     fun getCitiesListByCountry(countryId: String): LiveData<Resource<List<CityModel>>>
     fun getCitiesListBySearch(countryId: String, searchQuery: String): LiveData<Resource<List<CityModel>>>
-    //fun updateCitiesList(countryId: String): LiveData<Resource<List<CityModel>>>
 
-    suspend fun setCitiesList(citiesList: List<CityDTO>)
+    fun addLocationCity(city: CityModel)
+    fun getLocationCitiesList(): LiveData<List<CityModel>>
 }

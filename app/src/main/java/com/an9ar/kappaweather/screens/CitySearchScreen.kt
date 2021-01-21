@@ -24,10 +24,14 @@ import com.an9ar.kappaweather.viewmodels.MainViewModel
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.navigate
+import androidx.navigation.compose.popUpTo
 import com.an9ar.kappaweather.data.models.CityModel
 import com.an9ar.kappaweather.log
 import com.an9ar.kappaweather.network.utils.Resource
@@ -216,7 +220,37 @@ fun SearchedCitiesSuccessScreen(
                     .add(bottom = AppTheme.sizes.bottomNavigationHeight)
     ) {
         items(items = items) { city ->
-            LargeCityListItem(city = city)
+            SearchedCityListItem(city = city, navHostController = navHostController)
+        }
+    }
+}
+
+@Composable
+fun SearchedCityListItem(
+        city: CityModel,
+        navHostController: NavHostController
+) {
+    Card(
+            backgroundColor = AppTheme.colors.card,
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 4.dp)
+                    .clickable(onClick = {
+                        log("CLICKED - $city")
+                        navHostController.navigate(Screens.LocationsScreen.routeName) {
+                            popUpTo(Screens.CitySearchScreen.routeName) { inclusive = true }
+                        }
+                    })
+                    .fillMaxWidth()
+    ) {
+        Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                    text = "${city.name} - ${city.population}",
+                    color = AppTheme.colors.text,
+                    textAlign = TextAlign.Center,
+                    style = AppTheme.typography.listItem,
+                    modifier = Modifier.fillMaxSize().padding(16.dp)
+            )
         }
     }
 }

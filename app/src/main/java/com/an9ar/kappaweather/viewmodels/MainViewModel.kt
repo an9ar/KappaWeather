@@ -14,6 +14,7 @@ class MainViewModel @ViewModelInject constructor(
 
     val splashStatus = locationRepository.getCountriesList()
     val countriesList = locationRepository.updateCountriesList()
+    val locationsList = locationRepository.getLocationCitiesList()
 
     fun setCitySearchQuery(query: String) {
         citySearchQuery.value = query
