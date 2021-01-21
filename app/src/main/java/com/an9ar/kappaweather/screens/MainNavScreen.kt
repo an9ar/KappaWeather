@@ -16,9 +16,9 @@ fun MainNavScreen(
     Surface(color = AppTheme.colors.success) {
         val navHostController = rememberNavController()
         val navItems = listOf(
-            Screens.WeatherScreen,
-            Screens.LocationsScreen,
-            Screens.SettingsScreen
+            Screens.WeatherContainer,
+            Screens.LocationsContainer,
+            Screens.SettingsContainer
         )
         Scaffold(
             bottomBar = {
@@ -28,34 +28,42 @@ fun MainNavScreen(
                 )
             }
         ) {
-            NavHost(navController = navHostController, startDestination = Screens.WeatherScreen.routeName) {
-                //Tab screens
-                composable(Screens.WeatherScreen.routeName) {
-                    TestScreen(color = AppTheme.colors.background)
-                }
-                composable(Screens.LocationsScreen.routeName) {
-                    LocationsScreen(mainViewModel = mainViewModel, navHostController = navHostController)
-                }
-                composable(Screens.SettingsScreen.routeName) {
-                    SettingsScreen(navHostController = navHostController)
-                }
-                //Other screens
-                composable(Screens.CountryChooseScreen.routeName) {
-                    CountryChooseScreen(mainViewModel = mainViewModel, navHostController = navHostController)
-                }
-                composable("${Screens.CityChooseScreen.routeName}/{countryId}") { backStackEntry ->
-                    backStackEntry.arguments?.getString("countryId")?.let { countryId ->
-                        CityChooseScreen(mainViewModel = mainViewModel, navHostController = navHostController, countryId = countryId)
+            NavHost(navController = navHostController, startDestination = Screens.WeatherContainer.routeName) {
+
+                navigation(startDestination = Screens.WeatherScreen.routeName, route = Screens.WeatherContainer.routeName) {
+                    composable(Screens.WeatherScreen.routeName) {
+                        TestScreen(color = AppTheme.colors.background)
                     }
                 }
-                composable("${Screens.CitySearchScreen.routeName}/{countryId}") { backStackEntry ->
-                    backStackEntry.arguments?.getString("countryId")?.let { countryId ->
-                        CitySearchScreen(mainViewModel = mainViewModel, navHostController = navHostController, countryId = countryId)
+
+                navigation(startDestination = Screens.LocationsScreen.routeName, route = Screens.LocationsContainer.routeName) {
+                    composable(Screens.LocationsScreen.routeName) {
+                        LocationsScreen(mainViewModel = mainViewModel, navHostController = navHostController)
+                    }
+                    composable(Screens.CountryChooseScreen.routeName) {
+                        CountryChooseScreen(mainViewModel = mainViewModel, navHostController = navHostController)
+                    }
+                    composable("${Screens.CityChooseScreen.routeName}/{countryId}") { backStackEntry ->
+                        backStackEntry.arguments?.getString("countryId")?.let { countryId ->
+                            CityChooseScreen(mainViewModel = mainViewModel, navHostController = navHostController, countryId = countryId)
+                        }
+                    }
+                    composable("${Screens.CitySearchScreen.routeName}/{countryId}") { backStackEntry ->
+                        backStackEntry.arguments?.getString("countryId")?.let { countryId ->
+                            CitySearchScreen(mainViewModel = mainViewModel, navHostController = navHostController, countryId = countryId)
+                        }
                     }
                 }
-                composable(Screens.CreditsScreen.routeName) {
-                    CreditsScreen(navHostController = navHostController)
+
+                navigation(startDestination = Screens.SettingsScreen.routeName, route = Screens.SettingsContainer.routeName) {
+                    composable(Screens.SettingsScreen.routeName) {
+                        SettingsScreen(navHostController = navHostController)
+                    }
+                    composable(Screens.CreditsScreen.routeName) {
+                        CreditsScreen(navHostController = navHostController)
+                    }
                 }
+
             }
         }
     }

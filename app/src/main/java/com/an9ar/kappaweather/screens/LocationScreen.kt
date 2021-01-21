@@ -92,8 +92,6 @@ fun LocationsScreenContent(
                     OtherCityListItem(countryId = city.countryId, navHostController = navHostController)
                 }
             }
-
-
         }
     }
 }
