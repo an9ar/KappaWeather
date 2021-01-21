@@ -55,7 +55,7 @@ fun CountryChooseScreen(
                         }
                     )
                     IconButton(
-                        onClick = { /*navHostController.navigateUp()*/ },
+                        onClick = { navHostController.navigateUp() },
                         modifier = Modifier
                             .constrainAs(backButton) {
                                 top.linkTo(parent.top)

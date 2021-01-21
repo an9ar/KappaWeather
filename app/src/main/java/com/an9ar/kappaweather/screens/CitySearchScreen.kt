@@ -46,8 +46,8 @@ fun CitySearchScreen(
         countryId: String
 ) {
     val coroutineScope = CoroutineScope(Dispatchers.Main)
-    var searchedCityQuery by remember { mutableStateOf("") }
-    val listOfSearchedCities = mainViewModel.getCitiesListBySearch(countryId = countryId, searchedCityQuery).observeAsState(
+    val searchedCityQuery = mainViewModel.citySearchQuery.observeAsState(initial = "")
+    val listOfSearchedCities = mainViewModel.getCitiesListBySearch(countryId = countryId, searchedCityQuery.value).observeAsState(
             initial = Resource(
                     status = Resource.Status.COMPLETED,
                     data = emptyList(),
@@ -92,9 +92,10 @@ fun CitySearchScreen(
                             onDebouncingQueryTextChange = { queryText ->
                                 if (!queryText.isNullOrEmpty()) {
                                     log("typed - $queryText")
-                                    searchedCityQuery = queryText
+                                    mainViewModel.setCitySearchQuery(query = queryText)
                                 }
-                            }
+                            },
+                            initValue = searchedCityQuery.value
                     )
                 }
             }
@@ -109,7 +110,8 @@ fun CitySearchScreen(
 @Composable
 fun SearchBar(
         scope: CoroutineScope,
-        onDebouncingQueryTextChange: (String?) -> Unit
+        onDebouncingQueryTextChange: (String?) -> Unit,
+        initValue: String = ""
 ) {
     ConstraintLayout(
             modifier = Modifier
@@ -123,7 +125,7 @@ fun SearchBar(
                     .clip(RoundedCornerShape(8.dp))
     ) {
         val (searchBar, clearButton) = createRefs()
-        var searchedCity by remember { mutableStateOf(TextFieldValue("")) }
+        var searchedCity by remember { mutableStateOf(TextFieldValue(initValue)) }
         val focusRequester = remember { FocusRequester() }
         Row(modifier = Modifier
                 .fillMaxWidth()
@@ -148,6 +150,7 @@ fun SearchBar(
                     },
                     singleLine = true,
                     textStyle = AppTheme.typography.queryText,
+                    cursorColor = AppTheme.colors.text,
                     modifier = Modifier.focusRequester(focusRequester = focusRequester)
             )
         }

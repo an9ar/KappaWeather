@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 sealed class Screens(val routeName: String, val screenName: String = "", val screenIcon: ImageVector? = null) {
     //Tab screens
     object WeatherScreen : Screens(routeName = "WeatherScreen", "Weather", Icons.Outlined.Refresh)
+    object LocationsScreen : Screens(routeName = "LocationsScreen", "Locations", Icons.Outlined.Refresh)
     object SettingsScreen : Screens(routeName = "SettingsScreen", "Settings", Icons.Outlined.Settings)
     //Other screens
     object CountryChooseScreen : Screens(routeName = "CountryChooseScreen", "CountryChoose", Icons.Outlined.LocationOn)

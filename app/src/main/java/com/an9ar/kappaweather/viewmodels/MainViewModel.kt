@@ -10,8 +10,14 @@ class MainViewModel @ViewModelInject constructor(
     private val locationRepository: LocationRepository
 ) : ViewModel() {
 
+    val citySearchQuery = MutableLiveData<String>()
+
     val splashStatus = locationRepository.getCountriesList()
     val countriesList = locationRepository.updateCountriesList()
+
+    fun setCitySearchQuery(query: String) {
+        citySearchQuery.value = query
+    }
 
     fun getCitiesListByCountry(countryId: String): LiveData<Resource<List<CityModel>>> {
         return locationRepository.getCitiesListByCountry(countryId = countryId)
