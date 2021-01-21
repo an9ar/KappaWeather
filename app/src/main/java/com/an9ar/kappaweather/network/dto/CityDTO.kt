@@ -29,7 +29,6 @@ data class CityLocationDTO(
 
 fun CityDTO.toCityModel(): CityModel {
     return CityModel(
-            id = null,
             objectId = this.objectId,
             lat = this.location.latitude,
             lng = this.location.longitude,

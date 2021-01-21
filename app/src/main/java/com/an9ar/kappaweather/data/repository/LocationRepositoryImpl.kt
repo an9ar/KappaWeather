@@ -71,4 +71,8 @@ class LocationRepositoryImpl @Inject constructor(
     override fun getLocationCitiesList(): LiveData<List<CityModel>> {
         return citiesDao.getCitiesList()
     }
+
+    override fun clearLocations() = runBlocking(Dispatchers.IO) {
+        citiesDao.clearTable()
+    }
 }

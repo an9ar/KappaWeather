@@ -57,7 +57,7 @@ fun MainNavScreen(
 
                 navigation(startDestination = Screens.SettingsScreen.routeName, route = Screens.SettingsContainer.routeName) {
                     composable(Screens.SettingsScreen.routeName) {
-                        SettingsScreen(navHostController = navHostController)
+                        SettingsScreen(navHostController = navHostController, mainViewModel = mainViewModel)
                     }
                     composable(Screens.CreditsScreen.routeName) {
                         CreditsScreen(navHostController = navHostController)

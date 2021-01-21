@@ -15,4 +15,5 @@ interface LocationRepository {
 
     fun addLocationCity(city: CityModel)
     fun getLocationCitiesList(): LiveData<List<CityModel>>
+    fun clearLocations()
 }

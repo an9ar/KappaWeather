@@ -21,10 +21,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigate
 import com.an9ar.kappaweather.R
 import com.an9ar.kappaweather.theme.AppTheme
+import com.an9ar.kappaweather.viewmodels.MainViewModel
 
 @Composable
 fun SettingsScreen(
-        navHostController: NavHostController
+        navHostController: NavHostController,
+        mainViewModel: MainViewModel
 ) {
     Column(modifier = Modifier.fillMaxSize().background(AppTheme.colors.background)) {
         Box(
@@ -67,8 +69,8 @@ fun SettingsScreen(
             )
             SettingListItem(
                     vectorImage = vectorResource(id = R.drawable.ic_kappa_sign),
-                    itemTitle = "Credits",
-                    onClickAction = {  }
+                    itemTitle = "Clear locations",
+                    onClickAction = { mainViewModel.clearLocations() }
             )
         }
     }

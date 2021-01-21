@@ -28,7 +28,13 @@ class MainViewModel @ViewModelInject constructor(
         return locationRepository.getCitiesListBySearch(countryId = countryId, searchQuery = searchQuery)
     }
 
+    //Locations
+
     fun addLocationCity(city: CityModel) {
         locationRepository.addLocationCity(city = city)
+    }
+
+    fun clearLocations() {
+        locationRepository.clearLocations()
     }
 }
