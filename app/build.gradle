@@ -23,8 +23,7 @@ android {
 
     buildTypes {
         debug{
-            buildConfigField "String", "COUNTRIES_SERVER_URL", "\"https://parseapi.back4app.com/classes/\""
-            buildConfigField "String", "GITHUB_STORAGE_URL", "\"https://parseapi.back4app.com/classes/\""
+            buildConfigField "String", "LOCATIONS_SERVER_URL", "\"https://parseapi.back4app.com/classes/\""
             buildConfigField "String", "X_Parse_Application_Id", "\"mOITO6uEQyMcX9uXIUZ5gbjcjaAlPKcl4nfuTD46\""
             buildConfigField "String", "X_Parse_REST_API_Key", "\"b1tqOKQJ9gTyiJsbQYdj5yuXRvLyuaxM4MdgAPpD\""
         }

@@ -36,7 +36,7 @@ class NetworkModule {
         }
 
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.GITHUB_STORAGE_URL)
+            .baseUrl(BuildConfig.LOCATIONS_SERVER_URL)
             .addCallAdapterFactory(ResultAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create())
             .client(httpClient)
