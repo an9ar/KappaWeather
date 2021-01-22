@@ -135,6 +135,7 @@ fun Pager(
     state: PagerState,
     modifier: Modifier = Modifier,
     offscreenLimit: Int = 2,
+    onPageOpen: (Int) -> Unit,
     pageContent: @Composable PagerScope.() -> Unit
 ) {
     var pageSize by remember { mutableStateOf(0) }
@@ -142,6 +143,7 @@ fun Pager(
         content = {
             val minPage = (state.currentPage - offscreenLimit).coerceAtLeast(state.minPage)
             val maxPage = (state.currentPage + offscreenLimit).coerceAtMost(state.maxPage)
+            onPageOpen(state.currentPage)
 
             for (page in minPage..maxPage) {
                 val pageData = PageData(page)

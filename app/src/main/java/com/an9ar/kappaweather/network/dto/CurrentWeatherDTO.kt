@@ -1,5 +1,6 @@
 package com.an9ar.kappaweather.network.dto
 
+import com.an9ar.kappaweather.data.models.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -63,3 +64,72 @@ data class LocationInformationDTO(
     @SerialName("sunrise") val sunrise: Long,
     @SerialName("sunset") val sunset: Long
 )
+
+fun CurrentWeatherDTO.toLocationModel(objectId: Long): LocationModel {
+    return LocationModel(
+        locationId = objectId,
+        coordinates = this.coordinates.toCoordinatesModel(),
+        weather = this.weather.map { it.toWeatherInformationModel() },
+        base = this.base,
+        mainInformation = this.mainInformation.toMainInformationModel(),
+        visibility = this.visibility,
+        wind = this.wind.toWindInformationModel(),
+        clouds = this.clouds.toCloudsInformationModel(),
+        time = this.time,
+        location = this.location.toLocationInformationModel(),
+        timezone = this.timezone,
+        id = this.id,
+        name = this.name,
+        code = this.code
+    )
+}
+
+fun CoordinatesDTO.toCoordinatesModel(): CoordinatesModel {
+    return CoordinatesModel(
+        longitude = this.longitude,
+        latitude = this.latitude
+    )
+}
+
+fun WeatherInformationDTO.toWeatherInformationModel(): WeatherInformationModel {
+    return WeatherInformationModel(
+        id = this.id,
+        main = this.main,
+        description = this.description,
+        icon = this.icon
+    )
+}
+
+fun MainInformationDTO.toMainInformationModel(): MainInformationModel {
+    return MainInformationModel(
+        temp = this.temp,
+        feels_like = this.feels_like,
+        temp_min = this.temp_min,
+        temp_max = this.temp_max,
+        pressure = this.pressure,
+        humidity = this.humidity,
+        sea_level = this.sea_level,
+        grnd_level = this.grnd_level
+    )
+}
+
+fun WindInformationDTO.toWindInformationModel(): WindInformationModel {
+    return WindInformationModel(
+        speed = this.speed,
+        deg = this.deg
+    )
+}
+
+fun CloudsInformationDTO.toCloudsInformationModel(): CloudsInformationModel {
+    return CloudsInformationModel(
+        all = this.all
+    )
+}
+
+fun LocationInformationDTO.toLocationInformationModel(): LocationInformationModel {
+    return LocationInformationModel(
+        country = this.country,
+        sunrise = this.sunrise,
+        sunset = this.sunset
+    )
+}

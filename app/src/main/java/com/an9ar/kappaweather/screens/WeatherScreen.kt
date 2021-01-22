@@ -35,7 +35,13 @@ fun WeatherPagerScreen(
 ) {
     pagerState.maxPage = colors.size - 1
 
-    Pager(state = pagerState) {
+    Pager(
+        state = pagerState,
+        offscreenLimit = 1,
+        onPageOpen = { pageIndex ->
+
+        }
+    ) {
         Box(modifier = Modifier.fillMaxSize().background(colors[page])) {
 
         }
