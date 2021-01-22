@@ -32,7 +32,7 @@ fun MainNavScreen(
 
                 navigation(startDestination = Screens.WeatherScreen.routeName, route = Screens.WeatherContainer.routeName) {
                     composable(Screens.WeatherScreen.routeName) {
-                        TestScreen(color = AppTheme.colors.background)
+                        WeatherScreen()
                     }
                 }
 
