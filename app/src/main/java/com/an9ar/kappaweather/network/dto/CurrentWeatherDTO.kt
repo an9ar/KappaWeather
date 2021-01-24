@@ -65,8 +65,8 @@ data class LocationInformationDTO(
     @SerialName("sunset") val sunset: Long
 )
 
-fun CurrentWeatherDTO.toLocationModel(objectId: Long): LocationModel {
-    return LocationModel(
+fun CurrentWeatherDTO.toWeatherModel(objectId: String): WeatherModel {
+    return WeatherModel(
         locationId = objectId,
         coordinates = this.coordinates.toCoordinatesModel(),
         weather = this.weather.map { it.toWeatherInformationModel() },

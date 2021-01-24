@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.an9ar.kappaweather.data.db.AppDatabase
 import com.an9ar.kappaweather.data.db.dao.CitiesDao
 import com.an9ar.kappaweather.data.db.dao.CountriesDao
+import com.an9ar.kappaweather.data.db.dao.WeatherDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,4 +32,8 @@ class DatabaseModule {
     @Singleton
     @Provides
     fun provideCountriesDao(db: AppDatabase): CountriesDao = db.getCountriesDao()
+
+    @Singleton
+    @Provides
+    fun provideWeatherDao(db: AppDatabase): WeatherDao = db.getWeatherDao()
 }

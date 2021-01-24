@@ -26,6 +26,8 @@ android {
             buildConfigField "String", "LOCATIONS_SERVER_URL", "\"https://parseapi.back4app.com/classes/\""
             buildConfigField "String", "X_Parse_Application_Id", "\"mOITO6uEQyMcX9uXIUZ5gbjcjaAlPKcl4nfuTD46\""
             buildConfigField "String", "X_Parse_REST_API_Key", "\"b1tqOKQJ9gTyiJsbQYdj5yuXRvLyuaxM4MdgAPpD\""
+            buildConfigField "String", "WEATHER_SERVER_URL", "\"https://api.openweathermap.org/data/2.5/\""
+            buildConfigField "String", "WEATHER_SERVER_TOKEN", "\"12e1afdc7a62d7e303298fd2dd477f09\""
         }
         release {
             minifyEnabled false

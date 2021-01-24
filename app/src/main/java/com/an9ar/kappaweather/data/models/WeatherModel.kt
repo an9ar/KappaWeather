@@ -5,9 +5,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class LocationModel (
+data class WeatherModel (
     @PrimaryKey
-    val locationId: Long,
+    val locationId: String,
     @Embedded
     val coordinates: CoordinatesModel,
     @Embedded
