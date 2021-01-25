@@ -10,7 +10,7 @@ private const val SERVER_TOKEN = BuildConfig.WEATHER_SERVER_TOKEN
 
 interface WeatherApi {
     @GET("weather?units=metric&lang=ru")
-    fun getCurrentWeatherByGeo(
+    suspend fun getCurrentWeatherByGeo(
         @Query("lat") latitude: Double,
         @Query("lon") longitude: Double,
         @Query("appid") token: String = SERVER_TOKEN

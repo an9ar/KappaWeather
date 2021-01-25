@@ -2,8 +2,8 @@ package com.an9ar.kappaweather.di
 
 import com.an9ar.kappaweather.BuildConfig
 import com.an9ar.kappaweather.network.api.LocationApi
+import com.an9ar.kappaweather.network.api.WeatherApi
 import com.an9ar.kappaweather.network.retrofit_result.ResultAdapterFactory
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,5 +42,29 @@ class NetworkModule {
             .client(httpClient)
             .build()
             .create(LocationApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideWeatherApi(): WeatherApi {
+        val httpClient = OkHttpClient.Builder()
+            .apply {
+                if (BuildConfig.DEBUG) {
+                    addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+                }
+            }
+            .build()
+
+        val json = Json {
+            ignoreUnknownKeys = true
+        }
+
+        return Retrofit.Builder()
+            .baseUrl(BuildConfig.WEATHER_SERVER_URL)
+            .addCallAdapterFactory(ResultAdapterFactory())
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(httpClient)
+            .build()
+            .create(WeatherApi::class.java)
     }
 }

@@ -12,4 +12,15 @@ data class CityModel (
     val name: String,
     val population: Long,
     val countryId: String
-)
+) {
+    companion object {
+        val EMPTY = CityModel(
+            objectId = "",
+            lat = 0.0,
+            lng = 0.0,
+            name = "",
+            countryId = "",
+            population = 0
+        )
+    }
+}
