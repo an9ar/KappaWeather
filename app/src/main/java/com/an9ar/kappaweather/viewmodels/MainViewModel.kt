@@ -43,17 +43,17 @@ class MainViewModel @ViewModelInject constructor(
 
     //Weather
 
-    private var selectedWeatherLocation: CityModel = CityModel.EMPTY
+    var selectedWeatherLocation = MutableLiveData<CityModel>()
 
     fun setSelectedWeatherLocation(location: CityModel) {
-        selectedWeatherLocation = location
+        selectedWeatherLocation.value = location
     }
 
-    fun getlocationWeather(): LiveData<Resource<WeatherModel>> {
+    fun getlocationWeather(objectId: String, latitude: Double, longitude: Double): LiveData<Resource<WeatherModel>> {
         return weatherRepository.getlocationWeather(
-            objectId = selectedWeatherLocation.objectId,
-            latitude = selectedWeatherLocation.lat,
-            longitude = selectedWeatherLocation.lng
+            objectId = objectId,
+            latitude = latitude,
+            longitude = longitude
         )
     }
 

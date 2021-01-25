@@ -1,6 +1,7 @@
 package com.an9ar.kappaweather.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +12,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.AmbientAnimationClock
 import com.an9ar.kappaweather.data.models.CityModel
 import com.an9ar.kappaweather.data.models.WeatherModel
@@ -47,8 +49,14 @@ fun WeatherPagerScreen(
     locations: List<CityModel>
 ) {
     pagerState.maxPage = locations.size - 1
-
-    val currentWeatherState = mainViewModel.getlocationWeather().observeAsState(
+    val selectedWeatherLocation = mainViewModel.selectedWeatherLocation.observeAsState(
+        initial = CityModel.EMPTY
+    )
+    val currentWeatherState = mainViewModel.getlocationWeather(
+        objectId = selectedWeatherLocation.value.objectId,
+        latitude = selectedWeatherLocation.value.lat,
+        longitude = selectedWeatherLocation.value.lng
+    ).observeAsState(
         initial = Resource(
             status = Resource.Status.COMPLETED,
             data = WeatherModel.EMPTY,
@@ -64,7 +72,6 @@ fun WeatherPagerScreen(
             log("select TAB numero $pageIndex")
         }
     ) {
-
         WeatherPagerContent(
             currentLocation = locations[page],
             currentWeatherState = currentWeatherState.value
@@ -80,17 +87,14 @@ fun WeatherPagerContent(
     when (currentWeatherState.status) {
         Resource.Status.LOADING -> {
             log("entering to LOADING")
-            WeatherPagerLoadingScreen()
+            ColorBox(Color.Blue)
         }
         Resource.Status.SUCCESS -> {
             log("entering to SUCCESS")
             log("SUCCESS data - ${currentWeatherState.data}")
-            /*currentWeatherState.data?.let {
-
-            }*/
             if (currentWeatherState.data == null) {
                 log("LIST IS NULL")
-                WeatherPagerLoadingScreen()
+                ColorBox(Color.Red)
             }
             else {
                 log("LIST IS NOT NULL")
@@ -109,7 +113,11 @@ fun WeatherPagerSuccessScreen(
     currentLocation: CityModel,
     weatherInfo: WeatherModel
 ) {
-    Column(modifier = Modifier.background(AppTheme.colors.warning)) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
         Text(
             text = currentLocation.name,
             color = AppTheme.colors.text,
@@ -128,6 +136,18 @@ fun WeatherPagerLoadingScreen() {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
+    ) {
+        CircularProgressIndicator(
+            color = AppTheme.colors.text
+        )
+    }
+}
+
+@Composable
+fun ColorBox(color: Color) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize().background(color)
     ) {
         CircularProgressIndicator(
             color = AppTheme.colors.text

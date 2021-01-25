@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CurrentWeatherDTO(
-    @SerialName("coord") val coordinates: CoordinatesDTO,
+    @SerialName("coord") val coordinates: CoordinatesDTO?,
     @SerialName("weather") val weather: List<WeatherInformationDTO>,
     @SerialName("base") val base: String,
     @SerialName("main") val mainInformation: MainInformationDTO,
@@ -65,71 +65,85 @@ data class LocationInformationDTO(
     @SerialName("sunset") val sunset: Long
 )
 
-fun CurrentWeatherDTO.toWeatherModel(objectId: String): WeatherModel {
-    return WeatherModel(
-        locationId = objectId,
-        coordinates = this.coordinates.toCoordinatesModel(),
-        weather = this.weather.map { it.toWeatherInformationModel() },
-        base = this.base,
-        mainInformation = this.mainInformation.toMainInformationModel(),
-        visibility = this.visibility,
-        wind = this.wind.toWindInformationModel(),
-        clouds = this.clouds.toCloudsInformationModel(),
-        time = this.time,
-        location = this.location.toLocationInformationModel(),
-        timezone = this.timezone,
-        id = this.id,
-        name = this.name,
-        code = this.code
-    )
+fun CurrentWeatherDTO?.toWeatherModel(objectId: String): WeatherModel {
+    return this?.let {
+        WeatherModel(
+            locationId = objectId,
+            coordinates = coordinates.toCoordinatesModel() ?: CoordinatesModel.EMPTY,
+            weather = weather.map { it.toWeatherInformationModel() },
+            base = base,
+            mainInformation = mainInformation.toMainInformationModel(),
+            visibility = visibility,
+            wind = wind.toWindInformationModel(),
+            clouds = clouds.toCloudsInformationModel(),
+            time = time,
+            location = location.toLocationInformationModel(),
+            timezone = timezone,
+            id = id,
+            name = name,
+            code = code
+        )
+    } ?: WeatherModel.EMPTY
 }
 
-fun CoordinatesDTO.toCoordinatesModel(): CoordinatesModel {
-    return CoordinatesModel(
-        longitude = this.longitude,
-        latitude = this.latitude
-    )
+fun CoordinatesDTO?.toCoordinatesModel(): CoordinatesModel {
+    return this?.let{
+        CoordinatesModel(
+            longitude = longitude,
+            latitude = latitude
+        )
+    } ?: CoordinatesModel.EMPTY
 }
 
-fun WeatherInformationDTO.toWeatherInformationModel(): WeatherInformationModel {
-    return WeatherInformationModel(
-        id = this.id,
-        main = this.main,
-        description = this.description,
-        icon = this.icon
-    )
+fun WeatherInformationDTO?.toWeatherInformationModel(): WeatherInformationModel {
+    return this?.let{
+        WeatherInformationModel(
+            id = id,
+            main = main,
+            description = description,
+            icon = icon
+        )
+    } ?: WeatherInformationModel.EMPTY
 }
 
-fun MainInformationDTO.toMainInformationModel(): MainInformationModel {
-    return MainInformationModel(
-        temp = this.temp,
-        feels_like = this.feels_like,
-        temp_min = this.temp_min,
-        temp_max = this.temp_max,
-        pressure = this.pressure,
-        humidity = this.humidity,
-        sea_level = this.sea_level,
-        grnd_level = this.grnd_level
-    )
+fun MainInformationDTO?.toMainInformationModel(): MainInformationModel {
+    return this?.let{
+        MainInformationModel(
+            temp = temp,
+            feels_like = feels_like,
+            temp_min = temp_min,
+            temp_max = temp_max,
+            pressure = pressure,
+            humidity = humidity,
+            sea_level = sea_level,
+            grnd_level = grnd_level
+        )
+    } ?: MainInformationModel.EMPTY
 }
 
-fun WindInformationDTO.toWindInformationModel(): WindInformationModel {
-    return WindInformationModel(
-        speed = this.speed,
-        deg = this.deg
-    )
+fun WindInformationDTO?.toWindInformationModel(): WindInformationModel {
+    return this?.let{
+        WindInformationModel(
+            speed = speed,
+            deg = deg
+        )
+    } ?: WindInformationModel.EMPTY
 }
 
-fun CloudsInformationDTO.toCloudsInformationModel(): CloudsInformationModel {
-    return CloudsInformationModel(
-        all = this.all
-    )
+fun CloudsInformationDTO?.toCloudsInformationModel(): CloudsInformationModel {
+    return this?.let{
+        CloudsInformationModel(
+            all = all
+        )
+    } ?: CloudsInformationModel.EMPTY
 }
 
-fun LocationInformationDTO.toLocationInformationModel(): LocationInformationModel {
-    return LocationInformationModel(
-        country = this.country,
-        sunrise = this.sunrise,
-        sunset = this.sunset
-    )
+fun LocationInformationDTO?.toLocationInformationModel(): LocationInformationModel {
+    return this?.let{
+        LocationInformationModel(
+            country = country,
+            sunrise = sunrise,
+            sunset = sunset
+        )
+    } ?: LocationInformationModel.EMPTY
 }

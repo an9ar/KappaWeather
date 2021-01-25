@@ -58,7 +58,16 @@ data class WeatherInformationModel(
     val main: String,
     val description: String,
     val icon: String
-)
+) {
+    companion object {
+        val EMPTY = WeatherInformationModel(
+            id = 0L,
+            main = "",
+            description = "",
+            icon = ""
+        )
+    }
+}
 
 data class MainInformationModel(
     val temp: Double,
