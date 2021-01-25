@@ -2,6 +2,7 @@ package com.an9ar.kappaweather.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.an9ar.kappaweather.data.db.dao.CitiesDao
 import com.an9ar.kappaweather.data.db.dao.CountriesDao
 import com.an9ar.kappaweather.data.db.dao.WeatherDao
@@ -16,8 +17,17 @@ import com.an9ar.kappaweather.data.models.WeatherModel
         CountryModel::class,
         WeatherModel::class
     ],
-    version = 15,
-    exportSchema = false
+    version = 15
+)
+@TypeConverters(
+    value = [
+        CoordinatesModelConverter::class,
+        WeatherInformationModelConverter::class,
+        MainInformationModelConverter::class,
+        WindInformationModelConverter::class,
+        CloudsInformationModelConverter::class,
+        LocationInformationModelConverter::class,
+    ]
 )
 abstract class AppDatabase : RoomDatabase() {
 

@@ -8,20 +8,14 @@ import androidx.room.PrimaryKey
 data class WeatherModel (
     @PrimaryKey
     val locationId: String,
-    @Embedded
     val coordinates: CoordinatesModel,
-    @Embedded
     val weather: List<WeatherInformationModel>,
     val base: String,
-    @Embedded
     val mainInformation: MainInformationModel,
     val visibility: Long,
-    @Embedded
     val wind: WindInformationModel,
-    @Embedded
     val clouds: CloudsInformationModel,
     val time: Long,
-    @Embedded
     val location: LocationInformationModel,
     val timezone: Long,
     val id: Long,
