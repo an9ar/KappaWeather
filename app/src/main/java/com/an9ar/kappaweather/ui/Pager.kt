@@ -161,8 +161,6 @@ fun Pager(
                 state.selectionState = PagerState.SelectionState.Undecided
             },
             onDragStopped = { velocity ->
-                // Velocity is in pixels per second, but we deal in percentage offsets, so we
-                // need to scale the velocity to match
                 state.fling(velocity / pageSize)
             }
         ) { dy ->
@@ -185,8 +183,6 @@ fun Pager(
                     it.measure(childConstraints) to it.page
                 }
                 .forEach { (placeable, page) ->
-                    // TODO: current this centers each page. We should investigate reading
-                    //  gravity modifiers on the child, or maybe as a param to Pager.
                     val xCenterOffset = (constraints.maxWidth - placeable.width) / 2
                     val yCenterOffset = (constraints.maxHeight - placeable.height) / 2
 
@@ -205,28 +201,16 @@ fun Pager(
     }
 }
 
-/**
- * Scope for [Pager] content.
- */
 class PagerScope(
     private val state: PagerState,
     val page: Int
 ) {
-    /**
-     * Returns the current selected page
-     */
     val currentPage: Int
         get() = state.currentPage
 
-    /**
-     * Returns the current selected page offset
-     */
     val currentPageOffset: Float
         get() = state.currentPageOffset
 
-    /**
-     * Returns the current selection state
-     */
     val selectionState: PagerState.SelectionState
         get() = state.selectionState
 }
