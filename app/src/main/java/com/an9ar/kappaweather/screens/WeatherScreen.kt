@@ -27,13 +27,16 @@ import com.an9ar.kappaweather.viewmodels.MainViewModel
 fun WeatherScreen(
     mainViewModel: MainViewModel
 ) {
-    val locationCities = mainViewModel.locationsList.observeAsState(initial = emptyList())
-    if (locationCities.value.isNotEmpty()) {
+    val locationsWeatherlist = mainViewModel.locationsWeatherlist.observeAsState(initial = emptyList())
+    locationsWeatherlist.value.forEach {
+        log("WM - $it")
+    }
+    /*if (locationCities.value.isNotEmpty()) {
         WeatherPagerScreen(
             mainViewModel = mainViewModel,
             locations = locationCities.value
         )
-    }
+    }*/
 
 }
 
@@ -49,7 +52,7 @@ fun WeatherPagerScreen(
     locations: List<CityModel>
 ) {
     pagerState.maxPage = locations.size - 1
-    val selectedWeatherLocation = mainViewModel.selectedWeatherLocation.observeAsState(
+    /*val selectedWeatherLocation = mainViewModel.selectedWeatherLocation.observeAsState(
         initial = CityModel.EMPTY
     )
     val currentWeatherState = mainViewModel.getlocationWeather(
@@ -62,7 +65,7 @@ fun WeatherPagerScreen(
             data = WeatherModel.EMPTY,
             message = ""
         )
-    )
+    )*/
 
     Pager(
         state = pagerState,
@@ -73,18 +76,18 @@ fun WeatherPagerScreen(
         }
     ) {
         WeatherPagerContent(
-            currentLocation = locations[page],
-            currentWeatherState = currentWeatherState.value
+            currentLocation = locations[page]/*,
+            currentWeatherState = currentWeatherState.value*/
         )
     }
 }
 
 @Composable
 fun WeatherPagerContent(
-    currentLocation: CityModel,
-    currentWeatherState: Resource<WeatherModel>
+    currentLocation: CityModel/*,
+    currentWeatherState: Resource<WeatherModel>*/
 ) {
-    when (currentWeatherState.status) {
+    /*when (currentWeatherState.status) {
         Resource.Status.LOADING -> {
             log("entering to LOADING")
             ColorBox(Color.Blue)
@@ -105,6 +108,24 @@ fun WeatherPagerContent(
             }
         }
         Resource.Status.ERROR -> {}
+    }*/
+    SimpleWeatherPagerSuccessScreen(currentLocation = currentLocation)
+}
+
+@Composable
+fun SimpleWeatherPagerSuccessScreen(
+    currentLocation: CityModel
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Text(
+            text = currentLocation.name,
+            color = AppTheme.colors.text,
+            style = AppTheme.typography.h5
+        )
     }
 }
 

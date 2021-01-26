@@ -3,10 +3,11 @@ package com.an9ar.kappaweather.viewmodels
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.an9ar.kappaweather.data.models.CityModel
-import com.an9ar.kappaweather.data.models.WeatherModel
 import com.an9ar.kappaweather.domain.LocationRepository
 import com.an9ar.kappaweather.domain.WeatherRepository
 import com.an9ar.kappaweather.network.utils.Resource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 
 class MainViewModel @ViewModelInject constructor(
     private val locationRepository: LocationRepository,
@@ -45,16 +46,18 @@ class MainViewModel @ViewModelInject constructor(
 
     var selectedWeatherLocation = MutableLiveData<CityModel>()
 
+    val locationsWeatherlist = weatherRepository.getLocalLocationsWeather()
+
     fun setSelectedWeatherLocation(location: CityModel) {
         selectedWeatherLocation.value = location
     }
 
-    fun getlocationWeather(objectId: String, latitude: Double, longitude: Double): LiveData<Resource<WeatherModel>> {
-        return weatherRepository.getlocationWeather(
+    fun getLocationWeather(objectId: String, latitude: Double, longitude: Double): Resource.Status = runBlocking(Dispatchers.IO) {
+        weatherRepository.getLocationWeather(
             objectId = objectId,
             latitude = latitude,
             longitude = longitude
-        )
+        ).await()
     }
 
 }

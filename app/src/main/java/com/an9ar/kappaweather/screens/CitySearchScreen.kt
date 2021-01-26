@@ -31,7 +31,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.navigate
-import androidx.navigation.compose.popUpTo
 import com.an9ar.kappaweather.data.models.CityModel
 import com.an9ar.kappaweather.log
 import com.an9ar.kappaweather.network.utils.Resource
@@ -250,9 +249,23 @@ fun SearchedCityListItem(
                     .clickable(onClick = {
                         log("CLICKED - $city")
                         mainViewModel.addLocationCity(city = city)
-                        navHostController.navigate(Screens.LocationsScreen.routeName) {
-                            launchSingleTop = true
-                            popUpTo = navHostController.graph.startDestination
+                        log("trying to add city - $city")
+                        val weatherSavingState = mainViewModel.getLocationWeather(
+                            objectId = city.objectId,
+                            latitude = city.lat,
+                            longitude = city.lng
+                        )
+                        when (weatherSavingState) {
+                            Resource.Status.SUCCESS -> {
+                                log("FETCHING SUCCESS")
+                                navHostController.navigate(Screens.LocationsScreen.routeName) {
+                                    launchSingleTop = true
+                                    popUpTo = navHostController.graph.startDestination
+                                }
+                            }
+                            Resource.Status.ERROR -> {
+                                log("FETCHING ERROR")
+                            }
                         }
                     })
                     .fillMaxWidth()

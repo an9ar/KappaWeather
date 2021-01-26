@@ -11,14 +11,15 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.navigate
-import androidx.navigation.compose.popUpTo
 import com.an9ar.kappaweather.data.models.CityModel
 import com.an9ar.kappaweather.log
 import com.an9ar.kappaweather.network.utils.Resource
@@ -211,9 +212,23 @@ fun LargeCityListItem(
             .clickable(onClick = {
                 log("CLICKED - $city")
                 mainViewModel.addLocationCity(city = city)
-                navHostController.navigate(Screens.LocationsScreen.routeName) {
-                    launchSingleTop = true
-                    popUpTo = navHostController.graph.startDestination
+                log("trying to add city - $city")
+                val weatherSavingState = mainViewModel.getLocationWeather(
+                    objectId = city.objectId,
+                    latitude = city.lat,
+                    longitude = city.lng
+                )
+                when (weatherSavingState) {
+                    Resource.Status.SUCCESS -> {
+                        log("FETCHING SUCCESS")
+                        navHostController.navigate(Screens.LocationsScreen.routeName) {
+                            launchSingleTop = true
+                            popUpTo = navHostController.graph.startDestination
+                        }
+                    }
+                    Resource.Status.ERROR -> {
+                        log("FETCHING ERROR")
+                    }
                 }
             })
             .fillMaxWidth()

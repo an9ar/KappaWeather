@@ -14,16 +14,16 @@ interface WeatherDao {
     fun getLocationById(locationId: String): LiveData<WeatherModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(country: WeatherModel)
+    suspend fun insert(location: WeatherModel)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(countryList: List<WeatherModel>)
+    suspend fun insertAll(locationsList: List<WeatherModel>)
 
     @Update
-    suspend fun update(country: WeatherModel)
+    suspend fun update(location: WeatherModel)
 
     @Delete
-    suspend fun delete(country: WeatherModel)
+    suspend fun delete(location: WeatherModel)
 
     @Query("DELETE FROM weathermodel")
     suspend fun clearTable()

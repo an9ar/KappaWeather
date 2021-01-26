@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import com.an9ar.kappaweather.log
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 
 fun <T> performFetchOperation(
     networkCall: suspend () -> Resource<T>,
@@ -37,6 +37,22 @@ fun <T, A> performGetNetworkOperation(
                 emit(Resource.error(responseStatus.message!!))
             }
         }
+
+fun <A> performAsyncGetAndInsertOperation(
+    networkCall: suspend () -> Resource<A>,
+    saveCallResult: suspend (A) -> Unit
+): Deferred<Resource.Status> =
+    CoroutineScope(Dispatchers.IO).async {
+        val responseStatus = networkCall.invoke()
+        if (responseStatus.status == Resource.Status.SUCCESS) {
+            saveCallResult(responseStatus.data!!)
+            return@async Resource.Status.SUCCESS
+        } else if (responseStatus.status == Resource.Status.ERROR) {
+            log("error - ${responseStatus.message}")
+            return@async Resource.Status.ERROR
+        }
+        return@async Resource.Status.COMPLETED
+    }
 
 fun <T, A> performUpdateOperation(
     databaseQuery: () -> LiveData<T>,

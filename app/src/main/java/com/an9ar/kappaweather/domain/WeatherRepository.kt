@@ -3,7 +3,10 @@ package com.an9ar.kappaweather.domain
 import androidx.lifecycle.LiveData
 import com.an9ar.kappaweather.data.models.WeatherModel
 import com.an9ar.kappaweather.network.utils.Resource
+import kotlinx.coroutines.Deferred
 
 interface WeatherRepository {
-    fun getlocationWeather(objectId: String, latitude: Double, longitude: Double): LiveData<Resource<WeatherModel>>
+    fun getLocationWeather(objectId: String, latitude: Double, longitude: Double): Deferred<Resource.Status>
+    fun insertLocationWeather(weatherModel: WeatherModel)
+    fun getLocalLocationsWeather(): LiveData<List<WeatherModel>>
 }

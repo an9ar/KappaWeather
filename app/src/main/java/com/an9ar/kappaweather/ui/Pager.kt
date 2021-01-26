@@ -148,10 +148,13 @@ fun Pager(
             for (page in minPage..maxPage) {
                 val pageData = PageData(page)
                 val scope = PagerScope(state, page)
-                key(pageData) {
+                /*key(pageData) {
                     Box(contentAlignment = Alignment.Center, modifier = pageData) {
                         scope.pageContent()
                     }
+                }*/
+                Box(contentAlignment = Alignment.Center, modifier = pageData) {
+                    scope.pageContent()
                 }
             }
         },
