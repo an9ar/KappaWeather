@@ -28,16 +28,12 @@ fun WeatherScreen(
     mainViewModel: MainViewModel
 ) {
     val locationsWeatherlist = mainViewModel.locationsWeatherlist.observeAsState(initial = emptyList())
-    locationsWeatherlist.value.forEach {
-        log("WM - $it")
-    }
-    /*if (locationCities.value.isNotEmpty()) {
+    if (locationsWeatherlist.value.isNotEmpty()) {
         WeatherPagerScreen(
             mainViewModel = mainViewModel,
-            locations = locationCities.value
+            locations = locationsWeatherlist.value
         )
-    }*/
-
+    }
 }
 
 @Composable
@@ -49,89 +45,35 @@ fun WeatherPagerScreen(
         }
     },
     mainViewModel: MainViewModel,
-    locations: List<CityModel>
+    locations: List<WeatherModel>
 ) {
     pagerState.maxPage = locations.size - 1
-    /*val selectedWeatherLocation = mainViewModel.selectedWeatherLocation.observeAsState(
-        initial = CityModel.EMPTY
-    )
-    val currentWeatherState = mainViewModel.getlocationWeather(
-        objectId = selectedWeatherLocation.value.objectId,
-        latitude = selectedWeatherLocation.value.lat,
-        longitude = selectedWeatherLocation.value.lng
-    ).observeAsState(
-        initial = Resource(
-            status = Resource.Status.COMPLETED,
-            data = WeatherModel.EMPTY,
-            message = ""
-        )
-    )*/
 
     Pager(
         state = pagerState,
         offscreenLimit = 1,
         onPageOpen = { pageIndex ->
-            mainViewModel.setSelectedWeatherLocation(location = locations[pageIndex])
+            //mainViewModel.setSelectedWeatherLocation(location = locations[pageIndex])
             log("select TAB numero $pageIndex")
         }
     ) {
         WeatherPagerContent(
-            currentLocation = locations[page]/*,
-            currentWeatherState = currentWeatherState.value*/
+            currentLocation = locations[page]
         )
     }
 }
 
 @Composable
 fun WeatherPagerContent(
-    currentLocation: CityModel/*,
-    currentWeatherState: Resource<WeatherModel>*/
+    currentLocation: WeatherModel
 ) {
-    /*when (currentWeatherState.status) {
-        Resource.Status.LOADING -> {
-            log("entering to LOADING")
-            ColorBox(Color.Blue)
-        }
-        Resource.Status.SUCCESS -> {
-            log("entering to SUCCESS")
-            log("SUCCESS data - ${currentWeatherState.data}")
-            if (currentWeatherState.data == null) {
-                log("LIST IS NULL")
-                ColorBox(Color.Red)
-            }
-            else {
-                log("LIST IS NOT NULL")
-                WeatherPagerSuccessScreen(
-                    currentLocation = currentLocation,
-                    weatherInfo = currentWeatherState.data
-                )
-            }
-        }
-        Resource.Status.ERROR -> {}
-    }*/
-    SimpleWeatherPagerSuccessScreen(currentLocation = currentLocation)
-}
-
-@Composable
-fun SimpleWeatherPagerSuccessScreen(
-    currentLocation: CityModel
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Text(
-            text = currentLocation.name,
-            color = AppTheme.colors.text,
-            style = AppTheme.typography.h5
-        )
-    }
+    WeatherPagerSuccessScreen(
+        weatherInfo = currentLocation
+    )
 }
 
 @Composable
 fun WeatherPagerSuccessScreen(
-    currentLocation: CityModel,
     weatherInfo: WeatherModel
 ) {
     Column(
@@ -140,7 +82,7 @@ fun WeatherPagerSuccessScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         Text(
-            text = currentLocation.name,
+            text = weatherInfo.locationName,
             color = AppTheme.colors.text,
             style = AppTheme.typography.h5
         )
@@ -157,18 +99,6 @@ fun WeatherPagerLoadingScreen() {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.fillMaxSize()
-    ) {
-        CircularProgressIndicator(
-            color = AppTheme.colors.text
-        )
-    }
-}
-
-@Composable
-fun ColorBox(color: Color) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxSize().background(color)
     ) {
         CircularProgressIndicator(
             color = AppTheme.colors.text

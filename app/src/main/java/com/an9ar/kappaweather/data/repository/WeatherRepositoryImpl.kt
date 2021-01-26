@@ -59,6 +59,7 @@ class WeatherRepositoryImpl @Inject constructor(
 
     override fun getLocationWeather(
         objectId: String,
+        objectName: String,
         latitude: Double,
         longitude: Double
     ): Deferred<Resource.Status> = performAsyncGetAndInsertOperation(
@@ -72,7 +73,7 @@ class WeatherRepositoryImpl @Inject constructor(
         },
         saveCallResult = { response ->
             log("WEATHER RESPONSE - $response")
-            weatherDao.insert(response.toWeatherModel(objectId = objectId))
+            weatherDao.insert(response.toWeatherModel(objectId = objectId, objectName = objectName))
         }
     )
 

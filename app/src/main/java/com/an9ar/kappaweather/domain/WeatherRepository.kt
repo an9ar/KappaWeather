@@ -6,7 +6,7 @@ import com.an9ar.kappaweather.network.utils.Resource
 import kotlinx.coroutines.Deferred
 
 interface WeatherRepository {
-    fun getLocationWeather(objectId: String, latitude: Double, longitude: Double): Deferred<Resource.Status>
+    fun getLocationWeather(objectId: String, objectName: String, latitude: Double, longitude: Double): Deferred<Resource.Status>
     fun insertLocationWeather(weatherModel: WeatherModel)
     fun getLocalLocationsWeather(): LiveData<List<WeatherModel>>
 }

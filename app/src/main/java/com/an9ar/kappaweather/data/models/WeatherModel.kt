@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class WeatherModel (
     @PrimaryKey
     val locationId: String,
+    val locationName: String,
     val coordinates: CoordinatesModel,
     val weather: List<WeatherInformationModel>,
     val base: String,
@@ -24,6 +25,7 @@ data class WeatherModel (
     companion object {
         val EMPTY = WeatherModel(
             locationId = "",
+            locationName = "",
             coordinates = CoordinatesModel.EMPTY,
             weather = emptyList(),
             base = "",

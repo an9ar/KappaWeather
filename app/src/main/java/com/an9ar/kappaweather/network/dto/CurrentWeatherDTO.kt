@@ -65,10 +65,11 @@ data class LocationInformationDTO(
     @SerialName("sunset") val sunset: Long
 )
 
-fun CurrentWeatherDTO?.toWeatherModel(objectId: String): WeatherModel {
+fun CurrentWeatherDTO?.toWeatherModel(objectId: String, objectName: String): WeatherModel {
     return this?.let {
         WeatherModel(
             locationId = objectId,
+            locationName = objectName,
             coordinates = coord.toCoordinatesModel(),
             weather = weather.map { it.toWeatherInformationModel() },
             base = base,
