@@ -6,25 +6,25 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CurrentWeatherDTO(
-    @SerialName("coord") val coordinates: CoordinatesDTO?,
+    @SerialName("coord") val coord: CoordinatesDTO?,
     @SerialName("weather") val weather: List<WeatherInformationDTO>,
     @SerialName("base") val base: String,
-    @SerialName("main") val mainInformation: MainInformationDTO,
+    @SerialName("main") val main: MainInformationDTO,
     @SerialName("visibility") val visibility: Long,
     @SerialName("wind") val wind: WindInformationDTO,
     @SerialName("clouds") val clouds: CloudsInformationDTO,
-    @SerialName("dt") val time: Long,
-    @SerialName("sys") val location: LocationInformationDTO,
+    @SerialName("dt") val dt: Long,
+    @SerialName("sys") val sys: LocationInformationDTO,
     @SerialName("timezone") val timezone: Long,
     @SerialName("id") val id: Long,
     @SerialName("name") val name: String,
-    @SerialName("cod") val code: Int
+    @SerialName("cod") val cod: Int
 )
 
 @Serializable
 data class CoordinatesDTO(
-    @SerialName("lon") val longitude: Double,
-    @SerialName("lat") val latitude: Double
+    @SerialName("lon") val lon: Double,
+    @SerialName("lat") val lat: Double
 )
 
 @Serializable
@@ -69,19 +69,19 @@ fun CurrentWeatherDTO?.toWeatherModel(objectId: String): WeatherModel {
     return this?.let {
         WeatherModel(
             locationId = objectId,
-            coordinates = coordinates.toCoordinatesModel() ?: CoordinatesModel.EMPTY,
+            coordinates = coord.toCoordinatesModel(),
             weather = weather.map { it.toWeatherInformationModel() },
             base = base,
-            mainInformation = mainInformation.toMainInformationModel(),
+            mainInformation = main.toMainInformationModel(),
             visibility = visibility,
             wind = wind.toWindInformationModel(),
             clouds = clouds.toCloudsInformationModel(),
-            time = time,
-            location = location.toLocationInformationModel(),
+            time = dt,
+            location = sys.toLocationInformationModel(),
             timezone = timezone,
             id = id,
             name = name,
-            code = code
+            code = cod
         )
     } ?: WeatherModel.EMPTY
 }
@@ -89,8 +89,8 @@ fun CurrentWeatherDTO?.toWeatherModel(objectId: String): WeatherModel {
 fun CoordinatesDTO?.toCoordinatesModel(): CoordinatesModel {
     return this?.let{
         CoordinatesModel(
-            longitude = longitude,
-            latitude = latitude
+            longitude = lon,
+            latitude = lat
         )
     } ?: CoordinatesModel.EMPTY
 }

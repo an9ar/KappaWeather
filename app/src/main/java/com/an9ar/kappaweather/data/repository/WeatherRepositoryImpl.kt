@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import com.an9ar.kappaweather.data.db.dao.WeatherDao
 import com.an9ar.kappaweather.data.models.WeatherModel
 import com.an9ar.kappaweather.domain.WeatherRepository
+import com.an9ar.kappaweather.log
 import com.an9ar.kappaweather.network.api.WeatherApi
 import com.an9ar.kappaweather.network.dto.toWeatherModel
 import com.an9ar.kappaweather.network.utils.*
@@ -70,6 +71,7 @@ class WeatherRepositoryImpl @Inject constructor(
             }
         },
         saveCallResult = { response ->
+            log("WEATHER RESPONSE - $response")
             weatherDao.insert(response.toWeatherModel(objectId = objectId))
         }
     )
