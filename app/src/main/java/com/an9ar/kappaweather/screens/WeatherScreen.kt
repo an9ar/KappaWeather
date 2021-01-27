@@ -86,7 +86,7 @@ fun WeatherPagerSuccessScreen(
 
         WeatherLocationTitle(
                 title = weatherInfo.locationName,
-                date = convertDate(weatherInfo.timezone),
+                date = convertDate(weatherInfo.time * 1000),
                 modifier = Modifier.constrainAs(locationTitle) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
@@ -94,18 +94,10 @@ fun WeatherPagerSuccessScreen(
                 }
         )
         WeatherTemperatureWidget(
-                temperature = weatherInfo.mainInformation.temp.roundToInt(),
+                weatherInfo = weatherInfo,
                 modifier = Modifier.wrapContentWidth().constrainAs(temperature) {
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
-        )
-        WeatherDescription(
-                description = weatherInfo.weather.first().description.capitalize(),
-                modifier = Modifier.constrainAs(description) {
-                    top.linkTo(temperature.bottom)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
                 }
@@ -135,7 +127,7 @@ fun WeatherLocationTitle(
                 style = AppTheme.typography.h6
         )
         Text(
-                text = date,
+                text = "Last update: $date",
                 color = AppTheme.colors.text,
                 style = AppTheme.typography.body2
         )
@@ -144,16 +136,38 @@ fun WeatherLocationTitle(
 
 @Composable
 fun WeatherTemperatureWidget(
-        temperature: Int,
+        weatherInfo: WeatherModel,
         modifier: Modifier
 ) {
-    ConstraintLayout(modifier = modifier) {
+    Row(
+            modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(0.3f)) {
+            WeatherAdditionalTemperatureWidget(temperature = weatherInfo.mainInformation.temp_min.roundToInt())
+            WeatherDescription("Min.")
+        }
+        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(0.4f)) {
+            WeatherCurrentTemperatureWidget(temperature = weatherInfo.mainInformation.temp.roundToInt())
+            WeatherDescription(weatherInfo.weather.first().description.capitalize())
+        }
+        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(0.3f)) {
+            WeatherAdditionalTemperatureWidget(temperature = weatherInfo.mainInformation.temp_max.roundToInt())
+            WeatherDescription("Max.")
+        }
+    }
+}
+
+@Composable
+fun WeatherCurrentTemperatureWidget(temperature: Int) {
+    ConstraintLayout {
         val (tempValue, tempSign) = createRefs()
 
         Text(
                 text = temperature.toString(),
                 color = AppTheme.colors.text,
-                style = AppTheme.typography.weatherTemperature,
+                style = AppTheme.typography.weatherCurrentTemperature,
                 modifier = Modifier.constrainAs(tempValue) {
                     top.linkTo(parent.top)
                     bottom.linkTo(parent.bottom)
@@ -169,9 +183,7 @@ fun WeatherTemperatureWidget(
         ) {
             drawCircle(
                     color = Color.Black,
-                    style = Stroke(
-                            width = size.width / 6
-                    ),
+                    style = Stroke(width = size.width / 6),
                     radius = size.width / 4,
                     center = Offset(
                             x = size.width / 2,
@@ -183,14 +195,43 @@ fun WeatherTemperatureWidget(
 }
 
 @Composable
-fun WeatherDescription(
-        description: String,
-        modifier: Modifier
-) {
-    Row(
-            horizontalArrangement = Arrangement.Center,
-            modifier = modifier
-    ) {
+fun WeatherAdditionalTemperatureWidget(temperature: Int) {
+    ConstraintLayout {
+        val (tempValue, tempSign) = createRefs()
+
+        Text(
+                text = temperature.toString(),
+                color = AppTheme.colors.text,
+                style = AppTheme.typography.weatherAdditionalTemperature,
+                modifier = Modifier.constrainAs(tempValue) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                }
+        )
+        Canvas(
+                modifier = Modifier.size(9.dp).constrainAs(tempSign) {
+                    top.linkTo(parent.top, 9.dp)
+                    start.linkTo(parent.end)
+                }
+        ) {
+            drawCircle(
+                    color = Color.Black,
+                    style = Stroke(width = size.width / 5),
+                    radius = size.width / 4,
+                    center = Offset(
+                            x = size.width / 2,
+                            y = size.height / 2
+                    )
+            )
+        }
+    }
+}
+
+@Composable
+fun WeatherDescription(description: String) {
+    Row(horizontalArrangement = Arrangement.Center) {
         Text(
                 text = description,
                 color = AppTheme.colors.text,
