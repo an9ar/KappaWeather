@@ -1,6 +1,6 @@
 package com.an9ar.kappaweather.screens
 
-import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -9,11 +9,11 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.AmbientAnimationClock
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import com.an9ar.kappaweather.R
 import com.an9ar.kappaweather.convertDate
 import com.an9ar.kappaweather.data.models.WeatherModel
 import com.an9ar.kappaweather.log
@@ -82,7 +82,7 @@ fun WeatherPagerSuccessScreen(
     ConstraintLayout(
             modifier = Modifier.fillMaxSize().background(AppTheme.colors.background)
     ) {
-        val (locationTitle, temperature, description) = createRefs()
+        val (locationTitle, iconBlock, temperatureBlock) = createRefs()
 
         WeatherLocationTitle(
                 title = weatherInfo.locationName,
@@ -93,13 +93,22 @@ fun WeatherPagerSuccessScreen(
                     end.linkTo(parent.end)
                 }
         )
-        WeatherTemperatureWidget(
-                weatherInfo = weatherInfo,
-                modifier = Modifier.wrapContentWidth().constrainAs(temperature) {
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
+        WeatherIconBlock(
+                weatherInfo = weatherInfo.weather.first().description.capitalize(),
+                modifier = Modifier.constrainAs(iconBlock) {
+                    top.linkTo(locationTitle.bottom)
+                    bottom.linkTo(temperatureBlock.top)
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
+                }
+        )
+        WeatherTemperatureBlock(
+                weatherInfo = weatherInfo,
+                modifier = Modifier.constrainAs(temperatureBlock) {
+                    top.linkTo(iconBlock.bottom)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
                 }
         )
     }
@@ -135,7 +144,26 @@ fun WeatherLocationTitle(
 }
 
 @Composable
-fun WeatherTemperatureWidget(
+fun WeatherIconBlock(
+        weatherInfo: String,
+        modifier: Modifier
+) {
+    Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier.fillMaxWidth()
+    ) {
+        Image(
+                imageVector = vectorResource(id = R.drawable.ic_kappa_sign),
+                colorFilter = ColorFilter.tint(AppTheme.colors.text),
+                modifier = Modifier.preferredSize(128.dp)
+        )
+        Spacer(modifier = Modifier.preferredHeight(16.dp))
+        WeatherDescription(description = weatherInfo)
+    }
+}
+
+@Composable
+fun WeatherTemperatureBlock(
         weatherInfo: WeatherModel,
         modifier: Modifier
 ) {
@@ -150,7 +178,7 @@ fun WeatherTemperatureWidget(
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(0.4f)) {
             WeatherCurrentTemperatureWidget(temperature = weatherInfo.mainInformation.temp.roundToInt())
-            WeatherDescription(weatherInfo.weather.first().description.capitalize())
+            WeatherDescription("Feels like ${weatherInfo.mainInformation.feels_like.roundToInt()}°")
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(0.3f)) {
             WeatherAdditionalTemperatureWidget(temperature = weatherInfo.mainInformation.temp_max.roundToInt())
@@ -165,7 +193,7 @@ fun WeatherCurrentTemperatureWidget(temperature: Int) {
         val (tempValue, tempSign) = createRefs()
 
         Text(
-                text = temperature.toString(),
+                text = "$temperature°",
                 color = AppTheme.colors.text,
                 style = AppTheme.typography.weatherCurrentTemperature,
                 modifier = Modifier.constrainAs(tempValue) {
@@ -175,22 +203,7 @@ fun WeatherCurrentTemperatureWidget(temperature: Int) {
                     end.linkTo(parent.end)
                 }
         )
-        Canvas(
-                modifier = Modifier.size(24.dp).constrainAs(tempSign) {
-                    top.linkTo(parent.top, 24.dp)
-                    start.linkTo(parent.end)
-                }
-        ) {
-            drawCircle(
-                    color = Color.Black,
-                    style = Stroke(width = size.width / 6),
-                    radius = size.width / 4,
-                    center = Offset(
-                            x = size.width / 2,
-                            y = size.height / 2
-                    )
-            )
-        }
+
     }
 }
 
@@ -200,7 +213,7 @@ fun WeatherAdditionalTemperatureWidget(temperature: Int) {
         val (tempValue, tempSign) = createRefs()
 
         Text(
-                text = temperature.toString(),
+                text = "$temperature°",
                 color = AppTheme.colors.text,
                 style = AppTheme.typography.weatherAdditionalTemperature,
                 modifier = Modifier.constrainAs(tempValue) {
@@ -210,22 +223,6 @@ fun WeatherAdditionalTemperatureWidget(temperature: Int) {
                     end.linkTo(parent.end)
                 }
         )
-        Canvas(
-                modifier = Modifier.size(9.dp).constrainAs(tempSign) {
-                    top.linkTo(parent.top, 9.dp)
-                    start.linkTo(parent.end)
-                }
-        ) {
-            drawCircle(
-                    color = Color.Black,
-                    style = Stroke(width = size.width / 5),
-                    radius = size.width / 4,
-                    center = Offset(
-                            x = size.width / 2,
-                            y = size.height / 2
-                    )
-            )
-        }
     }
 }
 
