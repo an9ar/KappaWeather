@@ -9,7 +9,7 @@ import retrofit2.http.Query
 private const val SERVER_TOKEN = BuildConfig.WEATHER_SERVER_TOKEN
 
 interface WeatherApi {
-    @GET("weather?units=metric&lang=ru")
+    @GET("weather?units=metric") //&lang=ru
     suspend fun getCurrentWeatherByGeo(
         @Query("lat") latitude: Double,
         @Query("lon") longitude: Double,
