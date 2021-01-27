@@ -1,6 +1,7 @@
 package com.an9ar.kappaweather.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -45,10 +46,14 @@ fun CityChooseScreen(
     log("countryId - $countryId")
     Scaffold(
         topBar = {
-            TopAppBar(backgroundColor = AppTheme.colors.toolbar) {
-                ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-                    val (screenTitle, backButton) = createRefs()
-                    Text(
+            ConstraintLayout(modifier = Modifier
+                    .fillMaxWidth()
+                    .background(AppTheme.colors.toolbar)
+                    .padding(AmbientWindowInsets.current.statusBars.toPaddingValues())
+                    .preferredHeight(AppTheme.sizes.appBarHeight)
+            ) {
+                val (screenTitle, backButton) = createRefs()
+                Text(
                         text = "Choose a city",
                         style = AppTheme.typography.h6,
                         color = AppTheme.colors.text,
@@ -58,21 +63,20 @@ fun CityChooseScreen(
                             start.linkTo(parent.start)
                             end.linkTo(parent.end)
                         }
-                    )
-                    IconButton(
+                )
+                IconButton(
                         onClick = { navHostController.navigateUp() },
                         modifier = Modifier
-                            .constrainAs(backButton) {
-                                top.linkTo(parent.top)
-                                bottom.linkTo(parent.bottom)
-                                start.linkTo(parent.start)
-                            }
-                    ) {
-                        Icon(
+                                .constrainAs(backButton) {
+                                    top.linkTo(parent.top)
+                                    bottom.linkTo(parent.bottom)
+                                    start.linkTo(parent.start)
+                                }
+                ) {
+                    Icon(
                             imageVector = Icons.Default.ArrowBack,
                             tint = AppTheme.colors.uiSurface
-                        )
-                    }
+                    )
                 }
             }
         }
@@ -128,8 +132,9 @@ fun CityChooseSuccessScreen(
     navHostController: NavHostController
 ) {
     LazyColumn(
-        contentPadding = AmbientWindowInsets.current.systemBars
-            .toPaddingValues(bottom = false)
+        contentPadding = AmbientWindowInsets.current.navigationBars
+                .toPaddingValues(bottom = false)
+                .add(top = AppTheme.sizes.small)
             .add(bottom = AppTheme.sizes.bottomNavigationHeight)
     ) {
         stickyHeader {

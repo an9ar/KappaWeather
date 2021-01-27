@@ -10,5 +10,6 @@ data class AppSizes internal constructor(
         val large: Dp = 32.dp,
         val larger: Dp = 64.dp,
 
-        val bottomNavigationHeight: Dp = 56.dp
+        val bottomNavigationHeight: Dp = 56.dp,
+        val appBarHeight: Dp = 56.dp
 )

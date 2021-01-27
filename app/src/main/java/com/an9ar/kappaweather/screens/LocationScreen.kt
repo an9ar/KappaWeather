@@ -1,6 +1,7 @@
 package com.an9ar.kappaweather.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -29,21 +30,24 @@ fun LocationsScreen(
     val locationCities = mainViewModel.locationsList.observeAsState(initial = emptyList())
     Scaffold(
             topBar = {
-                TopAppBar(backgroundColor = AppTheme.colors.toolbar) {
-                    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-                        val (screenTitle, backButton) = createRefs()
-                        Text(
-                                text = "Locations managing",
-                                style = AppTheme.typography.h6,
-                                color = AppTheme.colors.text,
-                                modifier = Modifier.constrainAs(screenTitle) {
-                                    top.linkTo(parent.top)
-                                    bottom.linkTo(parent.bottom)
-                                    start.linkTo(parent.start)
-                                    end.linkTo(parent.end)
-                                }
-                        )
-                    }
+                ConstraintLayout(modifier = Modifier
+                        .fillMaxWidth()
+                        .background(AppTheme.colors.toolbar)
+                        .padding(AmbientWindowInsets.current.statusBars.toPaddingValues())
+                        .preferredHeight(AppTheme.sizes.appBarHeight)
+                ) {
+                    val (screenTitle) = createRefs()
+                    Text(
+                            text = "Locations managing",
+                            style = AppTheme.typography.h6,
+                            color = AppTheme.colors.text,
+                            modifier = Modifier.constrainAs(screenTitle) {
+                                top.linkTo(parent.top)
+                                bottom.linkTo(parent.bottom)
+                                start.linkTo(parent.start)
+                                end.linkTo(parent.end)
+                            }
+                    )
                 }
             }
     ) {
@@ -65,8 +69,9 @@ fun LocationsScreenContent(
             modifier = Modifier.fillMaxSize()
     ) {
         LazyColumn(
-                contentPadding = AmbientWindowInsets.current.systemBars
+                contentPadding = AmbientWindowInsets.current.navigationBars
                         .toPaddingValues(bottom = false)
+                        .add(top = AppTheme.sizes.small)
                         .add(bottom = AppTheme.sizes.bottomNavigationHeight)
         ) {
             stickyHeader {

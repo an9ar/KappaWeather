@@ -60,34 +60,37 @@ fun CitySearchScreen(
     Scaffold(
             topBar = {
                 Column {
-                    TopAppBar(backgroundColor = AppTheme.colors.toolbar) {
-                        ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-                            val (screenTitle, backButton) = createRefs()
-                            Text(
-                                    text = "Other cities",
-                                    style = AppTheme.typography.h6,
-                                    color = AppTheme.colors.text,
-                                    modifier = Modifier.constrainAs(screenTitle) {
-                                        top.linkTo(parent.top)
-                                        bottom.linkTo(parent.bottom)
-                                        start.linkTo(parent.start)
-                                        end.linkTo(parent.end)
-                                    }
+                    ConstraintLayout(modifier = Modifier
+                            .fillMaxWidth()
+                            .background(AppTheme.colors.toolbar)
+                            .padding(AmbientWindowInsets.current.statusBars.toPaddingValues())
+                            .preferredHeight(AppTheme.sizes.appBarHeight)
+                    ) {
+                        val (screenTitle, backButton) = createRefs()
+                        Text(
+                                text = "Other cities",
+                                style = AppTheme.typography.h6,
+                                color = AppTheme.colors.text,
+                                modifier = Modifier.constrainAs(screenTitle) {
+                                    top.linkTo(parent.top)
+                                    bottom.linkTo(parent.bottom)
+                                    start.linkTo(parent.start)
+                                    end.linkTo(parent.end)
+                                }
+                        )
+                        IconButton(
+                                onClick = { navHostController.navigateUp() },
+                                modifier = Modifier
+                                        .constrainAs(backButton) {
+                                            top.linkTo(parent.top)
+                                            bottom.linkTo(parent.bottom)
+                                            start.linkTo(parent.start)
+                                        }
+                        ) {
+                            Icon(
+                                    imageVector = Icons.Default.ArrowBack,
+                                    tint = AppTheme.colors.uiSurface
                             )
-                            IconButton(
-                                    onClick = { navHostController.navigateUp() },
-                                    modifier = Modifier
-                                            .constrainAs(backButton) {
-                                                top.linkTo(parent.top)
-                                                bottom.linkTo(parent.bottom)
-                                                start.linkTo(parent.start)
-                                            }
-                            ) {
-                                Icon(
-                                        imageVector = Icons.Default.ArrowBack,
-                                        tint = AppTheme.colors.uiSurface
-                                )
-                            }
                         }
                     }
                     SearchBar(
@@ -221,8 +224,9 @@ fun SearchedCitiesSuccessScreen(
         navHostController: NavHostController
 ) {
     LazyColumn(
-            contentPadding = AmbientWindowInsets.current.systemBars
+            contentPadding = AmbientWindowInsets.current.navigationBars
                     .toPaddingValues(bottom = false)
+                    .add(top = AppTheme.sizes.small)
                     .add(bottom = AppTheme.sizes.bottomNavigationHeight)
     ) {
         items(items = items) { city ->
