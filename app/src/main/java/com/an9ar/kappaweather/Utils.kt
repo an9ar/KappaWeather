@@ -6,5 +6,5 @@ import android.util.Log
 fun log(logMessage: String) = Log.i("LOG_TAG", logMessage)
 
 fun convertDate(dateInMilliseconds: Long): String {
-    return DateFormat.format("dd/MM/yyyy hh:mm:ss", dateInMilliseconds).toString()
+    return DateFormat.format("dd/MM/yyyy HH:mm:ss", dateInMilliseconds).toString()
 }

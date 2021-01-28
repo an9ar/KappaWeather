@@ -52,7 +52,7 @@ class MainViewModel @ViewModelInject constructor(
         selectedWeatherLocation.value = location
     }*/
 
-    fun getLocationWeather(objectId: String, objectName: String, latitude: Double, longitude: Double): Resource.Status = runBlocking(Dispatchers.IO) {
+    fun getLocationWeather(objectId: Long, objectName: String, latitude: Double, longitude: Double): Resource.Status = runBlocking(Dispatchers.IO) {
         weatherRepository.getLocationWeather(
             objectId = objectId,
             objectName = objectName,

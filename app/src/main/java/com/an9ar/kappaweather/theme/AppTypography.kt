@@ -104,13 +104,13 @@ data class AppTypography internal constructor(
         val weatherCurrentTemperature: TextStyle = TextStyle(
                 fontFamily = fontFamily(font(R.font.nunito_light)),
                 fontWeight = FontWeight.Bold,
-                fontSize = 128.sp,
+                fontSize = 72.sp,
                 letterSpacing = 0.sp
         ),
         val weatherAdditionalTemperature: TextStyle = TextStyle(
                 fontFamily = fontFamily(font(R.font.nunito_light)),
-                fontWeight = FontWeight.Bold,
-                fontSize = 48.sp,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 24.sp,
                 letterSpacing = 0.sp
         ),
         val materialTypography: Typography = Typography(

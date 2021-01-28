@@ -58,7 +58,7 @@ class WeatherRepositoryImpl @Inject constructor(
     )*/
 
     override fun getLocationWeather(
-        objectId: String,
+        objectId: Long,
         objectName: String,
         latitude: Double,
         longitude: Double

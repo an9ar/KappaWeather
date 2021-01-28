@@ -4,6 +4,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
@@ -12,11 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.AmbientAnimationClock
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import com.an9ar.kappaweather.R
 import com.an9ar.kappaweather.convertDate
 import com.an9ar.kappaweather.data.models.WeatherModel
+import com.an9ar.kappaweather.data.models.toWeatherType
 import com.an9ar.kappaweather.log
+import com.an9ar.kappaweather.network.utils.Resource
 import com.an9ar.kappaweather.theme.AppTheme
 import com.an9ar.kappaweather.ui.Pager
 import com.an9ar.kappaweather.ui.PagerState
@@ -28,161 +33,210 @@ import kotlin.math.roundToInt
 
 @Composable
 fun WeatherScreen(
-        mainViewModel: MainViewModel
+    mainViewModel: MainViewModel
 ) {
     val locationsWeatherlist = mainViewModel.locationsWeatherlist.observeAsState(initial = emptyList())
+    log("locationsWeatherlist - ${locationsWeatherlist.value}")
     if (locationsWeatherlist.value.isNotEmpty()) {
         WeatherPagerScreen(
-                mainViewModel = mainViewModel,
-                locations = locationsWeatherlist.value
+            mainViewModel = mainViewModel,
+            locations = locationsWeatherlist.value.sortedBy { it.locationId }
         )
     }
 }
 
 @Composable
 fun WeatherPagerScreen(
-        pagerState: PagerState = run {
-            val clock = AmbientAnimationClock.current
-            remember(clock) {
-                PagerState(clock)
-            }
-        },
-        mainViewModel: MainViewModel,
-        locations: List<WeatherModel>
+    pagerState: PagerState = run {
+        val clock = AmbientAnimationClock.current
+        remember(clock) {
+            PagerState(clock)
+        }
+    },
+    mainViewModel: MainViewModel,
+    locations: List<WeatherModel>
 ) {
     pagerState.maxPage = locations.size - 1
 
     Pager(
-            state = pagerState,
-            offscreenLimit = 1,
-            onPageOpen = { pageIndex ->
-                //mainViewModel.setSelectedWeatherLocation(location = locations[pageIndex])
-                log("select TAB numero $pageIndex")
-            }
+        state = pagerState,
+        offscreenLimit = 1,
+        onPageOpen = { pageIndex ->
+            //mainViewModel.setSelectedWeatherLocation(location = locations[pageIndex])
+            log("select TAB numero $pageIndex")
+        }
     ) {
         WeatherPagerContent(
-                currentLocation = locations[page]
+            currentLocation = locations[page],
+            mainViewModel = mainViewModel
         )
     }
 }
 
 @Composable
 fun WeatherPagerContent(
-        currentLocation: WeatherModel
+    currentLocation: WeatherModel,
+    mainViewModel: MainViewModel
 ) {
     WeatherPagerSuccessScreen(
-            weatherInfo = currentLocation
+        weatherInfo = currentLocation,
+        mainViewModel = mainViewModel
     )
 }
 
 @Composable
 fun WeatherPagerSuccessScreen(
-        weatherInfo: WeatherModel
+    weatherInfo: WeatherModel,
+    mainViewModel: MainViewModel
 ) {
     ConstraintLayout(
-            modifier = Modifier.fillMaxSize().background(AppTheme.colors.background)
+        modifier = Modifier.fillMaxSize().background(AppTheme.colors.background)
     ) {
-        val (locationTitle, iconBlock, temperatureBlock) = createRefs()
+        val (locationTitle, weatherInfoBlock, temperatureBlock) = createRefs()
 
-        WeatherLocationTitle(
-                title = weatherInfo.locationName,
-                date = convertDate(weatherInfo.time * 1000),
-                modifier = Modifier.constrainAs(locationTitle) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
+        LocationTitle(
+            weatherInfo = weatherInfo,
+            mainViewModel = mainViewModel,
+            modifier = Modifier.constrainAs(locationTitle) {
+                top.linkTo(parent.top)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
         )
-        WeatherIconBlock(
-                weatherInfo = weatherInfo.weather.first().description.capitalize(),
-                modifier = Modifier.constrainAs(iconBlock) {
-                    top.linkTo(locationTitle.bottom)
-                    bottom.linkTo(temperatureBlock.top)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
-        )
-        WeatherTemperatureBlock(
-                weatherInfo = weatherInfo,
-                modifier = Modifier.constrainAs(temperatureBlock) {
-                    top.linkTo(iconBlock.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                    bottom.linkTo(parent.bottom)
-                }
-        )
+        Column(modifier = Modifier.constrainAs(weatherInfoBlock) {
+            top.linkTo(locationTitle.bottom)
+            bottom.linkTo(parent.bottom, 56.dp)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+        }
+        ) {
+            WeatherIconBlock(weatherInfo = weatherInfo)
+            Spacer(modifier = Modifier.preferredHeight(64.dp))
+            WeatherTemperatureBlock(weatherInfo = weatherInfo)
+        }
     }
 }
 
 @Composable
-fun WeatherLocationTitle(
-        title: String,
-        date: String,
-        modifier: Modifier
+fun LocationTitle(
+    weatherInfo: WeatherModel,
+    mainViewModel: MainViewModel,
+    modifier: Modifier
 ) {
-    Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier
-                    .fillMaxWidth()
-                    .padding(AmbientWindowInsets.current.systemBars
-                            .toPaddingValues(bottom = false)
-                            .add(top = 8.dp)
-                            .add(bottom = 8.dp)
-                    )
+    ConstraintLayout(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(AmbientWindowInsets.current.systemBars
+                .toPaddingValues(bottom = false)
+                .add(top = 8.dp)
+                .add(bottom = 8.dp)
+            )
     ) {
-        Text(
-                text = title,
+        val (titleBlock, refreshButton) = createRefs()
+
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.constrainAs(titleBlock) {
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
+        ) {
+            Text(
+                text = weatherInfo.locationName,
                 color = AppTheme.colors.text,
                 style = AppTheme.typography.h6
-        )
-        Text(
-                text = "Last update: $date",
+            )
+            Text(
+                text = "Last update: ${convertDate(weatherInfo.time * 1000)}",
                 color = AppTheme.colors.text,
                 style = AppTheme.typography.body2
-        )
+            )
+        }
+        IconButton(
+            onClick = {
+                val weatherUpdateState = mainViewModel.getLocationWeather(
+                    objectId = weatherInfo.locationId,
+                    objectName = weatherInfo.locationName,
+                    latitude = weatherInfo.coordinates.latitude,
+                    longitude = weatherInfo.coordinates.longitude
+                )
+                when (weatherUpdateState) {
+                    Resource.Status.SUCCESS -> {
+                        log("REFRESH SUCCESS")
+                    }
+                    Resource.Status.ERROR -> {
+                        log("REFRESH ERROR")
+                    }
+                }
+            },
+            modifier = Modifier
+                .constrainAs(refreshButton) {
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
+                    end.linkTo(parent.end, 8.dp)
+                }
+        ) {
+            Icon(
+                imageVector = Icons.Default.Refresh,
+                tint = AppTheme.colors.uiSurface
+            )
+        }
     }
+
 }
 
 @Composable
 fun WeatherIconBlock(
-        weatherInfo: String,
-        modifier: Modifier
+    weatherInfo: WeatherModel
 ) {
     Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = modifier.fillMaxWidth()
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.fillMaxWidth()
     ) {
         Image(
-                imageVector = vectorResource(id = R.drawable.ic_kappa_sign),
-                colorFilter = ColorFilter.tint(AppTheme.colors.text),
-                modifier = Modifier.preferredSize(128.dp)
+            imageVector = vectorResource(id = weatherInfo.weather.first().description.toWeatherType().iconId),
+            colorFilter = ColorFilter.tint(AppTheme.colors.text),
+            modifier = Modifier.preferredSize(128.dp)
         )
         Spacer(modifier = Modifier.preferredHeight(16.dp))
-        WeatherDescription(description = weatherInfo)
+        WeatherDescription(
+            description = weatherInfo.weather.first().description,
+            style = AppTheme.typography.h6
+        )
     }
 }
 
 @Composable
 fun WeatherTemperatureBlock(
-        weatherInfo: WeatherModel,
-        modifier: Modifier
+    weatherInfo: WeatherModel
 ) {
     Row(
-            modifier = modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(0.3f)) {
             WeatherAdditionalTemperatureWidget(temperature = weatherInfo.mainInformation.temp_min.roundToInt())
-            WeatherDescription("Min.")
+            WeatherDescription(
+                description = "Min.",
+                style = AppTheme.typography.weatherAdditionalTemperature
+            )
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(0.4f)) {
             WeatherCurrentTemperatureWidget(temperature = weatherInfo.mainInformation.temp.roundToInt())
-            WeatherDescription("Feels like ${weatherInfo.mainInformation.feels_like.roundToInt()}°")
+            WeatherDescription(
+                description = "Feels like ${weatherInfo.mainInformation.feels_like.roundToInt()}°",
+                style = AppTheme.typography.h6
+            )
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(0.3f)) {
             WeatherAdditionalTemperatureWidget(temperature = weatherInfo.mainInformation.temp_max.roundToInt())
-            WeatherDescription("Max.")
+            WeatherDescription(
+                description = "Max.",
+                style = AppTheme.typography.weatherAdditionalTemperature
+            )
         }
     }
 }
@@ -193,15 +247,15 @@ fun WeatherCurrentTemperatureWidget(temperature: Int) {
         val (tempValue, tempSign) = createRefs()
 
         Text(
-                text = "$temperature°",
-                color = AppTheme.colors.text,
-                style = AppTheme.typography.weatherCurrentTemperature,
-                modifier = Modifier.constrainAs(tempValue) {
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
+            text = "$temperature°",
+            color = AppTheme.colors.text,
+            style = AppTheme.typography.weatherCurrentTemperature,
+            modifier = Modifier.constrainAs(tempValue) {
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
         )
 
     }
@@ -213,26 +267,29 @@ fun WeatherAdditionalTemperatureWidget(temperature: Int) {
         val (tempValue, tempSign) = createRefs()
 
         Text(
-                text = "$temperature°",
-                color = AppTheme.colors.text,
-                style = AppTheme.typography.weatherAdditionalTemperature,
-                modifier = Modifier.constrainAs(tempValue) {
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(parent.end)
-                }
+            text = "$temperature°",
+            color = AppTheme.colors.text,
+            style = AppTheme.typography.weatherAdditionalTemperature,
+            modifier = Modifier.constrainAs(tempValue) {
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
         )
     }
 }
 
 @Composable
-fun WeatherDescription(description: String) {
+fun WeatherDescription(
+    description: String,
+    style: TextStyle
+) {
     Row(horizontalArrangement = Arrangement.Center) {
         Text(
-                text = description,
-                color = AppTheme.colors.text,
-                style = AppTheme.typography.h6
+            text = description,
+            color = AppTheme.colors.text,
+            style = AppTheme.typography.h6
         )
     }
 }
@@ -240,11 +297,11 @@ fun WeatherDescription(description: String) {
 @Composable
 fun WeatherPagerLoadingScreen() {
     Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier.fillMaxSize()
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize()
     ) {
         CircularProgressIndicator(
-                color = AppTheme.colors.text
+            color = AppTheme.colors.text
         )
     }
 }

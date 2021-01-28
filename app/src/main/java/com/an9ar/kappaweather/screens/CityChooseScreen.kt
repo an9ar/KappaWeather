@@ -219,7 +219,7 @@ fun LargeCityListItem(
                 mainViewModel.addLocationCity(city = city)
                 log("trying to add city - $city")
                 val weatherSavingState = mainViewModel.getLocationWeather(
-                    objectId = city.objectId,
+                    objectId = System.currentTimeMillis(),
                     objectName = city.name,
                     latitude = city.lat,
                     longitude = city.lng
