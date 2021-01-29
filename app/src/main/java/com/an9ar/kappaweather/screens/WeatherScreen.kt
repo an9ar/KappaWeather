@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
@@ -15,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.AmbientAnimationClock
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.an9ar.kappaweather.convertDate
 import com.an9ar.kappaweather.data.models.WeatherModel
@@ -198,13 +196,10 @@ fun WeatherIconBlock(
         Image(
             imageVector = vectorResource(id = weatherInfo.weather.first().description.toWeatherType().iconId),
             colorFilter = ColorFilter.tint(AppTheme.colors.text),
-            modifier = Modifier.preferredSize(128.dp)
+            modifier = Modifier.preferredSize(192.dp)
         )
         Spacer(modifier = Modifier.preferredHeight(16.dp))
-        WeatherDescription(
-            description = weatherInfo.weather.first().description,
-            style = AppTheme.typography.h6
-        )
+        WeatherDescription(description = weatherInfo.weather.first().description)
     }
 }
 
@@ -219,24 +214,16 @@ fun WeatherTemperatureBlock(
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(0.3f)) {
             WeatherAdditionalTemperatureWidget(temperature = weatherInfo.mainInformation.temp_min.roundToInt())
-            WeatherDescription(
-                description = "Min.",
-                style = AppTheme.typography.weatherAdditionalTemperature
-            )
+            WeatherDescription(description = "Min.")
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(0.4f)) {
             WeatherCurrentTemperatureWidget(temperature = weatherInfo.mainInformation.temp.roundToInt())
             WeatherDescription(
-                description = "Feels like ${weatherInfo.mainInformation.feels_like.roundToInt()}°",
-                style = AppTheme.typography.h6
-            )
+                description = "Feels like ${weatherInfo.mainInformation.feels_like.roundToInt()}°")
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(0.3f)) {
             WeatherAdditionalTemperatureWidget(temperature = weatherInfo.mainInformation.temp_max.roundToInt())
-            WeatherDescription(
-                description = "Max.",
-                style = AppTheme.typography.weatherAdditionalTemperature
-            )
+            WeatherDescription(description = "Max.")
         }
     }
 }
@@ -282,8 +269,7 @@ fun WeatherAdditionalTemperatureWidget(temperature: Int) {
 
 @Composable
 fun WeatherDescription(
-    description: String,
-    style: TextStyle
+    description: String
 ) {
     Row(horizontalArrangement = Arrangement.Center) {
         Text(

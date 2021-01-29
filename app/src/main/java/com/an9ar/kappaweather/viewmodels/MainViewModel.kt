@@ -44,13 +44,7 @@ class MainViewModel @ViewModelInject constructor(
 
     //Weather
 
-    //var selectedWeatherLocation = MutableLiveData<CityModel>()
-
     val locationsWeatherlist = weatherRepository.getLocalLocationsWeather()
-
-    /*fun setSelectedWeatherLocation(location: CityModel) {
-        selectedWeatherLocation.value = location
-    }*/
 
     fun getLocationWeather(objectId: Long, objectName: String, latitude: Double, longitude: Double): Resource.Status = runBlocking(Dispatchers.IO) {
         weatherRepository.getLocationWeather(

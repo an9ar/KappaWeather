@@ -39,47 +39,47 @@ data class AppTypography internal constructor(
                 letterSpacing = 0.sp
         ),
         val h5: TextStyle = TextStyle(
-                fontFamily = fontFamily(font(R.font.nunito_light)),
+                fontFamily = fontFamily(font(R.font.comfortaa_light)),
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
                 letterSpacing = 0.sp
         ),
         val h6: TextStyle = TextStyle(
-                fontFamily = fontFamily(font(R.font.nunito_light)),
+                fontFamily = fontFamily(font(R.font.comfortaa_light)),
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 20.sp,
                 letterSpacing = 0.sp
         ),
         val listHeader: TextStyle = TextStyle(
-                fontFamily = fontFamily(font(R.font.nunito_light)),
+                fontFamily = fontFamily(font(R.font.comfortaa_light)),
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
                 letterSpacing = 0.sp,
                 lineHeight = 24.sp
         ),
         val listItem: TextStyle = TextStyle(
-                fontFamily = fontFamily(font(R.font.nunito_light)),
+                fontFamily = fontFamily(font(R.font.comfortaa_light)),
                 fontWeight = FontWeight.Medium,
                 fontSize = 16.sp,
                 letterSpacing = 0.sp,
                 lineHeight = 24.sp
         ),
         val queryText: TextStyle = TextStyle(
-                fontFamily = fontFamily(font(R.font.nunito_light)),
+                fontFamily = fontFamily(font(R.font.comfortaa_light)),
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 16.sp,
                 letterSpacing = 0.sp,
                 lineHeight = 24.sp
         ),
         val body1: TextStyle = TextStyle(
-                fontFamily = fontFamily(font(R.font.nunito_light)),
+                fontFamily = fontFamily(font(R.font.comfortaa_light)),
                 fontWeight = FontWeight.Medium,
                 fontSize = 16.sp,
                 letterSpacing = 0.sp,
                 lineHeight = 24.sp
         ),
         val body2: TextStyle = TextStyle(
-                fontFamily = fontFamily(font(R.font.nunito_light)),
+                fontFamily = fontFamily(font(R.font.comfortaa_light)),
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.sp,
                 letterSpacing = 0.25.sp
@@ -102,16 +102,22 @@ data class AppTypography internal constructor(
                 letterSpacing = 1.sp
         ),
         val weatherCurrentTemperature: TextStyle = TextStyle(
-                fontFamily = fontFamily(font(R.font.nunito_light)),
+                fontFamily = fontFamily(font(R.font.comfortaa_light)),
                 fontWeight = FontWeight.Bold,
                 fontSize = 72.sp,
                 letterSpacing = 0.sp
         ),
         val weatherAdditionalTemperature: TextStyle = TextStyle(
-                fontFamily = fontFamily(font(R.font.nunito_light)),
+                fontFamily = fontFamily(font(R.font.comfortaa_light)),
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 24.sp,
                 letterSpacing = 0.sp
+        ),
+        val bottomNavigation: TextStyle = TextStyle(
+            fontFamily = fontFamily(font(R.font.comfortaa_light)),
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 12.sp,
+            letterSpacing = 0.sp
         ),
         val materialTypography: Typography = Typography(
                 body1 = paragraph1

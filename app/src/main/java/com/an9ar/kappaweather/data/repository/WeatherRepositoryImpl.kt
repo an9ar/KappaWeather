@@ -18,45 +18,6 @@ class WeatherRepositoryImpl @Inject constructor(
     private val weatherDao: WeatherDao
 ) : WeatherRepository {
 
-    /*override fun getlocationWeather(
-        objectId: String,
-        latitude: Double,
-        longitude: Double
-    ): LiveData<Resource<WeatherModel>> = performUpdateOperation(
-        databaseQuery = { weatherDao.getLocationById(locationId = objectId) },
-        networkCall = {
-            getResult {
-                weatherApi.getCurrentWeatherByGeo(
-                    latitude = latitude,
-                    longitude = longitude
-                )
-            }
-        },
-        saveCallResult = {
-            log("RESULT - $it")
-            log("RESULT (model) - ${it.toWeatherModel(objectId)}")
-            weatherDao.insert(it.toWeatherModel(objectId = objectId))
-        }
-    )*/
-
-    /*override fun getLocationWeather(
-        objectId: String,
-        latitude: Double,
-        longitude: Double
-    ): LiveData<Resource<WeatherModel>> = performGetNetworkOperation(
-        networkCall = {
-            getResult {
-                weatherApi.getCurrentWeatherByGeo(
-                    latitude = latitude,
-                    longitude = longitude
-                )
-            }
-        },
-        convertResponseTo = { response ->
-            response.toWeatherModel(objectId = objectId)
-        }
-    )*/
-
     override fun getLocationWeather(
         objectId: Long,
         objectName: String,
