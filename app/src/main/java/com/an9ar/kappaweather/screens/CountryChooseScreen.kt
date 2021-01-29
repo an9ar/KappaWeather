@@ -43,7 +43,7 @@ fun CountryChooseScreen(
             topBar = {
                 ConstraintLayout(modifier = Modifier
                         .fillMaxWidth()
-                        .background(AppTheme.colors.warning)
+                        .background(AppTheme.colors.background)
                         .padding(AmbientWindowInsets.current.statusBars.toPaddingValues())
                         .preferredHeight(AppTheme.sizes.appBarHeight)
                 ) {

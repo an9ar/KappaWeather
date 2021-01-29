@@ -43,7 +43,12 @@ fun KappaWeatherBottomNavigation(
             BottomNavigationItem(
                     icon = { screen.screenIcon() },
                     selectedContentColor = AppTheme.colors.bottomNavItem,
-                    label = { Text(text = screen.screenName) },
+                    label = {
+                        Text(
+                            text = screen.screenName,
+                            style = AppTheme.typography.bottomNavigation
+                        )
+                    },
                     selected = currentRoute == screen.routeName,
                     onClick = {
                         navHostController.navigate(screen.routeName) {
