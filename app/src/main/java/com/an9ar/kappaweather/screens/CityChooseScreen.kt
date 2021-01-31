@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -33,17 +34,19 @@ fun CityChooseScreen(
     navHostController: NavHostController,
     countryId: String
 ) {
-    val listOfLargestCities = mainViewModel.getCitiesListByCountry(countryId = countryId).observeAsState(
-        initial = Resource(
-            status = Resource.Status.LOADING,
-            data = emptyList(),
-            message = ""
+    val listOfLargestCities =
+        mainViewModel.getCitiesListByCountry(countryId = countryId).observeAsState(
+            initial = Resource(
+                status = Resource.Status.LOADING,
+                data = emptyList(),
+                message = ""
+            )
         )
-    )
     log("countryId - $countryId")
     Scaffold(
         topBar = {
-            ConstraintLayout(modifier = Modifier
+            ConstraintLayout(
+                modifier = Modifier
                     .fillMaxWidth()
                     .background(AppTheme.colors.toolbar)
                     .padding(AmbientWindowInsets.current.statusBars.toPaddingValues())
@@ -51,58 +54,59 @@ fun CityChooseScreen(
             ) {
                 val (screenTitle, backButton) = createRefs()
                 Text(
-                        text = "Choose a city",
-                        style = AppTheme.typography.h6,
-                        color = AppTheme.colors.text,
-                        modifier = Modifier.constrainAs(screenTitle) {
+                    text = "Choose a city",
+                    style = AppTheme.typography.h6,
+                    color = AppTheme.colors.text,
+                    modifier = Modifier.constrainAs(screenTitle) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+                )
+                IconButton(
+                    onClick = { navHostController.navigateUp() },
+                    modifier = Modifier
+                        .constrainAs(backButton) {
                             top.linkTo(parent.top)
                             bottom.linkTo(parent.bottom)
                             start.linkTo(parent.start)
-                            end.linkTo(parent.end)
                         }
-                )
-                IconButton(
-                        onClick = { navHostController.navigateUp() },
-                        modifier = Modifier
-                                .constrainAs(backButton) {
-                                    top.linkTo(parent.top)
-                                    bottom.linkTo(parent.bottom)
-                                    start.linkTo(parent.start)
-                                }
                 ) {
                     Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            tint = AppTheme.colors.uiSurface
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Back",
+                        tint = AppTheme.colors.uiSurface
                     )
                 }
             }
         }
     ) {
         CityChooseScreenContent(
-                listOfLargestCities = listOfLargestCities,
-                mainViewModel = mainViewModel,
-                navHostController = navHostController
+            listOfLargestCities = listOfLargestCities,
+            mainViewModel = mainViewModel,
+            navHostController = navHostController
         )
     }
 }
 
 @Composable
 fun CityChooseScreenContent(
-        listOfLargestCities: State<Resource<List<CityModel>>>,
-        mainViewModel: MainViewModel,
-        navHostController: NavHostController
+    listOfLargestCities: State<Resource<List<CityModel>>>,
+    mainViewModel: MainViewModel,
+    navHostController: NavHostController
 ) {
     Surface(
-            color = AppTheme.colors.background,
-            modifier = Modifier.fillMaxSize()
+        color = AppTheme.colors.background,
+        modifier = Modifier.fillMaxSize()
     ) {
         when (listOfLargestCities.value.status) {
             Resource.Status.SUCCESS -> {
                 listOfLargestCities.value.data?.let {
                     CityChooseSuccessScreen(
-                            items = it,
-                            mainViewModel = mainViewModel,
-                            navHostController = navHostController
+                        items = it,
+                        mainViewModel = mainViewModel,
+                        navHostController = navHostController
                     )
                 }
                 log("SUCCESS - ${listOfLargestCities.value.data}")
@@ -130,8 +134,8 @@ fun CityChooseSuccessScreen(
 ) {
     LazyColumn(
         contentPadding = AmbientWindowInsets.current.navigationBars
-                .toPaddingValues(bottom = false)
-                .add(top = AppTheme.sizes.small)
+            .toPaddingValues(bottom = false)
+            .add(top = AppTheme.sizes.small)
             .add(bottom = AppTheme.sizes.bottomNavigationHeight)
     ) {
         stickyHeader {
@@ -139,9 +143,9 @@ fun CityChooseSuccessScreen(
         }
         items(items = items) { city ->
             LargeCityListItem(
-                    city = city,
-                    mainViewModel = mainViewModel,
-                    navHostController = navHostController
+                city = city,
+                mainViewModel = mainViewModel,
+                navHostController = navHostController
             )
         }
         stickyHeader {
@@ -172,11 +176,15 @@ fun CityListItemHeader(
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth().wrapContentHeight()
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
     ) {
         Divider(
             color = AppTheme.colors.card,
-            modifier = Modifier.weight(1f).padding(start = 16.dp)
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 16.dp)
         )
         Card(
             backgroundColor = AppTheme.colors.card,
@@ -195,7 +203,9 @@ fun CityListItemHeader(
         }
         Divider(
             color = AppTheme.colors.card,
-            modifier = Modifier.weight(1f).padding(end = 16.dp)
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 16.dp)
         )
     }
 }
@@ -242,7 +252,9 @@ fun LargeCityListItem(
                 color = AppTheme.colors.text,
                 textAlign = TextAlign.Center,
                 style = AppTheme.typography.listItem,
-                modifier = Modifier.fillMaxSize().padding(16.dp)
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
             )
         }
     }
@@ -250,26 +262,28 @@ fun LargeCityListItem(
 
 @Composable
 fun OtherCityListItem(
-        countryId: String,
-        navHostController: NavHostController
+    countryId: String,
+    navHostController: NavHostController
 ) {
     Card(
-            backgroundColor = AppTheme.colors.card,
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 4.dp)
-                    .clickable(onClick = {
-                        navHostController.navigate("${Screens.CitySearchScreen.routeName}/$countryId")
-                    })
-                    .fillMaxWidth()
+        backgroundColor = AppTheme.colors.card,
+        shape = RoundedCornerShape(8.dp),
+        modifier = Modifier
+            .padding(horizontal = 16.dp, vertical = 4.dp)
+            .clickable(onClick = {
+                navHostController.navigate("${Screens.CitySearchScreen.routeName}/$countryId")
+            })
+            .fillMaxWidth()
     ) {
         Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
             Text(
-                    text = "Choose another city",
-                    color = AppTheme.colors.text,
-                    textAlign = TextAlign.Center,
-                    style = AppTheme.typography.listItem,
-                    modifier = Modifier.fillMaxSize().padding(16.dp)
+                text = "Choose another city",
+                color = AppTheme.colors.text,
+                textAlign = TextAlign.Center,
+                style = AppTheme.typography.listItem,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
             )
         }
     }

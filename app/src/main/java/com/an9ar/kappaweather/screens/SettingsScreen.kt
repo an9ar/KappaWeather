@@ -25,52 +25,56 @@ import com.an9ar.kappaweather.viewmodels.MainViewModel
 
 @Composable
 fun SettingsScreen(
-        navHostController: NavHostController,
-        mainViewModel: MainViewModel
+    navHostController: NavHostController,
+    mainViewModel: MainViewModel
 ) {
-    Column(modifier = Modifier.fillMaxSize().background(AppTheme.colors.background)) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(AppTheme.colors.background)) {
         Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                        .padding(8.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .fillMaxSize()
-                        .weight(0.4f)
-                        .background(AppTheme.colors.card)
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .padding(8.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .fillMaxSize()
+                .weight(0.4f)
+                .background(AppTheme.colors.card)
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Image(
-                        imageVector = vectorResource(id = R.drawable.ic_kappa_sign),
-                        colorFilter = ColorFilter.tint(AppTheme.colors.text),
-                        modifier = Modifier.preferredSize(64.dp)
+                    imageVector = vectorResource(id = R.drawable.ic_kappa_sign),
+                    contentDescription = "App logo",
+                    colorFilter = ColorFilter.tint(AppTheme.colors.text),
+                    modifier = Modifier.preferredSize(64.dp)
                 )
                 Spacer(modifier = Modifier.preferredHeight(8.dp))
                 Text(text = "Version 1.0.0", color = AppTheme.colors.text)
             }
         }
         Divider(
-                color = AppTheme.colors.card,
-                modifier = Modifier.padding(8.dp)
+            color = AppTheme.colors.card,
+            modifier = Modifier.padding(8.dp)
         )
-        Column(modifier = Modifier
+        Column(
+            modifier = Modifier
                 .padding(4.dp)
                 .fillMaxSize()
                 .weight(0.6f)
         ) {
             SettingListItem(
-                    vectorImage = vectorResource(id = R.drawable.ic_kappa_sign),
-                    itemTitle = "Credits",
-                    onClickAction = { navHostController.navigate(Screens.CreditsScreen.routeName) }
+                vectorImage = vectorResource(id = R.drawable.ic_kappa_sign),
+                itemTitle = "Credits",
+                onClickAction = { navHostController.navigate(Screens.CreditsScreen.routeName) }
             )
             SettingListItem(
-                    vectorImage = vectorResource(id = R.drawable.ic_kappa_sign),
-                    itemTitle = "Colors",
-                    onClickAction = {  }
+                vectorImage = vectorResource(id = R.drawable.ic_kappa_sign),
+                itemTitle = "Colors",
+                onClickAction = { }
             )
             SettingListItem(
-                    vectorImage = vectorResource(id = R.drawable.ic_kappa_sign),
-                    itemTitle = "Clear locations",
-                    onClickAction = { mainViewModel.clearLocations() }
+                vectorImage = vectorResource(id = R.drawable.ic_kappa_sign),
+                itemTitle = "Clear locations",
+                onClickAction = { mainViewModel.clearLocations() }
             )
         }
     }
@@ -78,36 +82,37 @@ fun SettingsScreen(
 
 @Composable
 fun SettingListItem(
-        vectorImage: ImageVector,
-        itemTitle: String,
-        onClickAction: () -> Unit
+    vectorImage: ImageVector,
+    itemTitle: String,
+    onClickAction: () -> Unit
 ) {
     Card(
-            backgroundColor = AppTheme.colors.card,
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier
-                    .padding(horizontal = 4.dp, vertical = 4.dp)
-                    .clickable(onClick = {
-                        onClickAction()
-                    })
-                    .fillMaxWidth()
+        backgroundColor = AppTheme.colors.card,
+        shape = RoundedCornerShape(8.dp),
+        modifier = Modifier
+            .padding(horizontal = 4.dp, vertical = 4.dp)
+            .clickable(onClick = {
+                onClickAction()
+            })
+            .fillMaxWidth()
     ) {
         Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(16.dp)
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(16.dp)
         ) {
             Image(
-                    imageVector = vectorImage,
-                    colorFilter = ColorFilter.tint(AppTheme.colors.text),
-                    modifier = Modifier
-                            .preferredSize(16.dp)
-                            .weight(0.1f)
+                imageVector = vectorImage,
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(AppTheme.colors.text),
+                modifier = Modifier
+                    .preferredSize(16.dp)
+                    .weight(0.1f)
             )
             Text(
-                    text = itemTitle,
-                    color = AppTheme.colors.text,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.weight(0.9f),
+                text = itemTitle,
+                color = AppTheme.colors.text,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.weight(0.9f),
             )
         }
     }

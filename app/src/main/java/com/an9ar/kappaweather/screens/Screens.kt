@@ -11,9 +11,9 @@ sealed class Screens(
         val screenIcon: @Composable () -> Unit = {}
 ) {
     //Containers
-    object WeatherContainer : Screens(routeName = "WeatherContainer", "Weather", { Icon(imageVector = vectorResource(id = R.drawable.ic_weather)) })
-    object LocationsContainer : Screens(routeName = "LocationsContainer", "Locations", { Icon(imageVector = vectorResource(id = R.drawable.ic_locations)) })
-    object SettingsContainer : Screens(routeName = "SettingsContainer", "Settings", { Icon(imageVector = vectorResource(id = R.drawable.ic_settings)) })
+    object WeatherContainer : Screens(routeName = "WeatherContainer", "Weather", { Icon(imageVector = vectorResource(id = R.drawable.ic_weather), contentDescription = "Weather") })
+    object LocationsContainer : Screens(routeName = "LocationsContainer", "Locations", { Icon(imageVector = vectorResource(id = R.drawable.ic_locations), contentDescription = "Locations") })
+    object SettingsContainer : Screens(routeName = "SettingsContainer", "Settings", { Icon(imageVector = vectorResource(id = R.drawable.ic_settings), contentDescription = "Settings") })
 
     //Weather Tab screens
     object WeatherScreen : Screens(routeName = "WeatherScreen")

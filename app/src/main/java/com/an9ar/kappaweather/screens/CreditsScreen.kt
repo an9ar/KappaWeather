@@ -64,7 +64,10 @@ fun AuthorCard(
                     }
                 },
                 error = {
-                    Image(bitmap = imageResource(R.drawable.ic_launcher_background))
+                    Image(
+                        bitmap = imageResource(R.drawable.ic_launcher_background),
+                        contentDescription = null
+                    )
                 },
                 modifier = Modifier
                     .padding(16.dp)
@@ -143,6 +146,7 @@ fun SocialMediaButton(
     ) {
         Image(
             imageVector = buttonImage,
+            contentDescription = null,
             colorFilter = ColorFilter.tint(AppTheme.colors.uiSurface)
         )
     }

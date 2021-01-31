@@ -43,6 +43,7 @@ fun SplashScreenContent() {
     ) {
         Image(
             imageVector = vectorResource(id = R.drawable.ic_kappa_sign),
+            contentDescription = "App logo",
             colorFilter = ColorFilter.tint(AppTheme.colors.text),
             modifier = Modifier.preferredSize(128.dp)
         )

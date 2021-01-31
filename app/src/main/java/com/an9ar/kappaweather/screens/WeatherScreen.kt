@@ -33,7 +33,8 @@ import kotlin.math.roundToInt
 fun WeatherScreen(
     mainViewModel: MainViewModel
 ) {
-    val locationsWeatherlist = mainViewModel.locationsWeatherlist.observeAsState(initial = emptyList())
+    val locationsWeatherlist =
+        mainViewModel.locationsWeatherlist.observeAsState(initial = emptyList())
     log("locationsWeatherlist - ${locationsWeatherlist.value}")
     if (locationsWeatherlist.value.isNotEmpty()) {
         WeatherPagerScreen(
@@ -88,7 +89,9 @@ fun WeatherPagerSuccessScreen(
     mainViewModel: MainViewModel
 ) {
     ConstraintLayout(
-        modifier = Modifier.fillMaxSize().background(AppTheme.colors.background)
+        modifier = Modifier
+            .fillMaxSize()
+            .background(AppTheme.colors.background)
     ) {
         val (locationTitle, weatherInfoBlock, temperatureBlock) = createRefs()
 
@@ -124,10 +127,11 @@ fun LocationTitle(
     ConstraintLayout(
         modifier = modifier
             .fillMaxWidth()
-            .padding(AmbientWindowInsets.current.systemBars
-                .toPaddingValues(bottom = false)
-                .add(top = 8.dp)
-                .add(bottom = 8.dp)
+            .padding(
+                AmbientWindowInsets.current.systemBars
+                    .toPaddingValues(bottom = false)
+                    .add(top = 8.dp)
+                    .add(bottom = 8.dp)
             )
     ) {
         val (titleBlock, refreshButton) = createRefs()
@@ -178,6 +182,7 @@ fun LocationTitle(
         ) {
             Icon(
                 imageVector = Icons.Default.Refresh,
+                contentDescription = "Refresh weather",
                 tint = AppTheme.colors.uiSurface
             )
         }
@@ -195,6 +200,7 @@ fun WeatherIconBlock(
     ) {
         Image(
             imageVector = vectorResource(id = weatherInfo.weather.first().description.toWeatherType().iconId),
+            contentDescription = "Weather icon",
             colorFilter = ColorFilter.tint(AppTheme.colors.text),
             modifier = Modifier.preferredSize(192.dp)
         )
@@ -212,16 +218,26 @@ fun WeatherTemperatureBlock(
         horizontalArrangement = Arrangement.SpaceAround,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(0.3f)) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.weight(0.3f)
+        ) {
             WeatherAdditionalTemperatureWidget(temperature = weatherInfo.mainInformation.temp_min.roundToInt())
             WeatherDescription(description = "Min.")
         }
-        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(0.4f)) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.weight(0.4f)
+        ) {
             WeatherCurrentTemperatureWidget(temperature = weatherInfo.mainInformation.temp.roundToInt())
             WeatherDescription(
-                description = "Feels like ${weatherInfo.mainInformation.feels_like.roundToInt()}°")
+                description = "Feels like ${weatherInfo.mainInformation.feels_like.roundToInt()}°"
+            )
         }
-        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(0.3f)) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.weight(0.3f)
+        ) {
             WeatherAdditionalTemperatureWidget(temperature = weatherInfo.mainInformation.temp_max.roundToInt())
             WeatherDescription(description = "Max.")
         }
