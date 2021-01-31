@@ -11,10 +11,13 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.AmbientAnimationClock
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import com.an9ar.kappaweather.R
 import com.an9ar.kappaweather.convertDate
 import com.an9ar.kappaweather.data.models.WeatherModel
 import com.an9ar.kappaweather.data.models.toWeatherType
@@ -88,32 +91,26 @@ fun WeatherPagerSuccessScreen(
     weatherInfo: WeatherModel,
     mainViewModel: MainViewModel
 ) {
-    ConstraintLayout(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(AppTheme.colors.background)
     ) {
-        val (locationTitle, weatherInfoBlock, temperatureBlock) = createRefs()
-
         LocationTitle(
             weatherInfo = weatherInfo,
-            mainViewModel = mainViewModel,
-            modifier = Modifier.constrainAs(locationTitle) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
+            mainViewModel = mainViewModel
         )
-        Column(modifier = Modifier.constrainAs(weatherInfoBlock) {
-            top.linkTo(locationTitle.bottom)
-            bottom.linkTo(parent.bottom, 56.dp)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-        }
-        ) {
-            WeatherIconBlock(weatherInfo = weatherInfo)
-            Spacer(modifier = Modifier.preferredHeight(64.dp))
-            WeatherTemperatureBlock(weatherInfo = weatherInfo)
+        Column(modifier = Modifier.fillMaxSize()) {
+            WeatherTemperatureInfoBlock(
+                weatherInfo = weatherInfo,
+                modifier = Modifier.weight(0.5f)
+            )
+            WeatherAdditionalInfoBlock(
+                weatherInfo = weatherInfo,
+                modifier = Modifier
+                    .weight(0.5f)
+                    .padding(bottom = AppTheme.sizes.bottomNavigationHeight)
+            )
         }
     }
 }
@@ -121,11 +118,10 @@ fun WeatherPagerSuccessScreen(
 @Composable
 fun LocationTitle(
     weatherInfo: WeatherModel,
-    mainViewModel: MainViewModel,
-    modifier: Modifier
+    mainViewModel: MainViewModel
 ) {
     ConstraintLayout(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(
                 AmbientWindowInsets.current.systemBars
@@ -187,25 +183,109 @@ fun LocationTitle(
             )
         }
     }
-
 }
 
 @Composable
-fun WeatherIconBlock(
-    weatherInfo: WeatherModel
+fun WeatherTemperatureInfoBlock(
+    weatherInfo: WeatherModel,
+    modifier: Modifier
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth()
+        verticalArrangement = Arrangement.Center,
+        modifier = modifier.fillMaxWidth()
     ) {
         Image(
             imageVector = vectorResource(id = weatherInfo.weather.first().description.toWeatherType().iconId),
             contentDescription = "Weather icon",
             colorFilter = ColorFilter.tint(AppTheme.colors.text),
-            modifier = Modifier.preferredSize(192.dp)
+            modifier = Modifier.preferredSize(96.dp)
         )
-        Spacer(modifier = Modifier.preferredHeight(16.dp))
+        Text(
+            text = "${weatherInfo.mainInformation.temp.roundToInt()}°",
+            color = AppTheme.colors.text,
+            style = AppTheme.typography.weatherCurrentTemperature
+        )
         WeatherDescription(description = weatherInfo.weather.first().description)
+    }
+}
+
+@Composable
+fun WeatherAdditionalInfoBlock(
+    weatherInfo: WeatherModel,
+    modifier: Modifier
+) {
+    Column(modifier = modifier.fillMaxWidth()) {
+        Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.weight(0.5f)) {
+            WeatherInfoCard(
+                icon = vectorResource(id = R.drawable.ic_info_weather_temp_min),
+                title = "Min.",
+                value = "${weatherInfo.mainInformation.temp_min.roundToInt()}°",
+                modifier = Modifier.weight(0.5f)
+            )
+            WeatherInfoCard(
+                icon = vectorResource(id = R.drawable.ic_info_weather_temp_max),
+                title = "Max.",
+                value = "${weatherInfo.mainInformation.temp_max.roundToInt()}°",
+                modifier = Modifier.weight(0.5f)
+            )
+        }
+        Row(modifier = Modifier.weight(0.5f)) {
+            WeatherInfoCard(
+                icon = vectorResource(id = R.drawable.ic_info_weather_pressure),
+                title = "Pressure",
+                value = "${weatherInfo.mainInformation.pressure} mm",
+                modifier = Modifier.weight(0.5f)
+            )
+            WeatherInfoCard(
+                icon = vectorResource(id = R.drawable.ic_info_weather_humidity),
+                title = "Humidity",
+                value = "${weatherInfo.mainInformation.humidity}%",
+                modifier = Modifier.weight(0.5f)
+            )
+        }
+    }
+}
+
+@Composable
+fun WeatherInfoCard(
+    icon: ImageVector,
+    title: String,
+    value: String,
+    color: Color = Color.Unspecified,
+    modifier: Modifier
+) {
+    ConstraintLayout(modifier = modifier
+        .fillMaxHeight()
+        .background(color)
+        .padding(16.dp)) {
+        val (infoIcon, infoTitle, infoValue) = createRefs()
+
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            modifier = Modifier.constrainAs(infoIcon) {
+                top.linkTo(parent.top)
+                start.linkTo(parent.start, 16.dp)
+                bottom.linkTo(parent.bottom)
+            }
+        )
+        Text(
+            text = title,
+            modifier = Modifier.constrainAs(infoTitle) {
+                top.linkTo(parent.top)
+                start.linkTo(infoIcon.end, 16.dp)
+                bottom.linkTo(infoValue.top)
+            }
+        )
+        Text(
+            text = value,
+            modifier = Modifier.constrainAs(infoValue) {
+                top.linkTo(infoTitle.bottom)
+                start.linkTo(infoIcon.end, 16.dp)
+                bottom.linkTo(parent.bottom)
+            }
+        )
     }
 }
 
