@@ -32,7 +32,9 @@ import dev.chrisbanes.accompanist.insets.statusBarsPadding
 fun CreditsScreen(
     navHostController: NavHostController
 ) {
-    Column(modifier = Modifier.fillMaxSize().background(AppTheme.colors.background)) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(AppTheme.colors.background)) {
         AuthorCard(this, navHostController = navHostController)
         Spacer(modifier = Modifier.preferredHeight(8.dp))
         SocialMediaBar(this)
@@ -52,12 +54,20 @@ fun AuthorCard(
                 .fillMaxSize()
                 .weight(0.4f)
                 .clip(RoundedCornerShape(bottomLeft = 16.dp, bottomRight = 16.dp))
-                .background(Brush.linearGradient(colors = listOf(AppTheme.colors.card, AppTheme.colors.card)))
+                .background(
+                    Brush.linearGradient(
+                        colors = listOf(
+                            AppTheme.colors.card,
+                            AppTheme.colors.card
+                        )
+                    )
+                )
                 .statusBarsPadding()
         ) {
             val (authorPhoto, backButton) = createRefs()
             GlideImage(
                 data = "https://avatars3.githubusercontent.com/u/63235125?s=460&u=49ee018d6f0b00cc7853b8d9fa79106b8b949b4b&v=4",
+                contentDescription = "Author",
                 loading = {
                     Box(Modifier.fillMaxSize()) {
                         CircularProgressIndicator(Modifier.align(Alignment.Center))

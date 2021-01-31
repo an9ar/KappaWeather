@@ -206,7 +206,11 @@ fun WeatherTemperatureInfoBlock(
             color = AppTheme.colors.text,
             style = AppTheme.typography.weatherCurrentTemperature
         )
-        WeatherDescription(description = weatherInfo.weather.first().description)
+        Text(
+            text = weatherInfo.weather.first().description,
+            color = AppTheme.colors.text,
+            style = AppTheme.typography.h6
+        )
     }
 }
 
@@ -270,109 +274,26 @@ fun WeatherInfoCard(
                 bottom.linkTo(parent.bottom)
             }
         )
-        Text(
-            text = title,
+        Column(
             modifier = Modifier.constrainAs(infoTitle) {
                 top.linkTo(parent.top)
                 start.linkTo(infoIcon.end, 16.dp)
-                bottom.linkTo(infoValue.top)
-            }
-        )
-        Text(
-            text = value,
-            modifier = Modifier.constrainAs(infoValue) {
-                top.linkTo(infoTitle.bottom)
-                start.linkTo(infoIcon.end, 16.dp)
                 bottom.linkTo(parent.bottom)
             }
-        )
-    }
-}
+        ) {
+            Text(
+                text = title,
+                style = AppTheme.typography.additionalWeatherInfoTitle,
+                color = AppTheme.colors.text,
 
-@Composable
-fun WeatherTemperatureBlock(
-    weatherInfo: WeatherModel
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceAround,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.weight(0.3f)
-        ) {
-            WeatherAdditionalTemperatureWidget(temperature = weatherInfo.mainInformation.temp_min.roundToInt())
-            WeatherDescription(description = "Min.")
-        }
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.weight(0.4f)
-        ) {
-            WeatherCurrentTemperatureWidget(temperature = weatherInfo.mainInformation.temp.roundToInt())
-            WeatherDescription(
-                description = "Feels like ${weatherInfo.mainInformation.feels_like.roundToInt()}°"
+            )
+            Text(
+                text = value,
+                style = AppTheme.typography.additionalWeatherInfoValue,
+                color = AppTheme.colors.textSecondary
             )
         }
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.weight(0.3f)
-        ) {
-            WeatherAdditionalTemperatureWidget(temperature = weatherInfo.mainInformation.temp_max.roundToInt())
-            WeatherDescription(description = "Max.")
-        }
-    }
-}
 
-@Composable
-fun WeatherCurrentTemperatureWidget(temperature: Int) {
-    ConstraintLayout {
-        val (tempValue, tempSign) = createRefs()
-
-        Text(
-            text = "$temperature°",
-            color = AppTheme.colors.text,
-            style = AppTheme.typography.weatherCurrentTemperature,
-            modifier = Modifier.constrainAs(tempValue) {
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
-        )
-
-    }
-}
-
-@Composable
-fun WeatherAdditionalTemperatureWidget(temperature: Int) {
-    ConstraintLayout {
-        val (tempValue, tempSign) = createRefs()
-
-        Text(
-            text = "$temperature°",
-            color = AppTheme.colors.text,
-            style = AppTheme.typography.weatherAdditionalTemperature,
-            modifier = Modifier.constrainAs(tempValue) {
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-            }
-        )
-    }
-}
-
-@Composable
-fun WeatherDescription(
-    description: String
-) {
-    Row(horizontalArrangement = Arrangement.Center) {
-        Text(
-            text = description,
-            color = AppTheme.colors.text,
-            style = AppTheme.typography.h6
-        )
     }
 }
 

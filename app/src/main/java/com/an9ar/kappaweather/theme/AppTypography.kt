@@ -107,10 +107,16 @@ data class AppTypography internal constructor(
                 fontSize = 128.sp,
                 letterSpacing = 0.sp
         ),
-        val weatherAdditionalTemperature: TextStyle = TextStyle(
+        val additionalWeatherInfoTitle: TextStyle = TextStyle(
+                fontFamily = fontFamily(font(R.font.comfortaa_light)),
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                letterSpacing = 0.sp
+        ),
+        val additionalWeatherInfoValue: TextStyle = TextStyle(
                 fontFamily = fontFamily(font(R.font.comfortaa_light)),
                 fontWeight = FontWeight.SemiBold,
-                fontSize = 24.sp,
+                fontSize = 16.sp,
                 letterSpacing = 0.sp
         ),
         val bottomNavigation: TextStyle = TextStyle(
