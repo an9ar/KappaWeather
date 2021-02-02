@@ -12,8 +12,10 @@ object AppColors {
     val toolbarReverse = Color(0xFF141414)
     val card = Color(0xFFFFFFFF)
     val cardReverse = Color(0xFF252525)
-    val text = Color(0xFF192038)
-    val textSecondary = Color(0xFF2A3149)
+    val overflowCard = Color(0x33111111)
+    val overflowCardReverse = Color(0x33EEEEEE)
+    val text = Color(0xFF111111)
+    val textSecondary = Color(0xFF333333)
     val textReverse = Color(0xFFEEEEEE)
     val textReverseSecondary = Color(0xFFCCCCCC)
     val bottomNavItem = Color(0xFF000000)
@@ -31,6 +33,7 @@ interface ColorPalette {
     val background: Color
     val toolbar: Color
     val card: Color
+    val overflowCard: Color
     val text: Color
     val textSecondary: Color
     val bottomNavItem: Color
@@ -50,6 +53,7 @@ fun lightColorPalette(): ColorPalette = object : ColorPalette {
     override val background: Color = AppColors.background
     override val toolbar: Color = AppColors.toolbar
     override val card: Color = AppColors.card
+    override val overflowCard: Color = AppColors.overflowCardReverse
     override val text: Color = AppColors.text
     override val textSecondary: Color = AppColors.textSecondary
     override val bottomNavItem: Color = AppColors.bottomNavItem
@@ -73,6 +77,7 @@ fun darkColorPalette(): ColorPalette = object : ColorPalette {
     override val background: Color = AppColors.backgroundReverse
     override val toolbar: Color = AppColors.toolbarReverse
     override val card: Color = AppColors.cardReverse
+    override val overflowCard: Color = AppColors.overflowCard
     override val text: Color = AppColors.textReverse
     override val textSecondary: Color = AppColors.textReverseSecondary
     override val bottomNavItem: Color = AppColors.bottomNavItemReverse

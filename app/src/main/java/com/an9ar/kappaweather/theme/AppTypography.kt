@@ -80,7 +80,7 @@ data class AppTypography internal constructor(
         ),
         val body2: TextStyle = TextStyle(
                 fontFamily = fontFamily(font(R.font.comfortaa_light)),
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.SemiBold,
                 fontSize = 14.sp,
                 letterSpacing = 0.25.sp
         ),
@@ -104,19 +104,19 @@ data class AppTypography internal constructor(
         val weatherCurrentTemperature: TextStyle = TextStyle(
                 fontFamily = fontFamily(font(R.font.comfortaa_light)),
                 fontWeight = FontWeight.Bold,
-                fontSize = 128.sp,
+                fontSize = 96.sp,
                 letterSpacing = 0.sp
         ),
         val additionalWeatherInfoTitle: TextStyle = TextStyle(
                 fontFamily = fontFamily(font(R.font.comfortaa_light)),
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 16.sp,
                 letterSpacing = 0.sp
         ),
         val additionalWeatherInfoValue: TextStyle = TextStyle(
                 fontFamily = fontFamily(font(R.font.comfortaa_light)),
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
                 letterSpacing = 0.sp
         ),
         val bottomNavigation: TextStyle = TextStyle(

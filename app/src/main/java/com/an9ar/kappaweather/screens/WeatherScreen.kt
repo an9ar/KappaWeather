@@ -3,6 +3,7 @@ package com.an9ar.kappaweather.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
@@ -11,10 +12,12 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AmbientAnimationClock
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.an9ar.kappaweather.R
@@ -91,26 +94,32 @@ fun WeatherPagerSuccessScreen(
     weatherInfo: WeatherModel,
     mainViewModel: MainViewModel
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(AppTheme.colors.background)
-    ) {
-        LocationTitle(
-            weatherInfo = weatherInfo,
-            mainViewModel = mainViewModel
+    Box(modifier = Modifier.fillMaxSize()) {
+        Image(
+            bitmap = imageResource(id = R.drawable.broken_clouds_2),
+            contentScale = ContentScale.Crop,
+            contentDescription = null
         )
-        Column(modifier = Modifier.fillMaxSize()) {
-            WeatherTemperatureInfoBlock(
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            LocationTitle(
                 weatherInfo = weatherInfo,
-                modifier = Modifier.weight(0.5f)
+                mainViewModel = mainViewModel
             )
-            WeatherAdditionalInfoBlock(
-                weatherInfo = weatherInfo,
-                modifier = Modifier
-                    .weight(0.5f)
-                    .padding(bottom = AppTheme.sizes.bottomNavigationHeight)
-            )
+            Column(modifier = Modifier.fillMaxSize().padding(horizontal = 4.dp)) {
+                WeatherTemperatureInfoBlock(
+                    weatherInfo = weatherInfo,
+                    modifier = Modifier.weight(0.5f)
+                )
+                WeatherAdditionalInfoBlock(
+                    weatherInfo = weatherInfo,
+                    modifier = Modifier
+                        .weight(0.5f)
+                        .padding(bottom = AppTheme.sizes.bottomNavigationHeight)
+                )
+            }
         }
     }
 }
@@ -148,7 +157,7 @@ fun LocationTitle(
             )
             Text(
                 text = "Last update: ${convertDate(weatherInfo.time * 1000)}",
-                color = AppTheme.colors.text,
+                color = AppTheme.colors.textSecondary,
                 style = AppTheme.typography.body2
             )
         }
@@ -190,27 +199,36 @@ fun WeatherTemperatureInfoBlock(
     weatherInfo: WeatherModel,
     modifier: Modifier
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = modifier.fillMaxWidth()
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .fillMaxHeight()
+            .padding(4.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(AppTheme.colors.overflowCard)
     ) {
-        Image(
-            imageVector = vectorResource(id = weatherInfo.weather.first().description.toWeatherType().iconId),
-            contentDescription = "Weather icon",
-            colorFilter = ColorFilter.tint(AppTheme.colors.text),
-            modifier = Modifier.preferredSize(96.dp)
-        )
-        Text(
-            text = "${weatherInfo.mainInformation.temp.roundToInt()}°",
-            color = AppTheme.colors.text,
-            style = AppTheme.typography.weatherCurrentTemperature
-        )
-        Text(
-            text = weatherInfo.weather.first().description,
-            color = AppTheme.colors.text,
-            style = AppTheme.typography.h6
-        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = modifier.fillMaxWidth()
+        ) {
+            Image(
+                imageVector = vectorResource(id = weatherInfo.weather.first().description.toWeatherType().iconId),
+                contentDescription = "Weather icon",
+                colorFilter = ColorFilter.tint(AppTheme.colors.text),
+                modifier = Modifier.preferredSize(80.dp)
+            )
+            Text(
+                text = "${weatherInfo.mainInformation.temp.roundToInt()}°",
+                color = AppTheme.colors.text,
+                style = AppTheme.typography.weatherCurrentTemperature
+            )
+            Text(
+                text = weatherInfo.weather.first().description,
+                color = AppTheme.colors.text,
+                style = AppTheme.typography.h6
+            )
+        }
     }
 }
 
@@ -234,7 +252,7 @@ fun WeatherAdditionalInfoBlock(
                 modifier = Modifier.weight(0.5f)
             )
         }
-        Row(modifier = Modifier.weight(0.5f)) {
+        Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.weight(0.5f)) {
             WeatherInfoCard(
                 icon = vectorResource(id = R.drawable.ic_info_weather_pressure),
                 title = "Pressure",
@@ -256,44 +274,48 @@ fun WeatherInfoCard(
     icon: ImageVector,
     title: String,
     value: String,
-    color: Color = Color.Unspecified,
     modifier: Modifier
 ) {
-    ConstraintLayout(modifier = modifier
-        .fillMaxHeight()
-        .background(color)
-        .padding(16.dp)) {
-        val (infoIcon, infoTitle, infoValue) = createRefs()
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .fillMaxHeight()
+            .padding(4.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(AppTheme.colors.overflowCard)
+    ) {
+        ConstraintLayout(modifier = Modifier.padding(16.dp)) {
+            val (infoIcon, infoBlock) = createRefs()
 
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            modifier = Modifier.constrainAs(infoIcon) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start, 16.dp)
-                bottom.linkTo(parent.bottom)
-            }
-        )
-        Column(
-            modifier = Modifier.constrainAs(infoTitle) {
-                top.linkTo(parent.top)
-                start.linkTo(infoIcon.end, 16.dp)
-                bottom.linkTo(parent.bottom)
-            }
-        ) {
-            Text(
-                text = title,
-                style = AppTheme.typography.additionalWeatherInfoTitle,
-                color = AppTheme.colors.text,
-
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = AppTheme.colors.uiSurface,
+                modifier = Modifier.constrainAs(infoIcon) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    bottom.linkTo(parent.bottom)
+                }
             )
-            Text(
-                text = value,
-                style = AppTheme.typography.additionalWeatherInfoValue,
-                color = AppTheme.colors.textSecondary
-            )
+            Column(
+                modifier = Modifier.constrainAs(infoBlock) {
+                    top.linkTo(parent.top)
+                    start.linkTo(infoIcon.end, 16.dp)
+                    bottom.linkTo(parent.bottom)
+                }
+            ) {
+                Text(
+                    text = value,
+                    style = AppTheme.typography.additionalWeatherInfoValue,
+                    color = AppTheme.colors.text
+                )
+                Text(
+                    text = title,
+                    style = AppTheme.typography.additionalWeatherInfoTitle,
+                    color = AppTheme.colors.textSecondary,
+                )
+            }
         }
-
     }
 }
 
