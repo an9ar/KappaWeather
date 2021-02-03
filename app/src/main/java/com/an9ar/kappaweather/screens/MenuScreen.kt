@@ -21,12 +21,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigate
 import com.an9ar.kappaweather.R
 import com.an9ar.kappaweather.theme.AppTheme
-import com.an9ar.kappaweather.viewmodels.MainViewModel
 
 @Composable
-fun SettingsScreen(
-    navHostController: NavHostController,
-    mainViewModel: MainViewModel
+fun MenuScreen(navHostController: NavHostController) {
+    MenuScreenContent(navHostController = navHostController)
+}
+
+@Composable
+fun MenuScreenContent(
+    navHostController: NavHostController
 ) {
     Column(modifier = Modifier
         .fillMaxSize()
@@ -61,27 +64,27 @@ fun SettingsScreen(
                 .fillMaxSize()
                 .weight(0.6f)
         ) {
-            SettingListItem(
+            MenuListItem(
+                vectorImage = vectorResource(id = R.drawable.ic_kappa_sign),
+                itemTitle = "Locations managing",
+                onClickAction = { navHostController.navigate(Screens.LocationsScreen.routeName) }
+            )
+            MenuListItem(
+                vectorImage = vectorResource(id = R.drawable.ic_kappa_sign),
+                itemTitle = "Settings",
+                onClickAction = { }
+            )
+            MenuListItem(
                 vectorImage = vectorResource(id = R.drawable.ic_kappa_sign),
                 itemTitle = "Credits",
                 onClickAction = { navHostController.navigate(Screens.CreditsScreen.routeName) }
-            )
-            SettingListItem(
-                vectorImage = vectorResource(id = R.drawable.ic_kappa_sign),
-                itemTitle = "Colors",
-                onClickAction = { }
-            )
-            SettingListItem(
-                vectorImage = vectorResource(id = R.drawable.ic_kappa_sign),
-                itemTitle = "Clear locations",
-                onClickAction = { mainViewModel.clearLocations() }
             )
         }
     }
 }
 
 @Composable
-fun SettingListItem(
+fun MenuListItem(
     vectorImage: ImageVector,
     itemTitle: String,
     onClickAction: () -> Unit

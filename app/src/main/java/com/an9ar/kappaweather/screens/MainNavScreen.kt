@@ -20,7 +20,7 @@ fun MainNavScreen(
             }
             // Menu screen
             composable(Screens.MenuScreen.routeName) {
-                MenuScreen(navHostController = navHostController, mainViewModel = mainViewModel)
+                MenuScreen(navHostController = navHostController)
             }
             // Submenu screens
             composable(Screens.LocationsScreen.routeName) {

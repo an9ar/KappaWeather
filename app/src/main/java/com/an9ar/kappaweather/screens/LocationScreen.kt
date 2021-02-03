@@ -8,6 +8,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -37,7 +39,7 @@ fun LocationsScreen(
                         .padding(AmbientWindowInsets.current.statusBars.toPaddingValues())
                         .preferredHeight(AppTheme.sizes.appBarHeight)
                 ) {
-                    val (screenTitle) = createRefs()
+                    val (screenTitle, backButton) = createRefs()
                     Text(
                             text = "Locations managing",
                             style = AppTheme.typography.h6,
@@ -49,6 +51,21 @@ fun LocationsScreen(
                                 end.linkTo(parent.end)
                             }
                     )
+                    IconButton(
+                        onClick = { navHostController.navigateUp() },
+                        modifier = Modifier
+                            .constrainAs(backButton) {
+                                top.linkTo(parent.top)
+                                bottom.linkTo(parent.bottom)
+                                start.linkTo(parent.start)
+                            }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back",
+                            tint = AppTheme.colors.uiSurface
+                        )
+                    }
                 }
             }
     ) {
