@@ -8,5 +8,5 @@ import kotlinx.coroutines.Deferred
 interface WeatherRepository {
     fun getLocationWeather(objectId: Long, objectName: String, latitude: Double, longitude: Double): Deferred<Resource.Status>
     fun insertLocationWeather(weatherModel: WeatherModel)
-    fun getLocalLocationsWeather(): LiveData<List<WeatherModel>>
+    fun getLocalLocationsWeather(): LiveData<Resource<List<WeatherModel>>>
 }

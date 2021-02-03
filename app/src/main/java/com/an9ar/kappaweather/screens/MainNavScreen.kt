@@ -1,6 +1,6 @@
 package com.an9ar.kappaweather.screens
 
-import androidx.compose.material.*
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.*
 import com.an9ar.kappaweather.theme.AppTheme
@@ -8,9 +8,9 @@ import com.an9ar.kappaweather.viewmodels.MainViewModel
 
 @Composable
 fun MainNavScreen(
-        mainViewModel: MainViewModel
+    mainViewModel: MainViewModel
 ) {
-    Surface(color = AppTheme.colors.success) {
+    Surface(color = AppTheme.colors.background) {
         val navHostController = rememberNavController()
 
         NavHost(navController = navHostController, startDestination = Screens.WeatherScreen.routeName) {
@@ -27,16 +27,27 @@ fun MainNavScreen(
                 LocationsScreen(mainViewModel = mainViewModel, navHostController = navHostController)
             }
             composable(Screens.CountryChooseScreen.routeName) {
-                CountryChooseScreen(mainViewModel = mainViewModel, navHostController = navHostController)
+                CountryChooseScreen(
+                    mainViewModel = mainViewModel,
+                    navHostController = navHostController
+                )
             }
             composable("${Screens.CityChooseScreen.routeName}/{countryId}") { backStackEntry ->
                 backStackEntry.arguments?.getString("countryId")?.let { countryId ->
-                    CityChooseScreen(mainViewModel = mainViewModel, navHostController = navHostController, countryId = countryId)
+                    CityChooseScreen(
+                        mainViewModel = mainViewModel,
+                        navHostController = navHostController,
+                        countryId = countryId
+                    )
                 }
             }
             composable("${Screens.CitySearchScreen.routeName}/{countryId}") { backStackEntry ->
                 backStackEntry.arguments?.getString("countryId")?.let { countryId ->
-                    CitySearchScreen(mainViewModel = mainViewModel, navHostController = navHostController, countryId = countryId)
+                    CitySearchScreen(
+                        mainViewModel = mainViewModel,
+                        navHostController = navHostController,
+                        countryId = countryId
+                    )
                 }
             }
 

@@ -42,8 +42,10 @@ class WeatherRepositoryImpl @Inject constructor(
         weatherDao.insert(location = weatherModel)
     }
 
-    override fun getLocalLocationsWeather(): LiveData<List<WeatherModel>> {
-        return weatherDao.getLocationsList()
-    }
+    override fun getLocalLocationsWeather(): LiveData<Resource<List<WeatherModel>>> = performGetDBOperation (
+        databaseQuery = {
+            weatherDao.getLocationsList()
+        }
+    )
 
 }

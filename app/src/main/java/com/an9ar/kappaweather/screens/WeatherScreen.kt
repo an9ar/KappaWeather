@@ -1,5 +1,6 @@
 package com.an9ar.kappaweather.screens
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -42,18 +43,33 @@ fun WeatherScreen(
     navHostController: NavHostController,
     mainViewModel: MainViewModel
 ) {
-    val locationsWeatherlist = mainViewModel.locationsWeatherlist.observeAsState(initial = emptyList())
+    val locationsWeatherlist = mainViewModel.locationsWeatherlist.observeAsState(
+        initial = Resource(
+            status = Resource.Status.LOADING,
+            data = emptyList(),
+            message = ""
+        )
+    )
     log("locationsWeatherlist - ${locationsWeatherlist.value}")
 
-    WeatherScreenContent(
-        navHostController = navHostController,
-        mainViewModel = mainViewModel,
-        locations = locationsWeatherlist.value
-    )
+    when (locationsWeatherlist.value.status) {
+        Resource.Status.LOADING -> {
+            WeatherScreenContentLoading()
+        }
+        Resource.Status.SUCCESS -> {
+            locationsWeatherlist.value.data?.let {
+                WeatherScreenContentSuccess(
+                    navHostController = navHostController,
+                    mainViewModel = mainViewModel,
+                    locations = it
+                )
+            }
+        }
+    }
 }
 
 @Composable
-fun WeatherScreenContent(
+fun WeatherScreenContentSuccess(
     navHostController: NavHostController,
     mainViewModel: MainViewModel,
     locations: List<WeatherModel>
@@ -70,11 +86,13 @@ fun WeatherScreenContent(
                 .fillMaxSize()
         ) {
             if (locations.isNotEmpty()) {
-                LocationTitle(
-                    weatherInfo = currentLocationPageInfo,
-                    navHostController = navHostController,
-                    mainViewModel = mainViewModel
-                )
+                Crossfade(current = currentLocationPageInfo) {
+                    LocationTitle(
+                        weatherInfo = it,
+                        navHostController = navHostController,
+                        mainViewModel = mainViewModel
+                    )
+                }
                 WeatherPagerScreen(
                     locations = locations.sortedBy { it.locationId },
                     onLocationPageOpen = { pageInfo ->
@@ -87,7 +105,18 @@ fun WeatherScreenContent(
                 //WeatherEmptyScreen()
             }
         }
+    }
+}
 
+@Composable
+fun WeatherScreenContentLoading() {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        CircularProgressIndicator(
+            color = AppTheme.colors.text
+        )
     }
 }
 

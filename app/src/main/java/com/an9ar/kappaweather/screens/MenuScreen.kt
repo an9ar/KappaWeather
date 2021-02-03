@@ -5,9 +5,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Divider
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,10 +21,51 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigate
 import com.an9ar.kappaweather.R
 import com.an9ar.kappaweather.theme.AppTheme
+import dev.chrisbanes.accompanist.insets.AmbientWindowInsets
+import dev.chrisbanes.accompanist.insets.toPaddingValues
 
 @Composable
 fun MenuScreen(navHostController: NavHostController) {
-    MenuScreenContent(navHostController = navHostController)
+    Scaffold(
+        topBar = {
+            ConstraintLayout(modifier = Modifier
+                .fillMaxWidth()
+                .background(AppTheme.colors.toolbar)
+                .padding(AmbientWindowInsets.current.statusBars.toPaddingValues())
+                .preferredHeight(AppTheme.sizes.appBarHeight)
+            ) {
+                val (screenTitle, backButton) = createRefs()
+                Text(
+                    text = "Main menu",
+                    style = AppTheme.typography.h6,
+                    color = AppTheme.colors.text,
+                    modifier = Modifier.constrainAs(screenTitle) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+                )
+                IconButton(
+                    onClick = { navHostController.navigateUp() },
+                    modifier = Modifier
+                        .constrainAs(backButton) {
+                            top.linkTo(parent.top)
+                            bottom.linkTo(parent.bottom)
+                            start.linkTo(parent.start)
+                        }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Back",
+                        tint = AppTheme.colors.uiSurface
+                    )
+                }
+            }
+        }
+    ) {
+        MenuScreenContent(navHostController = navHostController)
+    }
 }
 
 @Composable
