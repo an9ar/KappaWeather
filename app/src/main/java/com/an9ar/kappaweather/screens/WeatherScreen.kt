@@ -6,10 +6,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,6 +20,8 @@ import androidx.compose.ui.platform.AmbientAnimationClock
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.navigate
 import com.an9ar.kappaweather.R
 import com.an9ar.kappaweather.convertDate
 import com.an9ar.kappaweather.data.models.WeatherModel
@@ -37,16 +39,62 @@ import kotlin.math.roundToInt
 
 @Composable
 fun WeatherScreen(
+    navHostController: NavHostController,
     mainViewModel: MainViewModel
 ) {
-    val locationsWeatherlist =
-        mainViewModel.locationsWeatherlist.observeAsState(initial = emptyList())
+    val locationsWeatherlist = mainViewModel.locationsWeatherlist.observeAsState(initial = emptyList())
     log("locationsWeatherlist - ${locationsWeatherlist.value}")
-    if (locationsWeatherlist.value.isNotEmpty()) {
-        WeatherPagerScreen(
-            mainViewModel = mainViewModel,
-            locations = locationsWeatherlist.value.sortedBy { it.locationId }
+
+    WeatherScreenContent(
+        navHostController = navHostController,
+        mainViewModel = mainViewModel,
+        locations = locationsWeatherlist.value
+    )
+}
+
+@Composable
+fun WeatherScreenContent(
+    navHostController: NavHostController,
+    mainViewModel: MainViewModel,
+    locations: List<WeatherModel>
+) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        var currentLocationPageInfo by remember { mutableStateOf(WeatherModel.EMPTY) }
+        Image(
+            bitmap = imageResource(id = R.drawable.few_clouds_1),
+            contentScale = ContentScale.Crop,
+            contentDescription = null
         )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            if (locations.isNotEmpty()) {
+                LocationTitle(
+                    weatherInfo = currentLocationPageInfo,
+                    navHostController = navHostController,
+                    mainViewModel = mainViewModel
+                )
+                WeatherPagerScreen(
+                    locations = locations.sortedBy { it.locationId },
+                    onLocationPageOpen = { pageInfo ->
+                        currentLocationPageInfo = pageInfo
+                    }
+                )
+            }
+            else {
+                EmptyLocationTitle(navHostController = navHostController)
+                //WeatherEmptyScreen()
+            }
+        }
+
+    }
+}
+
+@Composable
+fun WeatherEmptyScreen() {
+    Box(contentAlignment = Alignment.Center) {
+        Text(text = "EMPTY", color = AppTheme.colors.text)
     }
 }
 
@@ -58,8 +106,8 @@ fun WeatherPagerScreen(
             PagerState(clock)
         }
     },
-    mainViewModel: MainViewModel,
-    locations: List<WeatherModel>
+    locations: List<WeatherModel>,
+    onLocationPageOpen: (WeatherModel) -> Unit
 ) {
     pagerState.maxPage = locations.size - 1
 
@@ -68,65 +116,86 @@ fun WeatherPagerScreen(
         offscreenLimit = 1,
         onPageOpen = { pageIndex ->
             //mainViewModel.setSelectedWeatherLocation(location = locations[pageIndex])
+            onLocationPageOpen(locations[pageIndex])
             log("select TAB numero $pageIndex")
         }
     ) {
         WeatherPagerContent(
-            currentLocation = locations[page],
-            mainViewModel = mainViewModel
+            weatherInfo = locations[page]
         )
     }
 }
 
 @Composable
 fun WeatherPagerContent(
-    currentLocation: WeatherModel,
-    mainViewModel: MainViewModel
+    weatherInfo: WeatherModel
 ) {
-    WeatherPagerSuccessScreen(
-        weatherInfo = currentLocation,
-        mainViewModel = mainViewModel
-    )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 4.dp)
+    ) {
+        WeatherTemperatureInfoBlock(
+            weatherInfo = weatherInfo,
+            modifier = Modifier.weight(0.5f)
+        )
+        WeatherAdditionalInfoBlock(
+            weatherInfo = weatherInfo,
+            modifier = Modifier
+                .weight(0.5f)
+                .padding(bottom = AppTheme.sizes.bottomNavigationHeight)
+        )
+    }
 }
 
 @Composable
-fun WeatherPagerSuccessScreen(
-    weatherInfo: WeatherModel,
-    mainViewModel: MainViewModel
-) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Image(
-            bitmap = imageResource(id = R.drawable.broken_clouds_2),
-            contentScale = ContentScale.Crop,
-            contentDescription = null
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            LocationTitle(
-                weatherInfo = weatherInfo,
-                mainViewModel = mainViewModel
+fun EmptyLocationTitle(navHostController: NavHostController) {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                AmbientWindowInsets.current.systemBars
+                    .toPaddingValues(bottom = false)
+                    .add(top = 8.dp)
+                    .add(bottom = 8.dp)
             )
-            Column(modifier = Modifier.fillMaxSize().padding(horizontal = 4.dp)) {
-                WeatherTemperatureInfoBlock(
-                    weatherInfo = weatherInfo,
-                    modifier = Modifier.weight(0.5f)
-                )
-                WeatherAdditionalInfoBlock(
-                    weatherInfo = weatherInfo,
-                    modifier = Modifier
-                        .weight(0.5f)
-                        .padding(bottom = AppTheme.sizes.bottomNavigationHeight)
-                )
+    ) {
+        val (menuItem, titleBlock) = createRefs()
+
+        IconButton(
+            onClick = {
+                navHostController.navigate(Screens.MenuScreen.routeName)
+            },
+            modifier = Modifier.constrainAs(menuItem) {
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+                start.linkTo(parent.start, 8.dp)
             }
+        ) {
+            Icon(
+                imageVector = Icons.Default.Menu,
+                contentDescription = "Menu button",
+                tint = AppTheme.colors.uiSurface
+            )
         }
+        Text(
+            text = "Empty list",
+            color = AppTheme.colors.text,
+            style = AppTheme.typography.h6,
+            modifier = Modifier.constrainAs(titleBlock) {
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
+        )
     }
 }
 
 @Composable
 fun LocationTitle(
     weatherInfo: WeatherModel,
+    navHostController: NavHostController,
     mainViewModel: MainViewModel
 ) {
     ConstraintLayout(
@@ -139,8 +208,24 @@ fun LocationTitle(
                     .add(bottom = 8.dp)
             )
     ) {
-        val (titleBlock, refreshButton) = createRefs()
+        val (menuItem, titleBlock, refreshButton) = createRefs()
 
+        IconButton(
+            onClick = {
+                navHostController.navigate(Screens.MenuScreen.routeName)
+            },
+            modifier = Modifier.constrainAs(menuItem) {
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+                start.linkTo(parent.start, 8.dp)
+            }
+        ) {
+            Icon(
+                imageVector = Icons.Default.Menu,
+                contentDescription = "Menu button",
+                tint = AppTheme.colors.uiSurface
+            )
+        }
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.constrainAs(titleBlock) {
@@ -178,16 +263,15 @@ fun LocationTitle(
                     }
                 }
             },
-            modifier = Modifier
-                .constrainAs(refreshButton) {
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    end.linkTo(parent.end, 8.dp)
-                }
+            modifier = Modifier.constrainAs(refreshButton) {
+                top.linkTo(parent.top)
+                bottom.linkTo(parent.bottom)
+                end.linkTo(parent.end, 8.dp)
+            }
         ) {
             Icon(
                 imageVector = Icons.Default.Refresh,
-                contentDescription = "Refresh weather",
+                contentDescription = "Refresh button",
                 tint = AppTheme.colors.uiSurface
             )
         }
@@ -316,17 +400,5 @@ fun WeatherInfoCard(
                 )
             }
         }
-    }
-}
-
-@Composable
-fun WeatherPagerLoadingScreen() {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        CircularProgressIndicator(
-            color = AppTheme.colors.text
-        )
     }
 }
