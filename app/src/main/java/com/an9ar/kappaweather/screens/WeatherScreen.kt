@@ -1,6 +1,7 @@
 package com.an9ar.kappaweather.screens
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -14,6 +15,8 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -130,11 +133,28 @@ fun PageIndicator(
     pagesCount: Int,
     currentPage: Int
 ) {
-    Text(
-        text = "${currentPage+1} / $pagesCount",
-        color = AppTheme.colors.text,
-        style = AppTheme.typography.h6
-    )
+    Row {
+        repeat(pagesCount) {
+            if (it == currentPage)
+                PageIndicatorDot(isActive = true)
+            else
+                PageIndicatorDot(isActive = false)
+        }
+    }
+}
+
+@Composable
+fun PageIndicatorDot(isActive: Boolean) {
+    Canvas(modifier = Modifier.preferredSize(32.dp)) {
+        drawCircle(
+            color = if (isActive) Color.Black else Color.Gray,
+            radius = if (isActive) size.width / 6 else size.width / 8,
+            center = Offset(
+                x = size.width / 2,
+                y = size.height / 2
+            )
+        )
+    }
 }
 
 @Composable
