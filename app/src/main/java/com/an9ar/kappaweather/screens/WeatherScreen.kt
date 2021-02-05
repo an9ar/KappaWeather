@@ -74,38 +74,67 @@ fun WeatherScreenContentSuccess(
     mainViewModel: MainViewModel,
     locations: List<WeatherModel>
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        var currentLocationPageInfo by remember { mutableStateOf(WeatherModel.EMPTY) }
-        Image(
-            bitmap = imageResource(id = R.drawable.few_clouds_1),
-            contentScale = ContentScale.Crop,
-            contentDescription = null
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            if (locations.isNotEmpty()) {
-                Crossfade(current = currentLocationPageInfo) {
-                    LocationTitle(
-                        weatherInfo = it,
-                        navHostController = navHostController,
-                        mainViewModel = mainViewModel
+    var selectedPageIndex by remember { mutableStateOf(0) }
+    Scaffold(
+        bottomBar = {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .preferredHeight(AppTheme.sizes.bottomNavigationHeight)
+                    .fillMaxWidth()
+            ) {
+                Crossfade(current = selectedPageIndex) { page ->
+                    PageIndicator(
+                        pagesCount = locations.size,
+                        currentPage = page
                     )
                 }
-                WeatherPagerScreen(
-                    locations = locations.sortedBy { it.locationId },
-                    onLocationPageOpen = { pageInfo ->
-                        currentLocationPageInfo = pageInfo
-                    }
-                )
             }
-            else {
-                EmptyLocationTitle(navHostController = navHostController)
-                //WeatherEmptyScreen()
+        }
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            Image(
+                bitmap = imageResource(id = R.drawable.few_clouds_1),
+                contentScale = ContentScale.Crop,
+                contentDescription = null
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                if (locations.isNotEmpty()) {
+                    Crossfade(current = locations[selectedPageIndex]) {
+                        LocationTitle(
+                            weatherInfo = it,
+                            navHostController = navHostController,
+                            mainViewModel = mainViewModel
+                        )
+                    }
+                    WeatherPagerScreen(
+                        locations = locations.sortedBy { it.locationId },
+                        onLocationPageOpen = { pageInfo ->
+                            selectedPageIndex = pageInfo
+                        }
+                    )
+                }
+                else {
+                    EmptyLocationTitle(navHostController = navHostController)
+                }
             }
         }
     }
+}
+
+@Composable
+fun PageIndicator(
+    pagesCount: Int,
+    currentPage: Int
+) {
+    Text(
+        text = "${currentPage+1} / $pagesCount",
+        color = AppTheme.colors.text,
+        style = AppTheme.typography.h6
+    )
 }
 
 @Composable
@@ -121,13 +150,6 @@ fun WeatherScreenContentLoading() {
 }
 
 @Composable
-fun WeatherEmptyScreen() {
-    Box(contentAlignment = Alignment.Center) {
-        Text(text = "EMPTY", color = AppTheme.colors.text)
-    }
-}
-
-@Composable
 fun WeatherPagerScreen(
     pagerState: PagerState = run {
         val clock = AmbientAnimationClock.current
@@ -136,7 +158,7 @@ fun WeatherPagerScreen(
         }
     },
     locations: List<WeatherModel>,
-    onLocationPageOpen: (WeatherModel) -> Unit
+    onLocationPageOpen: (Int) -> Unit
 ) {
     pagerState.maxPage = locations.size - 1
 
@@ -145,7 +167,7 @@ fun WeatherPagerScreen(
         offscreenLimit = 1,
         onPageOpen = { pageIndex ->
             //mainViewModel.setSelectedWeatherLocation(location = locations[pageIndex])
-            onLocationPageOpen(locations[pageIndex])
+            onLocationPageOpen(pageIndex)
             log("select TAB numero $pageIndex")
         }
     ) {
