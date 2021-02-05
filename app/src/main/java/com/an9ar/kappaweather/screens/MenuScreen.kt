@@ -82,7 +82,7 @@ fun MenuScreenContent(
                 .clip(RoundedCornerShape(8.dp))
                 .fillMaxSize()
                 .weight(0.4f)
-                .background(AppTheme.colors.card)
+                .background(AppTheme.colors.transparent)
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Image(

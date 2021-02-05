@@ -97,7 +97,7 @@ fun WeatherScreenContentSuccess(
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Image(
-                bitmap = imageResource(id = R.drawable.few_clouds_1),
+                bitmap = imageResource(id = R.drawable.broken_clouds_2),
                 contentScale = ContentScale.Crop,
                 contentDescription = null
             )

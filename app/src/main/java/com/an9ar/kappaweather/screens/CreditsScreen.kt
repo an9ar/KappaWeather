@@ -1,5 +1,7 @@
 package com.an9ar.kappaweather.screens
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -17,6 +19,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.AmbientContext
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -104,6 +107,7 @@ fun AuthorCard(
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
+                    contentDescription = null,
                     tint = AppTheme.colors.uiSurface
                 )
             }
@@ -125,17 +129,18 @@ fun SocialMediaBar(
                 .background(AppTheme.colors.background)
                 .padding(vertical = 8.dp)
         ) {
+            val context = AmbientContext.current
             SocialMediaButton(
                 buttonImage = vectorResource(id = R.drawable.ic_social_github),
-                onClick = {}
+                onClick = { context.startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://github.com/an9ar"))) }
             )
             SocialMediaButton(
                 buttonImage = vectorResource(id = R.drawable.ic_social_linkedin),
-                onClick = {}
+                onClick = { context.startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://linkedin.com/in/grigorievdy"))) }
             )
             SocialMediaButton(
                 buttonImage = vectorResource(id = R.drawable.ic_social_telegram),
-                onClick = {}
+                onClick = { context.startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://t.me/grigorievdy"))) }
             )
         }
     }
@@ -217,10 +222,4 @@ fun AboutInfoBlock() {
         style = AppTheme.typography.body1,
         color = AppTheme.colors.textSecondary
     )
-    /*ClickableText(
-        text = AnnotatedString(
-            text = "test"
-        ),
-        onClick = {  }
-    )*/
 }
