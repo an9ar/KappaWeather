@@ -46,7 +46,7 @@ class MainViewModel @ViewModelInject constructor(
 
     val locationsWeatherlist = weatherRepository.getLocalLocationsWeather()
 
-    fun getLocationWeather(objectId: Long, objectName: String, latitude: Double, longitude: Double): Resource.Status = runBlocking(Dispatchers.IO) {
+    fun getLocationWeather(objectId: Long, objectName: String, latitude: Double, longitude: Double): Resource.Status = runBlocking(Dispatchers.Default) {
         weatherRepository.getLocationWeather(
             objectId = objectId,
             objectName = objectName,

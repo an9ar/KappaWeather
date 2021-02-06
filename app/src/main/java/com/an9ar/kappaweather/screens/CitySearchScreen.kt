@@ -101,7 +101,6 @@ fun CitySearchScreen(
                     scope = coroutineScope,
                     onDebouncingQueryTextChange = { queryText ->
                         if (!queryText.isNullOrEmpty()) {
-                            log("typed - $queryText")
                             mainViewModel.setCitySearchQuery(query = queryText)
                         }
                     },
@@ -204,17 +203,12 @@ fun CitySearchScreenContent(
                         navHostController = navHostController
                     )
                 }
-                log("SUCCESS - ${listOfSearchedCities.value.data}")
-                log("SUCCESS MSG - ${listOfSearchedCities.value.message}")
             }
             Resource.Status.LOADING -> {
                 CityChooseLoadingScreen()
-                log("LOADING")
-                log("LOADING MSG - ${listOfSearchedCities.value.message}")
             }
             Resource.Status.ERROR -> {
-                log("ERROR")
-                log("ERROR MSG - ${listOfSearchedCities.value.message}")
+                log("ERROR - ${listOfSearchedCities.value.message}")
             }
             Resource.Status.COMPLETED -> {
                 log("EMPTY LIST")
@@ -257,9 +251,7 @@ fun SearchedCityListItem(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .clickable(onClick = {
-                log("CLICKED - $city")
                 mainViewModel.addLocationCity(city = city)
-                log("trying to add city - $city")
                 val weatherSavingState = mainViewModel.getLocationWeather(
                     objectId = System.currentTimeMillis(),
                     objectName = city.name,
@@ -268,7 +260,6 @@ fun SearchedCityListItem(
                 )
                 when (weatherSavingState) {
                     Resource.Status.SUCCESS -> {
-                        log("FETCHING SUCCESS")
                         navHostController.navigate(Screens.LocationsScreen.routeName) {
                             launchSingleTop = true
                             popUpTo = navHostController.graph.startDestination

@@ -53,7 +53,6 @@ fun WeatherScreen(
             message = ""
         )
     )
-    log("locationsWeatherlist - ${locationsWeatherlist.value}")
 
     when (locationsWeatherlist.value.status) {
         Resource.Status.LOADING -> {
@@ -186,9 +185,7 @@ fun WeatherPagerScreen(
         state = pagerState,
         offscreenLimit = 1,
         onPageOpen = { pageIndex ->
-            //mainViewModel.setSelectedWeatherLocation(location = locations[pageIndex])
             onLocationPageOpen(pageIndex)
-            log("select TAB numero $pageIndex")
         }
     ) {
         WeatherPagerContent(

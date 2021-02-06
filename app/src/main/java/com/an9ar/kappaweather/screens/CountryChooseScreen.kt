@@ -94,11 +94,9 @@ fun CountryChooseScreenContent(
                 listOfCountries.value.data?.let {
                     CountryChooseSuccessScreen(items = it, navHostController = navHostController)
                 }
-                log("SUCCESS")
             }
             Resource.Status.LOADING -> {
                 CountryChooseLoadingScreen()
-                log("LOADING")
             }
             Resource.Status.ERROR -> {
                 log("ERROR")

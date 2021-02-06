@@ -42,7 +42,6 @@ fun CityChooseScreen(
                 message = ""
             )
         )
-    log("countryId - $countryId")
     Scaffold(
         topBar = {
             ConstraintLayout(
@@ -109,17 +108,12 @@ fun CityChooseScreenContent(
                         navHostController = navHostController
                     )
                 }
-                log("SUCCESS - ${listOfLargestCities.value.data}")
-                log("SUCCESS MSG - ${listOfLargestCities.value.message}")
             }
             Resource.Status.LOADING -> {
                 CityChooseLoadingScreen()
-                log("LOADING")
-                log("LOADING MSG - ${listOfLargestCities.value.message}")
             }
             Resource.Status.ERROR -> {
-                log("ERROR")
-                log("ERROR MSG - ${listOfLargestCities.value.message}")
+                log("ERROR - ${listOfLargestCities.value.message}")
             }
         }
     }
@@ -222,9 +216,7 @@ fun LargeCityListItem(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .clickable(onClick = {
-                log("CLICKED - $city")
                 mainViewModel.addLocationCity(city = city)
-                log("trying to add city - $city")
                 val weatherSavingState = mainViewModel.getLocationWeather(
                     objectId = System.currentTimeMillis(),
                     objectName = city.name,
@@ -233,7 +225,6 @@ fun LargeCityListItem(
                 )
                 when (weatherSavingState) {
                     Resource.Status.SUCCESS -> {
-                        log("FETCHING SUCCESS")
                         navHostController.navigate(Screens.LocationsScreen.routeName) {
                             launchSingleTop = true
                             popUpTo = navHostController.graph.startDestination

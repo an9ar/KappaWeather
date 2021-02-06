@@ -8,7 +8,6 @@ import com.an9ar.kappaweather.data.models.CountryModel
 import com.an9ar.kappaweather.domain.LocationRepository
 import com.an9ar.kappaweather.log
 import com.an9ar.kappaweather.network.api.LocationApi
-import com.an9ar.kappaweather.network.dto.CityDTO
 import com.an9ar.kappaweather.network.dto.toCityModel
 import com.an9ar.kappaweather.network.dto.toCountryModel
 import com.an9ar.kappaweather.network.utils.*
