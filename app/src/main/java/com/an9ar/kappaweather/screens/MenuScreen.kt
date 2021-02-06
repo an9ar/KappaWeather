@@ -4,6 +4,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -22,6 +24,7 @@ import androidx.navigation.compose.navigate
 import com.an9ar.kappaweather.R
 import com.an9ar.kappaweather.theme.AppTheme
 import dev.chrisbanes.accompanist.insets.AmbientWindowInsets
+import dev.chrisbanes.accompanist.insets.add
 import dev.chrisbanes.accompanist.insets.toPaddingValues
 
 @Composable
@@ -78,55 +81,49 @@ fun MenuScreenContent(
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .padding(8.dp)
+                .padding(16.dp)
                 .clip(RoundedCornerShape(8.dp))
                 .fillMaxSize()
-                .weight(0.4f)
-                .background(AppTheme.colors.transparent)
+                .weight(0.3f)
+                .background(AppTheme.colors.card)
         ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Image(
-                    imageVector = vectorResource(id = R.drawable.ic_kappa_sign),
-                    contentDescription = "App logo",
-                    colorFilter = ColorFilter.tint(AppTheme.colors.text),
-                    modifier = Modifier.preferredSize(64.dp)
-                )
-                Spacer(modifier = Modifier.preferredHeight(8.dp))
-                Text(text = "Version 1.0.0", color = AppTheme.colors.text)
-            }
+            Image(
+                imageVector = vectorResource(id = R.drawable.ic_kappa_sign),
+                contentDescription = "App logo",
+                colorFilter = ColorFilter.tint(AppTheme.colors.text),
+                modifier = Modifier.preferredSize(64.dp)
+            )
         }
         Divider(
             color = AppTheme.colors.card,
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(16.dp)
         )
-        Column(
+        val menuItemsList = listOf(
+            "Locations managing" to { navHostController.navigate(Screens.LocationsScreen.routeName) },
+            "Settings" to {  },
+            "Credits" to { navHostController.navigate(Screens.CreditsScreen.routeName) },
+        )
+        LazyColumn(
+            contentPadding = AmbientWindowInsets.current.navigationBars
+                .toPaddingValues(bottom = false)
+                .add(top = AppTheme.sizes.small)
+                .add(bottom = AppTheme.sizes.bottomNavigationHeight),
             modifier = Modifier
-                .padding(4.dp)
                 .fillMaxSize()
-                .weight(0.6f)
+                .weight(0.7f)
         ) {
-            MenuListItem(
-                vectorImage = vectorResource(id = R.drawable.ic_kappa_sign),
-                itemTitle = "Locations managing",
-                onClickAction = { navHostController.navigate(Screens.LocationsScreen.routeName) }
-            )
-            MenuListItem(
-                vectorImage = vectorResource(id = R.drawable.ic_kappa_sign),
-                itemTitle = "Settings",
-                onClickAction = { }
-            )
-            MenuListItem(
-                vectorImage = vectorResource(id = R.drawable.ic_kappa_sign),
-                itemTitle = "Credits",
-                onClickAction = { navHostController.navigate(Screens.CreditsScreen.routeName) }
-            )
+            items(menuItemsList) { menuItem ->
+                MenuListItem(
+                    itemTitle = menuItem.first,
+                    onClickAction = menuItem.second
+                )
+            }
         }
     }
 }
 
 @Composable
 fun MenuListItem(
-    vectorImage: ImageVector,
     itemTitle: String,
     onClickAction: () -> Unit
 ) {
@@ -134,29 +131,19 @@ fun MenuListItem(
         backgroundColor = AppTheme.colors.card,
         shape = RoundedCornerShape(8.dp),
         modifier = Modifier
-            .padding(horizontal = 4.dp, vertical = 4.dp)
-            .clickable(onClick = {
-                onClickAction()
-            })
+            .padding(horizontal = 16.dp, vertical = 4.dp)
+            .clickable(onClick = onClickAction)
             .fillMaxWidth()
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Image(
-                imageVector = vectorImage,
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(AppTheme.colors.text),
-                modifier = Modifier
-                    .preferredSize(16.dp)
-                    .weight(0.1f)
-            )
+        Row(modifier = Modifier.fillMaxSize(), verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = itemTitle,
                 color = AppTheme.colors.text,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.weight(0.9f),
+                style = AppTheme.typography.listItem,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
             )
         }
     }
