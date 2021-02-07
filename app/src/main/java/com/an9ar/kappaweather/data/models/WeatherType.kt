@@ -1,9 +1,11 @@
 package com.an9ar.kappaweather.data.models
 
+import androidx.compose.ui.graphics.Brush
 import com.an9ar.kappaweather.R
+import com.an9ar.kappaweather.theme.WeatherColors
 
-sealed class WeatherType (val iconId: Int) {
-    object ClearSky : WeatherType(iconId = R.drawable.ic_weather_clear_sky)
+sealed class WeatherType (val iconId: Int, val color: Brush = WeatherColors.white) {
+    object ClearSky : WeatherType(iconId = R.drawable.ic_weather_clear_sky, color = WeatherColors.clearSky)
     object FewClouds : WeatherType(iconId = R.drawable.ic_weather_few_clouds)
     object ScatteredClouds : WeatherType(iconId = R.drawable.ic_weather_scattered_clouds)
     object BrokenClouds : WeatherType(iconId = R.drawable.ic_weather_broken_clouds)
@@ -12,6 +14,7 @@ sealed class WeatherType (val iconId: Int) {
     object Thunderstorm : WeatherType(iconId = R.drawable.ic_weather_thunderstorm)
     object Snow : WeatherType(iconId = R.drawable.ic_weather_snow)
     object Mist : WeatherType(iconId = R.drawable.ic_weather_mist)
+    object Undefined : WeatherType(iconId = R.drawable.ic_weather_clear_sky, color = WeatherColors.white)
 }
 
 fun String?.toWeatherType(): WeatherType {
@@ -26,7 +29,7 @@ fun String?.toWeatherType(): WeatherType {
             "thunderstorm" -> WeatherType.Thunderstorm
             "snow" -> WeatherType.Snow
             "mist" -> WeatherType.Mist
-            else -> WeatherType.ClearSky
+            else -> WeatherType.Undefined
         }
     } ?: WeatherType.ClearSky
 }

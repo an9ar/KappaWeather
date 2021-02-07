@@ -2,6 +2,7 @@ package com.an9ar.kappaweather.theme
 
 import androidx.compose.material.Colors
 import androidx.compose.material.lightColors
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 object AppColors {
@@ -26,6 +27,22 @@ object AppColors {
     val light = Color(0xFFEEEEEE)
     val dark = Color(0xFF1E1E1E)
     val transparent = Color(0x00000000)
+}
+
+object WeatherColors {
+    val white = Brush.linearGradient(
+        colors = listOf(
+            Color(0xFFFFFFFF),
+            Color(0xFFFFFFFF)
+        )
+    )
+    val clearSky = Brush.linearGradient(
+        colors = listOf(
+            Color(0xFFFFAA00),
+            Color(0xFFFFFFFF),
+            Color(0xFFFFAA00)
+        )
+    )
 }
 
 interface ColorPalette {

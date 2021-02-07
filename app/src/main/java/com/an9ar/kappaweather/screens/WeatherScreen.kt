@@ -33,6 +33,7 @@ import com.an9ar.kappaweather.data.models.toWeatherType
 import com.an9ar.kappaweather.log
 import com.an9ar.kappaweather.network.utils.Resource
 import com.an9ar.kappaweather.theme.AppTheme
+import com.an9ar.kappaweather.theme.WeatherColors
 import com.an9ar.kappaweather.ui.Pager
 import com.an9ar.kappaweather.ui.PagerState
 import com.an9ar.kappaweather.viewmodels.MainViewModel
@@ -77,6 +78,7 @@ fun WeatherScreenContentSuccess(
     locations: List<WeatherModel>
 ) {
     var selectedPageIndex by remember { mutableStateOf(0) }
+    var selectedPageColor by remember { mutableStateOf(WeatherColors.white) }
     Scaffold(
         bottomBar = {
             Box(
@@ -95,11 +97,11 @@ fun WeatherScreenContentSuccess(
         }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            Image(
-                bitmap = imageResource(id = R.drawable.broken_clouds_2),
-                contentScale = ContentScale.Crop,
-                contentDescription = null
-            )
+            Crossfade(current = selectedPageColor) {
+                Box(Modifier.fillMaxSize().background(it)) {
+
+                }
+            }
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -114,8 +116,9 @@ fun WeatherScreenContentSuccess(
                     }
                     WeatherPagerScreen(
                         locations = locations.sortedBy { it.locationId },
-                        onLocationPageOpen = { pageInfo ->
-                            selectedPageIndex = pageInfo
+                        onLocationPageOpen = { pageIndex ->
+                            selectedPageIndex = pageIndex
+                            selectedPageColor = locations[pageIndex].weather.first().description.toWeatherType().color
                         }
                     )
                 }
