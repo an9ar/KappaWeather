@@ -19,9 +19,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.AmbientAnimationClock
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -37,10 +35,10 @@ import com.an9ar.kappaweather.theme.WeatherColors
 import com.an9ar.kappaweather.ui.Pager
 import com.an9ar.kappaweather.ui.PagerState
 import com.an9ar.kappaweather.viewmodels.MainViewModel
-import dev.chrisbanes.accompanist.insets.AmbientWindowInsets
-import dev.chrisbanes.accompanist.insets.add
 import dev.chrisbanes.accompanist.insets.toPaddingValues
 import kotlin.math.roundToInt
+import androidx.constraintlayout.compose.ConstraintLayout
+import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 
 @Composable
 fun WeatherScreen(
@@ -87,7 +85,7 @@ fun WeatherScreenContentSuccess(
                     .preferredHeight(AppTheme.sizes.bottomNavigationHeight)
                     .fillMaxWidth()
             ) {
-                Crossfade(current = selectedPageIndex) { page ->
+                Crossfade(targetState = selectedPageIndex) { page ->
                     PageIndicator(
                         pagesCount = locations.size,
                         currentPage = page
@@ -97,7 +95,7 @@ fun WeatherScreenContentSuccess(
         }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            Crossfade(current = selectedPageColor) {
+            Crossfade(targetState = selectedPageColor) {
                 Box(Modifier.fillMaxSize().background(it)) {
 
                 }
@@ -107,7 +105,7 @@ fun WeatherScreenContentSuccess(
                     .fillMaxSize()
             ) {
                 if (locations.isNotEmpty()) {
-                    Crossfade(current = locations[selectedPageIndex]) {
+                    Crossfade(targetState = locations[selectedPageIndex]) {
                         LocationTitle(
                             weatherInfo = it,
                             navHostController = navHostController,
@@ -225,10 +223,12 @@ fun EmptyLocationTitle(navHostController: NavHostController) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                AmbientWindowInsets.current.systemBars
-                    .toPaddingValues(bottom = false)
-                    .add(top = 8.dp)
-                    .add(bottom = 8.dp)
+                LocalWindowInsets.current.systemBars
+                    .toPaddingValues(
+                        bottom = false,
+                        additionalTop = 8.dp,
+                        additionalBottom = 8.dp
+                    )
             )
     ) {
         val (menuItem, titleBlock) = createRefs()
@@ -273,10 +273,12 @@ fun LocationTitle(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                AmbientWindowInsets.current.systemBars
-                    .toPaddingValues(bottom = false)
-                    .add(top = 8.dp)
-                    .add(bottom = 8.dp)
+                LocalWindowInsets.current.systemBars
+                    .toPaddingValues(
+                        bottom = false,
+                        additionalTop = 8.dp,
+                        additionalBottom = 8.dp
+                    )
             )
     ) {
         val (menuItem, titleBlock, refreshButton) = createRefs()

@@ -7,9 +7,7 @@ import com.an9ar.kappaweather.theme.AppTheme
 import com.an9ar.kappaweather.viewmodels.MainViewModel
 
 @Composable
-fun MainNavScreen(
-    mainViewModel: MainViewModel
-) {
+fun MainNavScreen(mainViewModel: MainViewModel) {
     Surface(color = AppTheme.colors.background) {
         val navHostController = rememberNavController()
 

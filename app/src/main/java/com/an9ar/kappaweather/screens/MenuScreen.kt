@@ -15,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -23,9 +22,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigate
 import com.an9ar.kappaweather.R
 import com.an9ar.kappaweather.theme.AppTheme
-import dev.chrisbanes.accompanist.insets.AmbientWindowInsets
-import dev.chrisbanes.accompanist.insets.add
 import dev.chrisbanes.accompanist.insets.toPaddingValues
+import androidx.constraintlayout.compose.ConstraintLayout
+import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 
 @Composable
 fun MenuScreen(navHostController: NavHostController) {
@@ -34,7 +33,7 @@ fun MenuScreen(navHostController: NavHostController) {
             ConstraintLayout(modifier = Modifier
                 .fillMaxWidth()
                 .background(AppTheme.colors.toolbar)
-                .padding(AmbientWindowInsets.current.statusBars.toPaddingValues())
+                .padding(LocalWindowInsets.current.statusBars.toPaddingValues())
                 .preferredHeight(AppTheme.sizes.appBarHeight)
             ) {
                 val (screenTitle, backButton) = createRefs()
@@ -104,10 +103,12 @@ fun MenuScreenContent(
             "Credits" to { navHostController.navigate(Screens.CreditsScreen.routeName) },
         )
         LazyColumn(
-            contentPadding = AmbientWindowInsets.current.navigationBars
-                .toPaddingValues(bottom = false)
-                .add(top = AppTheme.sizes.small)
-                .add(bottom = AppTheme.sizes.bottomNavigationHeight),
+            contentPadding = LocalWindowInsets.current.navigationBars
+                .toPaddingValues(
+                    bottom = false,
+                    additionalTop = AppTheme.sizes.small,
+                    additionalBottom = AppTheme.sizes.bottomNavigationHeight
+                ),
             modifier = Modifier
                 .fillMaxSize()
                 .weight(0.7f)

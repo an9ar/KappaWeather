@@ -21,9 +21,9 @@ import androidx.navigation.compose.navigate
 import com.an9ar.kappaweather.data.models.CityModel
 import com.an9ar.kappaweather.theme.AppTheme
 import com.an9ar.kappaweather.viewmodels.MainViewModel
-import dev.chrisbanes.accompanist.insets.AmbientWindowInsets
-import dev.chrisbanes.accompanist.insets.add
 import dev.chrisbanes.accompanist.insets.toPaddingValues
+import androidx.constraintlayout.compose.ConstraintLayout
+import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 
 @Composable
 fun LocationsScreen(
@@ -36,7 +36,7 @@ fun LocationsScreen(
                 ConstraintLayout(modifier = Modifier
                         .fillMaxWidth()
                         .background(AppTheme.colors.toolbar)
-                        .padding(AmbientWindowInsets.current.statusBars.toPaddingValues())
+                        .padding(LocalWindowInsets.current.statusBars.toPaddingValues())
                         .preferredHeight(AppTheme.sizes.appBarHeight)
                 ) {
                     val (screenTitle, backButton) = createRefs()
@@ -87,10 +87,12 @@ fun LocationsScreenContent(
             modifier = Modifier.fillMaxSize()
     ) {
         LazyColumn(
-                contentPadding = AmbientWindowInsets.current.navigationBars
-                        .toPaddingValues(bottom = false)
-                        .add(top = AppTheme.sizes.small)
-                        .add(bottom = AppTheme.sizes.bottomNavigationHeight)
+                contentPadding = LocalWindowInsets.current.navigationBars
+                        .toPaddingValues(
+                            bottom = false,
+                            additionalTop = AppTheme.sizes.small,
+                            additionalBottom = AppTheme.sizes.bottomNavigationHeight
+                        )
         ) {
             stickyHeader {
                 CityListItemHeader(title = "New locations")

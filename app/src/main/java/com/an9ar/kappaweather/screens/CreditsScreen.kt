@@ -25,11 +25,11 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.an9ar.kappaweather.R
 import com.an9ar.kappaweather.theme.AppTheme
 import dev.chrisbanes.accompanist.glide.GlideImage
 import dev.chrisbanes.accompanist.insets.statusBarsPadding
+import androidx.constraintlayout.compose.ConstraintLayout
 
 @Composable
 fun CreditsScreen(
@@ -56,7 +56,7 @@ fun AuthorCard(
             modifier = Modifier
                 .fillMaxSize()
                 .weight(0.4f)
-                .clip(RoundedCornerShape(bottomLeft = 16.dp, bottomRight = 16.dp))
+                .clip(RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp))
                 .background(
                     Brush.linearGradient(
                         colors = listOf(
@@ -174,7 +174,7 @@ fun AuthorInfo(
     scope.run {
         Column(modifier = Modifier
             .fillMaxSize()
-            .clip(RoundedCornerShape(topLeft = 16.dp, topRight = 16.dp))
+            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
             .weight(0.5f)
             .background(AppTheme.colors.card)
             .padding(16.dp)
