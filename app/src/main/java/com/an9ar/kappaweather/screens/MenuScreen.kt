@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -87,7 +87,7 @@ fun MenuScreenContent(
                 .background(AppTheme.colors.card)
         ) {
             Image(
-                imageVector = vectorResource(id = R.drawable.ic_kappa_sign),
+                painter = painterResource(id = R.drawable.ic_kappa_sign),
                 contentDescription = "App logo",
                 colorFilter = ColorFilter.tint(AppTheme.colors.text),
                 modifier = Modifier.preferredSize(64.dp)

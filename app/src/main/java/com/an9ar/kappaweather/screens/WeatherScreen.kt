@@ -18,9 +18,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.AmbientAnimationClock
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigate
@@ -370,7 +371,7 @@ fun WeatherTemperatureInfoBlock(
             modifier = modifier.fillMaxWidth()
         ) {
             Image(
-                imageVector = vectorResource(id = weatherInfo.weather.first().description.toWeatherType().iconId),
+                painter = painterResource(id = weatherInfo.weather.first().description.toWeatherType().iconId),
                 contentDescription = "Weather icon",
                 colorFilter = ColorFilter.tint(AppTheme.colors.text),
                 modifier = Modifier.preferredSize(80.dp)
@@ -397,13 +398,13 @@ fun WeatherAdditionalInfoBlock(
     Column(modifier = modifier.fillMaxWidth()) {
         Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.weight(0.5f)) {
             WeatherInfoCard(
-                icon = vectorResource(id = R.drawable.ic_info_weather_temp_min),
+                icon = painterResource(id = R.drawable.ic_info_weather_temp_min),
                 title = "Min.",
                 value = "${weatherInfo.mainInformation.temp_min.roundToInt()}°",
                 modifier = Modifier.weight(0.5f)
             )
             WeatherInfoCard(
-                icon = vectorResource(id = R.drawable.ic_info_weather_temp_max),
+                icon = painterResource(id = R.drawable.ic_info_weather_temp_max),
                 title = "Max.",
                 value = "${weatherInfo.mainInformation.temp_max.roundToInt()}°",
                 modifier = Modifier.weight(0.5f)
@@ -411,13 +412,13 @@ fun WeatherAdditionalInfoBlock(
         }
         Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.weight(0.5f)) {
             WeatherInfoCard(
-                icon = vectorResource(id = R.drawable.ic_info_weather_pressure),
+                icon = painterResource(id = R.drawable.ic_info_weather_pressure),
                 title = "Pressure",
                 value = "${weatherInfo.mainInformation.pressure} mm",
                 modifier = Modifier.weight(0.5f)
             )
             WeatherInfoCard(
-                icon = vectorResource(id = R.drawable.ic_info_weather_humidity),
+                icon = painterResource(id = R.drawable.ic_info_weather_humidity),
                 title = "Humidity",
                 value = "${weatherInfo.mainInformation.humidity}%",
                 modifier = Modifier.weight(0.5f)
@@ -428,7 +429,7 @@ fun WeatherAdditionalInfoBlock(
 
 @Composable
 fun WeatherInfoCard(
-    icon: ImageVector,
+    icon: Painter,
     title: String,
     value: String,
     modifier: Modifier
@@ -445,7 +446,7 @@ fun WeatherInfoCard(
             val (infoIcon, infoBlock) = createRefs()
 
             Icon(
-                imageVector = icon,
+                painter = icon,
                 contentDescription = null,
                 tint = AppTheme.colors.uiSurface,
                 modifier = Modifier.constrainAs(infoIcon) {

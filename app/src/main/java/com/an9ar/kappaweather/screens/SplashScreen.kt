@@ -10,7 +10,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.an9ar.kappaweather.R
 import com.an9ar.kappaweather.log
@@ -42,7 +42,7 @@ fun SplashScreenContent() {
         modifier = Modifier.fillMaxSize().background(AppTheme.colors.background)
     ) {
         Image(
-            imageVector = vectorResource(id = R.drawable.ic_kappa_sign),
+            painter = painterResource(id = R.drawable.ic_kappa_sign),
             contentDescription = "App logo",
             colorFilter = ColorFilter.tint(AppTheme.colors.text),
             modifier = Modifier.preferredSize(128.dp)

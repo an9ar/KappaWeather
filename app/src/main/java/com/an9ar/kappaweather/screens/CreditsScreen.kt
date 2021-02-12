@@ -18,10 +18,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.AmbientContext
-import androidx.compose.ui.res.imageResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -78,7 +77,7 @@ fun AuthorCard(
                 },
                 error = {
                     Image(
-                        bitmap = imageResource(R.drawable.ic_launcher_background),
+                        painter = painterResource(R.drawable.ic_launcher_background),
                         contentDescription = null
                     )
                 },
@@ -129,17 +128,17 @@ fun SocialMediaBar(
                 .background(AppTheme.colors.background)
                 .padding(vertical = 8.dp)
         ) {
-            val context = AmbientContext.current
+            val context = LocalContext.current
             SocialMediaButton(
-                buttonImage = vectorResource(id = R.drawable.ic_social_github),
+                buttonImage = painterResource(id = R.drawable.ic_social_github),
                 onClick = { context.startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://github.com/an9ar"))) }
             )
             SocialMediaButton(
-                buttonImage = vectorResource(id = R.drawable.ic_social_linkedin),
+                buttonImage = painterResource(id = R.drawable.ic_social_linkedin),
                 onClick = { context.startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://linkedin.com/in/grigorievdy"))) }
             )
             SocialMediaButton(
-                buttonImage = vectorResource(id = R.drawable.ic_social_telegram),
+                buttonImage = painterResource(id = R.drawable.ic_social_telegram),
                 onClick = { context.startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://t.me/grigorievdy"))) }
             )
         }
@@ -148,7 +147,7 @@ fun SocialMediaBar(
 
 @Composable
 fun SocialMediaButton(
-    buttonImage: ImageVector,
+    buttonImage: Painter,
     onClick: () -> Unit
 ) {
     Box(
@@ -160,7 +159,7 @@ fun SocialMediaButton(
             .padding(16.dp)
     ) {
         Image(
-            imageVector = buttonImage,
+            painter = buttonImage,
             contentDescription = null,
             colorFilter = ColorFilter.tint(AppTheme.colors.uiSurface)
         )

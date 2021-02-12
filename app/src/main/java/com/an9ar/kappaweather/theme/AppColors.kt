@@ -38,9 +38,8 @@ object WeatherColors {
     )
     val clearSky = Brush.linearGradient(
         colors = listOf(
-            Color(0xFFFFAA00),
-            Color(0xFFFFFFFF),
-            Color(0xFFFFAA00)
+            Color(0xFFFFF95B),
+            Color(0xFFFF930F)
         )
     )
 }
