@@ -19,7 +19,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.AmbientAnimationClock
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -39,6 +38,7 @@ import com.an9ar.kappaweather.viewmodels.MainViewModel
 import dev.chrisbanes.accompanist.insets.toPaddingValues
 import kotlin.math.roundToInt
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.an9ar.kappaweather.getDateHours
 import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 
 @Composable
@@ -117,7 +117,11 @@ fun WeatherScreenContentSuccess(
                         locations = locations.sortedBy { it.locationId },
                         onLocationPageOpen = { pageIndex ->
                             selectedPageIndex = pageIndex
-                            selectedPageColor = locations[pageIndex].weather.first().description.toWeatherType().color
+                            selectedPageColor = if (getDateHours(locations[pageIndex].time * 1000) < 17) {
+                                locations[pageIndex].weather.first().description.toWeatherType().dayColor
+                            } else {
+                                locations[pageIndex].weather.first().description.toWeatherType().nightColor
+                            }
                         }
                     )
                 }
