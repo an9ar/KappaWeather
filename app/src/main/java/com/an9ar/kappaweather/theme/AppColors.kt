@@ -57,9 +57,33 @@ object WeatherColors {
             Color(0xFF85D0E3)
         )
     )
+    val fewCloudsNight = Brush.linearGradient(
+        colors = listOf(
+            Color(0xFF3F3F64),
+            Color(0xFF64558A),
+            Color(0xFF997A98)
+        )
+    )
+    val scatteredCloudsDay = Brush.linearGradient(
+        colors = listOf(
+            Color(0xFF0761B1),
+            Color(0xFFC5CEDA),
+            Color(0xFF7C9DCA),
+            Color(0xFFC5CEDA)
+        )
+    )
+    val scatteredCloudsNight = Brush.linearGradient(
+        colors = listOf(
+            Color(0xFF5D4966),
+            Color(0xFFA86978),
+            Color(0xFF7F5263),
+            Color(0xFFE77A6A)
+        )
+    )
     val snowDay = Brush.linearGradient(
         colors = listOf(
             Color(0xFF96B3DC),
+            Color(0xFFF4F9FD),
             Color(0xFFF4F9FD)
         )
     )

@@ -4,7 +4,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Providers
-import androidx.compose.runtime.staticAmbientOf
+import androidx.compose.runtime.staticCompositionLocalOf
 
 @Composable
 fun KappaWeatherTheme(
@@ -40,5 +40,5 @@ object AppTheme {
         get() = AppSizes()
 }
 
-internal val AmbientColor = staticAmbientOf { lightColorPalette() }
-internal val AmbientTypography = staticAmbientOf { AppTypography() }
+internal val AmbientColor = staticCompositionLocalOf { lightColorPalette() }
+internal val AmbientTypography = staticCompositionLocalOf { AppTypography() }
