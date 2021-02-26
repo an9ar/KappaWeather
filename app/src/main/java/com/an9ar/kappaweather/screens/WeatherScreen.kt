@@ -83,7 +83,7 @@ fun WeatherScreenContentSuccess(
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .preferredHeight(AppTheme.sizes.bottomNavigationHeight)
+                    .height(AppTheme.sizes.bottomNavigationHeight)
                     .fillMaxWidth()
             ) {
                 Crossfade(targetState = selectedPageIndex) { page ->
@@ -150,7 +150,7 @@ fun PageIndicator(
 
 @Composable
 fun PageIndicatorDot(isActive: Boolean) {
-    Canvas(modifier = Modifier.preferredSize(32.dp)) {
+    Canvas(modifier = Modifier.size(32.dp)) {
         drawCircle(
             color = if (isActive) Color.Black else Color.Gray,
             radius = if (isActive) size.width / 6 else size.width / 8,
@@ -378,7 +378,7 @@ fun WeatherTemperatureInfoBlock(
                 painter = painterResource(id = weatherInfo.weather.first().description.toWeatherType().iconId),
                 contentDescription = "Weather icon",
                 colorFilter = ColorFilter.tint(AppTheme.colors.text),
-                modifier = Modifier.preferredSize(80.dp)
+                modifier = Modifier.size(80.dp)
             )
             Text(
                 text = "${weatherInfo.mainInformation.temp.roundToInt()}°",

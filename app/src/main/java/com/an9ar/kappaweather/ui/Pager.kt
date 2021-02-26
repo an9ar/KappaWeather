@@ -19,23 +19,21 @@ package com.an9ar.kappaweather.ui
  * limitations under the License.
  */
 
-import androidx.compose.animation.AnimatedFloatModel
-import androidx.compose.animation.core.AnimationClockObservable
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationEndReason
-import androidx.compose.animation.core.fling
+import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.gesture.scrollorientationlocking.Orientation
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.ParentDataModifier
@@ -49,7 +47,6 @@ import kotlin.math.roundToInt
 
 
 class PagerState(
-    clock: AnimationClockObservable,
     currentPage: Int = 0,
     minPage: Int = 0,
     maxPage: Int = 0
@@ -94,9 +91,9 @@ class PagerState(
         selectionState = SelectionState.Selected
     }
 
-    private var _currentPageOffset = AnimatedFloatModel(0f, clock = clock).apply {
+    private var _currentPageOffset = Animatable(0f)/*.apply {
         setBounds(-1f, 1f)
-    }
+    }*/
     var currentPageOffset: Float
         get() = _currentPageOffset.value
         set(value) {
@@ -165,16 +162,17 @@ fun Pager(
             },
             onDragStopped = { velocity ->
                 state.fling(velocity / pageSize)
+            },
+            state = rememberDraggableState { delta ->
+                with(state) {
+                    val pos = pageSize * currentPageOffset
+                    val max = if (currentPage == minPage) 0 else pageSize * offscreenLimit
+                    val min = if (currentPage == maxPage) 0 else -pageSize * offscreenLimit
+                    val newPos = (pos + delta).coerceIn(min.toFloat(), max.toFloat())
+                    currentPageOffset = newPos / pageSize
+                }
             }
-        ) { dy ->
-            with(state) {
-                val pos = pageSize * currentPageOffset
-                val max = if (currentPage == minPage) 0 else pageSize * offscreenLimit
-                val min = if (currentPage == maxPage) 0 else -pageSize * offscreenLimit
-                val newPos = (pos + dy).coerceIn(min.toFloat(), max.toFloat())
-                currentPageOffset = newPos / pageSize
-            }
-        }
+        )
     ) { measurables, constraints ->
         layout(constraints.maxWidth, constraints.maxHeight) {
             val currentPage = state.currentPage

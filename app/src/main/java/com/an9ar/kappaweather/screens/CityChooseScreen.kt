@@ -49,7 +49,7 @@ fun CityChooseScreen(
                     .fillMaxWidth()
                     .background(AppTheme.colors.toolbar)
                     .padding(LocalWindowInsets.current.statusBars.toPaddingValues())
-                    .preferredHeight(AppTheme.sizes.appBarHeight)
+                    .height(AppTheme.sizes.appBarHeight)
             ) {
                 val (screenTitle, backButton) = createRefs()
                 Text(

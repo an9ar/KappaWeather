@@ -67,7 +67,7 @@ fun CitySearchScreen(
                         .fillMaxWidth()
                         .background(AppTheme.colors.toolbar)
                         .padding(LocalWindowInsets.current.statusBars.toPaddingValues())
-                        .preferredHeight(AppTheme.sizes.appBarHeight)
+                        .height(AppTheme.sizes.appBarHeight)
                 ) {
                     val (screenTitle, backButton) = createRefs()
                     Text(
@@ -160,7 +160,6 @@ fun SearchBar(
                 },
                 singleLine = true,
                 textStyle = AppTheme.typography.queryText,
-                cursorColor = AppTheme.colors.text,
                 modifier = Modifier.focusRequester(focusRequester = focusRequester)
             )
         }

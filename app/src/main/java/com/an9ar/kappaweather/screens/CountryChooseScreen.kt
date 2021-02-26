@@ -47,7 +47,7 @@ fun CountryChooseScreen(
                     .fillMaxWidth()
                     .background(AppTheme.colors.background)
                     .padding(LocalWindowInsets.current.statusBars.toPaddingValues())
-                    .preferredHeight(AppTheme.sizes.appBarHeight)
+                    .height(AppTheme.sizes.appBarHeight)
             ) {
                 val (screenTitle, backButton) = createRefs()
                 Text(

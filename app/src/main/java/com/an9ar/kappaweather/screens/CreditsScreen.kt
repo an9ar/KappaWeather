@@ -38,9 +38,9 @@ fun CreditsScreen(
         .fillMaxSize()
         .background(AppTheme.colors.background)) {
         AuthorCard(this, navHostController = navHostController)
-        Spacer(modifier = Modifier.preferredHeight(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         SocialMediaBar(this)
-        Spacer(modifier = Modifier.preferredHeight(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         AuthorInfo(this)
     }
 }
@@ -214,7 +214,7 @@ fun AboutInfoBlock() {
         style = AppTheme.typography.h5,
         color = AppTheme.colors.text
     )
-    Spacer(modifier = Modifier.preferredHeight(8.dp))
+    Spacer(modifier = Modifier.height(8.dp))
     Text(
         text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
         modifier = Modifier.fillMaxWidth(),

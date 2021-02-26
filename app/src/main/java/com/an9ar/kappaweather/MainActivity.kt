@@ -18,8 +18,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            KappaWeatherTheme{
-                 ProvideWindowInsets {
+            KappaWeatherTheme {
+                ProvideWindowInsets {
                     MainNavScreen(mainViewModel = mainViewModel)
                 }
             }

@@ -2,9 +2,9 @@ package com.an9ar.kappaweather
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.ui.platform.setContent
 import com.an9ar.kappaweather.screens.SplashScreen
 import com.an9ar.kappaweather.theme.KappaWeatherTheme
 import com.an9ar.kappaweather.viewmodels.MainViewModel

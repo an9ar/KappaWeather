@@ -4,7 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.preferredSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -45,7 +45,7 @@ fun SplashScreenContent() {
             painter = painterResource(id = R.drawable.ic_kappa_sign),
             contentDescription = "App logo",
             colorFilter = ColorFilter.tint(AppTheme.colors.text),
-            modifier = Modifier.preferredSize(128.dp)
+            modifier = Modifier.size(128.dp)
         )
     }
 }
