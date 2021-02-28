@@ -21,23 +21,19 @@ package com.an9ar.kappaweather.ui
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationEndReason
+import androidx.compose.animation.core.exponentialDecay
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Box
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.structuralEqualityPolicy
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.layout.ParentDataModifier
 import androidx.compose.ui.unit.Density
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 /**
@@ -78,40 +74,40 @@ class PagerState(
 
     var selectionState by mutableStateOf(SelectionState.Selected)
 
-    inline fun <R> selectPage(block: PagerState.() -> R): R = try {
+    suspend inline fun <R> selectPage(block: PagerState.() -> R): R = try {
         selectionState = SelectionState.Undecided
         block()
     } finally {
         selectPage()
     }
 
-    fun selectPage() {
+    suspend fun selectPage() {
         currentPage -= currentPageOffset.roundToInt()
-        currentPageOffset = 0f
+        snapToOffset(0f)
         selectionState = SelectionState.Selected
     }
 
-    private var _currentPageOffset = Animatable(0f)/*.apply {
-        setBounds(-1f, 1f)
-    }*/
-    var currentPageOffset: Float
+    private var _currentPageOffset = Animatable(0f).apply {
+        updateBounds(-1f, 1f)
+    }
+    val currentPageOffset: Float
         get() = _currentPageOffset.value
-        set(value) {
-            val max = if (currentPage == minPage) 0f else 1f
-            val min = if (currentPage == maxPage) 0f else -1f
-            _currentPageOffset.snapTo(value.coerceIn(min, max))
-        }
 
-    fun fling(velocity: Float) {
+    suspend fun snapToOffset(offset: Float) {
+        val max = if (currentPage == minPage) 0f else 1f
+        val min = if (currentPage == maxPage) 0f else -1f
+        _currentPageOffset.snapTo(offset.coerceIn(min, max))
+    }
+
+    suspend fun fling(velocity: Float) {
         if (velocity < 0 && currentPage == maxPage) return
         if (velocity > 0 && currentPage == minPage) return
 
-        _currentPageOffset.fling(velocity) { reason, _, _ ->
-            if (reason != AnimationEndReason.Interrupted) {
-                _currentPageOffset.animateTo(currentPageOffset.roundToInt().toFloat()) { _, _ ->
-                    selectPage()
-                }
-            }
+        val result = _currentPageOffset.animateDecay(velocity, exponentialDecay())
+
+        if (result.endReason != AnimationEndReason.Finished) {
+            _currentPageOffset.animateTo(currentPageOffset.roundToInt().toFloat())
+            selectPage()
         }
     }
 
@@ -136,6 +132,7 @@ fun Pager(
     pageContent: @Composable PagerScope.() -> Unit
 ) {
     var pageSize by remember { mutableStateOf(0) }
+    val coroutineScope = rememberCoroutineScope()
     Layout(
         content = {
             val minPage = (state.currentPage - offscreenLimit).coerceAtLeast(state.minPage)
@@ -161,15 +158,19 @@ fun Pager(
                 state.selectionState = PagerState.SelectionState.Undecided
             },
             onDragStopped = { velocity ->
-                state.fling(velocity / pageSize)
+                coroutineScope.launch {
+                    state.fling(velocity / pageSize)
+                }
             },
             state = rememberDraggableState { delta ->
-                with(state) {
-                    val pos = pageSize * currentPageOffset
-                    val max = if (currentPage == minPage) 0 else pageSize * offscreenLimit
-                    val min = if (currentPage == maxPage) 0 else -pageSize * offscreenLimit
-                    val newPos = (pos + delta).coerceIn(min.toFloat(), max.toFloat())
-                    currentPageOffset = newPos / pageSize
+                coroutineScope.launch {
+                    with(state) {
+                        val pos = pageSize * currentPageOffset
+                        val max = if (currentPage == minPage) 0 else pageSize * offscreenLimit
+                        val min = if (currentPage == maxPage) 0 else -pageSize * offscreenLimit
+                        val newPos = (pos + delta).coerceIn(min.toFloat(), max.toFloat())
+                        snapToOffset(newPos / pageSize)
+                    }
                 }
             }
         )

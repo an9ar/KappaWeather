@@ -19,9 +19,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.platform.AmbientAnimationClock
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigate
 import com.an9ar.kappaweather.R
@@ -37,7 +37,6 @@ import com.an9ar.kappaweather.ui.PagerState
 import com.an9ar.kappaweather.viewmodels.MainViewModel
 import dev.chrisbanes.accompanist.insets.toPaddingValues
 import kotlin.math.roundToInt
-import androidx.constraintlayout.compose.ConstraintLayout
 import com.an9ar.kappaweather.getDateHours
 import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 
@@ -95,6 +94,7 @@ fun WeatherScreenContentSuccess(
             }
         }
     ) {
+        val pagerState = remember { PagerState() }
         Box(modifier = Modifier.fillMaxSize()) {
             Crossfade(targetState = selectedPageColor) {
                 Box(Modifier.fillMaxSize().background(it)) {
@@ -114,6 +114,7 @@ fun WeatherScreenContentSuccess(
                         )
                     }
                     WeatherPagerScreen(
+                        pagerState = pagerState,
                         locations = locations.sortedBy { it.locationId },
                         onLocationPageOpen = { pageIndex ->
                             selectedPageIndex = pageIndex
@@ -176,12 +177,7 @@ fun WeatherScreenContentLoading() {
 
 @Composable
 fun WeatherPagerScreen(
-    pagerState: PagerState = run {
-        val clock = AmbientAnimationClock.current
-        remember(clock) {
-            PagerState(clock)
-        }
-    },
+    pagerState: PagerState = remember { PagerState() },
     locations: List<WeatherModel>,
     onLocationPageOpen: (Int) -> Unit
 ) {
