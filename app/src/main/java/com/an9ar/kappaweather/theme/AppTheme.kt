@@ -14,8 +14,8 @@ fun KappaWeatherTheme(
 ) {
     val colors = if (darkTheme) darkColorPalette() else lightColorPalette()
     CompositionLocalProvider(
-        AmbientColor provides colors,
-        AmbientTypography provides typography,
+        LocalColor provides colors,
+        LocalTypography provides typography,
     ) {
         MaterialTheme(
             colors = colors.materialColors,
@@ -27,18 +27,16 @@ fun KappaWeatherTheme(
 }
 
 object AppTheme {
-    @Composable
+
     val colors: ColorPalette
-        get() = AmbientColor.current
+        @Composable get() = LocalColor.current
 
-    @Composable
     val typography: AppTypography
-        get() = AmbientTypography.current
+        @Composable get() = LocalTypography.current
 
-    @Composable
     val sizes: AppSizes
-        get() = AppSizes()
+        @Composable get() = AppSizes()
 }
 
-internal val AmbientColor = staticCompositionLocalOf { lightColorPalette() }
-internal val AmbientTypography = staticCompositionLocalOf { AppTypography() }
+internal val LocalColor = staticCompositionLocalOf { lightColorPalette() }
+internal val LocalTypography = staticCompositionLocalOf { AppTypography() }
