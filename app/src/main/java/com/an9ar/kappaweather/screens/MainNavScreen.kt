@@ -48,7 +48,9 @@ fun MainNavScreen(mainViewModel: MainViewModel) {
                     )
                 }
             }
-
+            composable(Screens.SettingsScreen.routeName) {
+                SettingsScreen(navHostController = navHostController)
+            }
             composable(Screens.CreditsScreen.routeName) {
                 CreditsScreen(navHostController = navHostController)
             }

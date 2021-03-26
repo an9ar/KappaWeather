@@ -7,5 +7,6 @@ sealed class Screens(val routeName: String) {
     object CountryChooseScreen : Screens(routeName = "CountryChooseScreen")
     object CityChooseScreen : Screens(routeName = "CityChooseScreen")
     object CitySearchScreen : Screens(routeName = "CitySearchScreen")
+    object SettingsScreen : Screens(routeName = "SettingsScreen")
     object CreditsScreen : Screens(routeName = "CreditsScreen")
 }
