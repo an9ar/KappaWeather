@@ -1,14 +1,14 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     ext {
-        compose_version = '1.0.0-beta03'
-        kotlin_version = "1.4.31"
-        gradle_version = '7.1.0-beta05'
-        hilt_version = "2.28-alpha"
+        compose_version = '1.1.0-beta04'
+        kotlin_version = "1.6.0"
+        gradle_version = '7.0.1'
+        hilt_version = "2.38.1"
     }
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$gradle_version"
@@ -21,7 +21,7 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
