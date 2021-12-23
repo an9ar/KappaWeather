@@ -30,17 +30,16 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.navigate
 import com.an9ar.kappaweather.data.models.CityModel
 import com.an9ar.kappaweather.log
 import com.an9ar.kappaweather.network.utils.Resource
-import dev.chrisbanes.accompanist.insets.toPaddingValues
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.constraintlayout.compose.ConstraintLayout
-import dev.chrisbanes.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.toPaddingValues
 
 @Composable
 fun CitySearchScreen(
@@ -263,7 +262,7 @@ fun SearchedCityListItem(
                     Resource.Status.SUCCESS -> {
                         navHostController.navigate(Screens.LocationsScreen.routeName) {
                             launchSingleTop = true
-                            popUpTo = navHostController.graph.startDestination
+                            popUpTo(navHostController.graph.startDestinationId)
                         }
                     }
                     Resource.Status.ERROR -> {

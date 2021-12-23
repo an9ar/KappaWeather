@@ -1,15 +1,17 @@
 package com.an9ar.kappaweather.viewmodels
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.an9ar.kappaweather.data.models.CityModel
 import com.an9ar.kappaweather.domain.LocationRepository
 import com.an9ar.kappaweather.domain.WeatherRepository
 import com.an9ar.kappaweather.network.utils.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import javax.inject.Inject
 
-class MainViewModel @ViewModelInject constructor(
+@HiltViewModel
+class MainViewModel @Inject constructor(
     private val locationRepository: LocationRepository,
     private val weatherRepository: WeatherRepository
 ) : ViewModel() {

@@ -54,13 +54,14 @@ android {
 def compose_navigation = "2.4.0-rc01"
 def compose_activity = "1.4.0"
 def compose_constraint_layout = "1.0.0-rc02"
-def accompanist_version = "0.6.2"
+def accompanist_version = "0.22.0-rc"
 def retrofit_version = "2.9.0"
 def coroutines_adapter_version = "0.9.2"
 def okhttp_logging_interceptor = "4.9.1"
 def hilt_version = '2.38.1'
 def hilt_jetpack_version = '1.0.0-alpha03'
 def room_version = "2.4.0"
+def coil_version = "1.4.0"
 
 dependencies {
 
@@ -84,8 +85,10 @@ dependencies {
 
 
     //Accompanist
-    implementation "dev.chrisbanes.accompanist:accompanist-glide:$accompanist_version"
-    implementation "dev.chrisbanes.accompanist:accompanist-insets:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
+
+    //Coil
+    implementation "io.coil-kt:coil-compose:$coil_version"
 
     //Network
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"

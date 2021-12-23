@@ -23,7 +23,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.navigate
 import com.an9ar.kappaweather.R
 import com.an9ar.kappaweather.convertDate
 import com.an9ar.kappaweather.data.models.WeatherModel
@@ -35,10 +34,10 @@ import com.an9ar.kappaweather.theme.WeatherColors
 import com.an9ar.kappaweather.ui.Pager
 import com.an9ar.kappaweather.ui.PagerState
 import com.an9ar.kappaweather.viewmodels.MainViewModel
-import dev.chrisbanes.accompanist.insets.toPaddingValues
 import kotlin.math.roundToInt
 import com.an9ar.kappaweather.getDateHours
-import dev.chrisbanes.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.toPaddingValues
 
 @Composable
 fun WeatherScreen(

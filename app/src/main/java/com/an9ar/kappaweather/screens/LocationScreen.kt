@@ -17,13 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.navigate
 import com.an9ar.kappaweather.data.models.CityModel
 import com.an9ar.kappaweather.theme.AppTheme
 import com.an9ar.kappaweather.viewmodels.MainViewModel
-import dev.chrisbanes.accompanist.insets.toPaddingValues
 import androidx.constraintlayout.compose.ConstraintLayout
-import dev.chrisbanes.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.toPaddingValues
 
 @Composable
 fun LocationsScreen(

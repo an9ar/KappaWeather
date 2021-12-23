@@ -19,12 +19,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.navigate
 import com.an9ar.kappaweather.R
 import com.an9ar.kappaweather.theme.AppTheme
-import dev.chrisbanes.accompanist.insets.toPaddingValues
 import androidx.constraintlayout.compose.ConstraintLayout
-import dev.chrisbanes.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.toPaddingValues
 
 @Composable
 fun MenuScreen(navHostController: NavHostController) {

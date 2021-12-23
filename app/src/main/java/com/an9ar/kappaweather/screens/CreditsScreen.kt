@@ -26,9 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.an9ar.kappaweather.R
 import com.an9ar.kappaweather.theme.AppTheme
-import dev.chrisbanes.accompanist.glide.GlideImage
-import dev.chrisbanes.accompanist.insets.statusBarsPadding
 import androidx.constraintlayout.compose.ConstraintLayout
+import coil.compose.rememberImagePainter
+import com.google.accompanist.insets.statusBarsPadding
 
 @Composable
 fun CreditsScreen(
@@ -67,20 +67,19 @@ fun AuthorCard(
                 .statusBarsPadding()
         ) {
             val (authorPhoto, backButton) = createRefs()
-            GlideImage(
-                data = "https://avatars3.githubusercontent.com/u/63235125?s=460&u=49ee018d6f0b00cc7853b8d9fa79106b8b949b4b&v=4",
+            Image(
+                painter = rememberImagePainter(
+                    data = "https://avatars3.githubusercontent.com/u/63235125?s=460&u=49ee018d6f0b00cc7853b8d9fa79106b8b949b4b&v=4",
+                    builder = {
+                        error(R.drawable.ic_launcher_background)
+                    },
+                ),
                 contentDescription = "Author",
-                loading = {
+                /*loading = {
                     Box(Modifier.fillMaxSize()) {
                         CircularProgressIndicator(Modifier.align(Alignment.Center))
                     }
-                },
-                error = {
-                    Image(
-                        painter = painterResource(R.drawable.ic_launcher_background),
-                        contentDescription = null
-                    )
-                },
+                },*/
                 modifier = Modifier
                     .padding(16.dp)
                     .clip(CircleShape)
