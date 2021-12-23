@@ -16,7 +16,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.an9ar.kappaweather.theme.AppTheme
 import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.toPaddingValues
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 
 @Composable
 fun SettingsScreen(navHostController: NavHostController) {
@@ -25,7 +25,7 @@ fun SettingsScreen(navHostController: NavHostController) {
             ConstraintLayout(modifier = Modifier
                 .fillMaxWidth()
                 .background(AppTheme.colors.toolbar)
-                .padding(LocalWindowInsets.current.statusBars.toPaddingValues())
+                .padding(rememberInsetsPaddingValues(LocalWindowInsets.current.statusBars))
                 .height(AppTheme.sizes.appBarHeight)
             ) {
                 val (screenTitle, backButton) = createRefs()

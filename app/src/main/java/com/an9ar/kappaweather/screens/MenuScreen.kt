@@ -23,7 +23,7 @@ import com.an9ar.kappaweather.R
 import com.an9ar.kappaweather.theme.AppTheme
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.toPaddingValues
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 
 @Composable
 fun MenuScreen(navHostController: NavHostController) {
@@ -32,7 +32,7 @@ fun MenuScreen(navHostController: NavHostController) {
             ConstraintLayout(modifier = Modifier
                 .fillMaxWidth()
                 .background(AppTheme.colors.toolbar)
-                .padding(LocalWindowInsets.current.statusBars.toPaddingValues())
+                .padding(rememberInsetsPaddingValues(LocalWindowInsets.current.statusBars))
                 .height(AppTheme.sizes.appBarHeight)
             ) {
                 val (screenTitle, backButton) = createRefs()
@@ -102,12 +102,12 @@ fun MenuScreenContent(
             "Credits" to { navHostController.navigate(Screens.CreditsScreen.routeName) },
         )
         LazyColumn(
-            contentPadding = LocalWindowInsets.current.navigationBars
-                .toPaddingValues(
-                    bottom = false,
-                    additionalTop = AppTheme.sizes.small,
-                    additionalBottom = AppTheme.sizes.bottomNavigationHeight
-                ),
+            contentPadding = rememberInsetsPaddingValues(
+                insets = LocalWindowInsets.current.navigationBars,
+                applyBottom = false,
+                additionalTop = AppTheme.sizes.small,
+                additionalBottom = AppTheme.sizes.bottomNavigationHeight
+            ),
             modifier = Modifier
                 .fillMaxSize()
                 .weight(0.7f)

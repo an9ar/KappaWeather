@@ -37,14 +37,14 @@ import com.an9ar.kappaweather.viewmodels.MainViewModel
 import kotlin.math.roundToInt
 import com.an9ar.kappaweather.getDateHours
 import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.toPaddingValues
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 
 @Composable
 fun WeatherScreen(
     navHostController: NavHostController,
     mainViewModel: MainViewModel
 ) {
-    val locationsWeatherlist = mainViewModel.locationsWeatherlist.observeAsState(
+    val locationsWeatherList = mainViewModel.locationsWeatherlist.observeAsState(
         initial = Resource(
             status = Resource.Status.LOADING,
             data = emptyList(),
@@ -52,12 +52,12 @@ fun WeatherScreen(
         )
     )
 
-    when (locationsWeatherlist.value.status) {
+    when (locationsWeatherList.value.status) {
         Resource.Status.LOADING -> {
             WeatherScreenContentLoading()
         }
         Resource.Status.SUCCESS -> {
-            locationsWeatherlist.value.data?.let {
+            locationsWeatherList.value.data?.let {
                 WeatherScreenContentSuccess(
                     navHostController = navHostController,
                     mainViewModel = mainViewModel,
@@ -223,12 +223,12 @@ fun EmptyLocationTitle(navHostController: NavHostController) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                LocalWindowInsets.current.systemBars
-                    .toPaddingValues(
-                        bottom = false,
-                        additionalTop = 8.dp,
-                        additionalBottom = 8.dp
-                    )
+                rememberInsetsPaddingValues(
+                    insets = LocalWindowInsets.current.systemBars,
+                    applyBottom = false,
+                    additionalTop = 8.dp,
+                    additionalBottom = 8.dp
+                )
             )
     ) {
         val (menuItem, titleBlock) = createRefs()
@@ -273,12 +273,12 @@ fun LocationTitle(
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                LocalWindowInsets.current.systemBars
-                    .toPaddingValues(
-                        bottom = false,
-                        additionalTop = 8.dp,
-                        additionalBottom = 8.dp
-                    )
+                rememberInsetsPaddingValues(
+                    insets = LocalWindowInsets.current.systemBars,
+                    applyBottom = false,
+                    additionalTop = 8.dp,
+                    additionalBottom = 8.dp
+                )
             )
     ) {
         val (menuItem, titleBlock, refreshButton) = createRefs()

@@ -39,7 +39,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.toPaddingValues
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 
 @Composable
 fun CitySearchScreen(
@@ -65,7 +65,7 @@ fun CitySearchScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(AppTheme.colors.toolbar)
-                        .padding(LocalWindowInsets.current.statusBars.toPaddingValues())
+                        .padding(rememberInsetsPaddingValues(LocalWindowInsets.current.statusBars))
                         .height(AppTheme.sizes.appBarHeight)
                 ) {
                     val (screenTitle, backButton) = createRefs()
@@ -222,12 +222,12 @@ fun SearchedCitiesSuccessScreen(
     navHostController: NavHostController
 ) {
     LazyColumn(
-        contentPadding = LocalWindowInsets.current.navigationBars
-            .toPaddingValues(
-                bottom = false,
-                additionalTop = AppTheme.sizes.small,
-                additionalBottom = AppTheme.sizes.bottomNavigationHeight
-            )
+        contentPadding = rememberInsetsPaddingValues(
+            insets = LocalWindowInsets.current.navigationBars,
+            applyBottom = false,
+            additionalTop = AppTheme.sizes.small,
+            additionalBottom = AppTheme.sizes.bottomNavigationHeight
+        )
     ) {
         items(items = items) { city ->
             SearchedCityListItem(
