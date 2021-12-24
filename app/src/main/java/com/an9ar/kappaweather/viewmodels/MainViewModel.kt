@@ -1,12 +1,12 @@
 package com.an9ar.kappaweather.viewmodels
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.an9ar.kappaweather.data.models.CityModel
 import com.an9ar.kappaweather.data.models.CountryModel
 import com.an9ar.kappaweather.domain.LocationRepository
 import com.an9ar.kappaweather.domain.WeatherRepository
-import com.an9ar.kappaweather.log
-import com.an9ar.kappaweather.network.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,8 +16,6 @@ class MainViewModel @Inject constructor(
     private val locationRepository: LocationRepository,
     private val weatherRepository: WeatherRepository
 ) : ViewModel() {
-
-    val citySearchQuery = MutableLiveData<String>()
 
     val splashStatus = MutableLiveData<SplashStatus>()
     val countriesList = MutableLiveData<List<CountryModel>>()
@@ -36,7 +34,6 @@ class MainViewModel @Inject constructor(
     }
 
     private fun changeSplashStatus(status: SplashStatus) {
-        log("- change to $status")
         splashStatus.value = status
     }
 
@@ -51,12 +48,11 @@ class MainViewModel @Inject constructor(
         citiesList.value = emptyList()
     }
 
-    fun setCitySearchQuery(query: String) {
-        citySearchQuery.value = query
-    }
-
-    fun getCitiesListBySearch(countryId: String, searchQuery: String): LiveData<Resource<List<CityModel>>> {
-        return locationRepository.getCitiesListBySearch(countryId = countryId, searchQuery = searchQuery)
+    fun getCitiesListBySearch(countryId: String, searchQuery: String) {
+        viewModelScope.launch {
+            val result = locationRepository.getCitiesListBySearch(countryId = countryId, searchQuery = searchQuery)
+            citiesList.value = result
+        }
     }
 
     //Locations

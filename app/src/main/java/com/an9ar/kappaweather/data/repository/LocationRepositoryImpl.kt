@@ -6,13 +6,11 @@ import com.an9ar.kappaweather.data.db.dao.CountriesDao
 import com.an9ar.kappaweather.data.models.CityModel
 import com.an9ar.kappaweather.data.models.CountryModel
 import com.an9ar.kappaweather.domain.LocationRepository
-import com.an9ar.kappaweather.log
 import com.an9ar.kappaweather.network.api.LocationApi
 import com.an9ar.kappaweather.network.dto.toCityModel
 import com.an9ar.kappaweather.network.dto.toCountryModel
-import com.an9ar.kappaweather.network.utils.*
-import kotlinx.coroutines.*
-import java.lang.Exception
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class LocationRepositoryImpl @Inject constructor(
@@ -49,28 +47,25 @@ class LocationRepositoryImpl @Inject constructor(
         return emptyList()
     }
 
+    override suspend fun getCitiesListBySearch(
+        countryId: String,
+        searchQuery: String
+    ): List<CityModel> {
+        try {
+            val response = locationApi.getCitiesListBySearch(
+                whereCondition = """{"country": {"__type": "Pointer","className": "Continentscountriescities_Country","objectId": "$countryId"}, "name": {"${'$'}regex": "${searchQuery.capitalize()}"}}"""
+            )
+            if (response.isSuccessful) {
+                return response.body()?.results?.map { it.toCityModel() }?.sortedBy { it.name } ?: emptyList()
+            }
+        } catch (e: Exception) {
+        }
+        return emptyList()
+    }
+
     override suspend fun addLocationCity(city: CityModel) {
         citiesDao.insert(city = city)
     }
-
-    override fun getCitiesListBySearch(
-        countryId: String,
-        searchQuery: String
-    ): LiveData<Resource<List<CityModel>>> = performGetNetworkOperation(
-        networkCall = {
-            getResult {
-                locationApi.getCitiesListBySearch(
-                    whereCondition = """{"country": {"__type": "Pointer","className": "Continentscountriescities_Country","objectId": "$countryId"}, "name": {"${'$'}regex": "${searchQuery.capitalize()}"}}"""
-                )
-            }
-        },
-        convertResponseTo = { response ->
-            log("response - $response")
-            response.results
-                .map { it.toCityModel() }
-                .sortedBy { it.name }
-        }
-    )
 
     override fun getLocationCitiesList(): LiveData<List<CityModel>> {
         return citiesDao.getCitiesList()

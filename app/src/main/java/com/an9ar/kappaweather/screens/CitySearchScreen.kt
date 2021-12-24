@@ -25,8 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.an9ar.kappaweather.data.models.CityModel
-import com.an9ar.kappaweather.log
-import com.an9ar.kappaweather.network.utils.Resource
 import com.an9ar.kappaweather.theme.AppTheme
 import com.an9ar.kappaweather.viewmodels.MainViewModel
 import com.google.accompanist.insets.LocalWindowInsets
@@ -43,16 +41,7 @@ fun CitySearchScreen(
     countryId: String
 ) {
     val coroutineScope = CoroutineScope(Dispatchers.Main)
-    val searchedCityQuery = mainViewModel.citySearchQuery.observeAsState(initial = "")
-    val listOfSearchedCities =
-        mainViewModel.getCitiesListBySearch(countryId = countryId, searchedCityQuery.value)
-            .observeAsState(
-                initial = Resource(
-                    status = Resource.Status.COMPLETED,
-                    data = emptyList(),
-                    message = ""
-                )
-            )
+    val listOfSearchedCities by mainViewModel.citiesList.observeAsState(emptyList())
     Scaffold(
         topBar = {
             Column {
@@ -95,10 +84,9 @@ fun CitySearchScreen(
                     scope = coroutineScope,
                     onDebouncingQueryTextChange = { queryText ->
                         if (!queryText.isNullOrEmpty()) {
-                            mainViewModel.setCitySearchQuery(query = queryText)
+                            mainViewModel.getCitiesListBySearch(countryId = countryId, queryText)
                         }
-                    },
-                    initValue = searchedCityQuery.value
+                    }
                 )
             }
         }
@@ -178,7 +166,7 @@ fun SearchBar(
 
 @Composable
 fun CitySearchScreenContent(
-    listOfSearchedCities: State<Resource<List<CityModel>>>,
+    listOfSearchedCities: List<CityModel>,
     mainViewModel: MainViewModel,
     navHostController: NavHostController
 ) {
@@ -187,7 +175,14 @@ fun CitySearchScreenContent(
             .fillMaxSize()
             .background(AppTheme.colors.background)
     ) {
-        when (listOfSearchedCities.value.status) {
+        if (listOfSearchedCities.isNotEmpty()) {
+            SearchedCitiesSuccessScreen(
+                items = listOfSearchedCities,
+                mainViewModel = mainViewModel,
+                navHostController = navHostController
+            )
+        }
+        /*when (listOfSearchedCities.value.status) {
             Resource.Status.SUCCESS -> {
                 listOfSearchedCities.value.data?.let {
                     SearchedCitiesSuccessScreen(
@@ -206,7 +201,7 @@ fun CitySearchScreenContent(
             Resource.Status.COMPLETED -> {
                 log("EMPTY LIST")
             }
-        }
+        }*/
     }
 }
 
