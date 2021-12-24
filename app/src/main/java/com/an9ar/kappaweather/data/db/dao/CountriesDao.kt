@@ -1,15 +1,13 @@
 package com.an9ar.kappaweather.data.db.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.an9ar.kappaweather.data.models.CityModel
 import com.an9ar.kappaweather.data.models.CountryModel
 
 @Dao
 interface CountriesDao {
 
     @Query("SELECT * FROM countrymodel")
-    fun getCountriesList(): LiveData<List<CountryModel>>
+    suspend fun getCountriesList(): List<CountryModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(country: CountryModel)

@@ -17,7 +17,7 @@ import com.an9ar.kappaweather.data.models.WeatherModel
         CountryModel::class,
         WeatherModel::class
     ],
-    version = 16
+    version = 17
 )
 @TypeConverters(
     value = [

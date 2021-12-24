@@ -7,9 +7,9 @@ import com.an9ar.kappaweather.domain.WeatherRepository
 import com.an9ar.kappaweather.network.api.WeatherApi
 import com.an9ar.kappaweather.network.dto.toWeatherModel
 import com.an9ar.kappaweather.network.utils.*
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import java.lang.Exception
 import javax.inject.Inject
 
 class WeatherRepositoryImpl @Inject constructor(
@@ -17,24 +17,24 @@ class WeatherRepositoryImpl @Inject constructor(
     private val weatherDao: WeatherDao
 ) : WeatherRepository {
 
-    override fun getLocationWeather(
+    override suspend fun fetchSelectedLocationWeather(
         objectId: Long,
         objectName: String,
         latitude: Double,
         longitude: Double
-    ): Deferred<Resource.Status> = performAsyncGetAndInsertOperation(
-        networkCall = {
-            getResult {
-                weatherApi.getCurrentWeatherByGeo(
-                    latitude = latitude,
-                    longitude = longitude
-                )
+    ) {
+        try {
+            val response = weatherApi.getCurrentWeatherByGeo(
+                latitude = latitude,
+                longitude = longitude
+            )
+            if (response.isSuccessful) {
+                weatherDao.insert(response.body().toWeatherModel(objectId = objectId, objectName = objectName))
             }
-        },
-        saveCallResult = { response ->
-            weatherDao.insert(response.toWeatherModel(objectId = objectId, objectName = objectName))
+        } catch (e: Exception) {
+
         }
-    )
+    }
 
     override fun insertLocationWeather(weatherModel: WeatherModel) = runBlocking(Dispatchers.IO) {
         weatherDao.insert(location = weatherModel)
