@@ -11,19 +11,17 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.an9ar.kappaweather.data.models.CountryModel
-import com.an9ar.kappaweather.log
-import com.an9ar.kappaweather.network.utils.Resource
 import com.an9ar.kappaweather.theme.AppTheme
 import com.an9ar.kappaweather.viewmodels.MainViewModel
-import androidx.constraintlayout.compose.ConstraintLayout
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 
@@ -32,13 +30,7 @@ fun CountryChooseScreen(
     mainViewModel: MainViewModel,
     navHostController: NavHostController
 ) {
-    val listOfCountries = mainViewModel.countriesList.observeAsState(
-        initial = Resource(
-            status = Resource.Status.LOADING,
-            data = emptyList(),
-            message = ""
-        )
-    )
+    val listOfCountries by mainViewModel.countriesList.observeAsState(emptyList())
     Scaffold(
         topBar = {
             ConstraintLayout(
@@ -78,28 +70,22 @@ fun CountryChooseScreen(
             }
         }
     ) {
-        CountryChooseScreenContent(listOfCountries, navHostController)
+        CountryChooseScreenContent(listOfCountries, navHostController, mainViewModel)
     }
 }
 
 @Composable
 fun CountryChooseScreenContent(
-    listOfCountries: State<Resource<List<CountryModel>>>,
-    navHostController: NavHostController
+    listOfCountries: List<CountryModel>,
+    navHostController: NavHostController,
+    mainViewModel: MainViewModel
 ) {
     Surface(color = AppTheme.colors.background) {
-        when (listOfCountries.value.status) {
-            Resource.Status.SUCCESS -> {
-                listOfCountries.value.data?.let {
-                    CountryChooseSuccessScreen(items = it, navHostController = navHostController)
-                }
-            }
-            Resource.Status.LOADING -> {
-                CountryChooseLoadingScreen()
-            }
-            Resource.Status.ERROR -> {
-                log("ERROR")
-            }
+        if (listOfCountries.isEmpty()) {
+            CountryChooseLoadingScreen()
+            mainViewModel.getCountriesList()
+        } else {
+            CountryChooseSuccessScreen(items = listOfCountries, navHostController = navHostController)
         }
     }
 }

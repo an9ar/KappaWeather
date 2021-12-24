@@ -27,17 +27,16 @@ import com.an9ar.kappaweather.R
 import com.an9ar.kappaweather.convertDate
 import com.an9ar.kappaweather.data.models.WeatherModel
 import com.an9ar.kappaweather.data.models.toWeatherType
-import com.an9ar.kappaweather.log
+import com.an9ar.kappaweather.getDateHours
 import com.an9ar.kappaweather.network.utils.Resource
 import com.an9ar.kappaweather.theme.AppTheme
 import com.an9ar.kappaweather.theme.WeatherColors
 import com.an9ar.kappaweather.ui.Pager
 import com.an9ar.kappaweather.ui.PagerState
 import com.an9ar.kappaweather.viewmodels.MainViewModel
-import kotlin.math.roundToInt
-import com.an9ar.kappaweather.getDateHours
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
+import kotlin.math.roundToInt
 
 @Composable
 fun WeatherScreen(
@@ -321,20 +320,12 @@ fun LocationTitle(
         }
         IconButton(
             onClick = {
-                val weatherUpdateState = mainViewModel.getLocationWeather(
+                mainViewModel.getLocationWeather(
                     objectId = weatherInfo.locationId,
                     objectName = weatherInfo.locationName,
                     latitude = weatherInfo.coordinates.latitude,
                     longitude = weatherInfo.coordinates.longitude
                 )
-                when (weatherUpdateState) {
-                    Resource.Status.SUCCESS -> {
-                        log("REFRESH SUCCESS")
-                    }
-                    Resource.Status.ERROR -> {
-                        log("REFRESH ERROR")
-                    }
-                }
             },
             modifier = Modifier.constrainAs(refreshButton) {
                 top.linkTo(parent.top)

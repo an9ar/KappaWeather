@@ -11,19 +11,17 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.an9ar.kappaweather.data.models.CityModel
-import com.an9ar.kappaweather.log
-import com.an9ar.kappaweather.network.utils.Resource
 import com.an9ar.kappaweather.theme.AppTheme
 import com.an9ar.kappaweather.viewmodels.MainViewModel
-import androidx.constraintlayout.compose.ConstraintLayout
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 
@@ -33,14 +31,7 @@ fun CityChooseScreen(
     navHostController: NavHostController,
     countryId: String
 ) {
-    val listOfLargestCities =
-        mainViewModel.getCitiesListByCountry(countryId = countryId).observeAsState(
-            initial = Resource(
-                status = Resource.Status.LOADING,
-                data = emptyList(),
-                message = ""
-            )
-        )
+    val listOfLargestCities by mainViewModel.citiesList.observeAsState(emptyList())
     Scaffold(
         topBar = {
             ConstraintLayout(
@@ -63,7 +54,10 @@ fun CityChooseScreen(
                     }
                 )
                 IconButton(
-                    onClick = { navHostController.navigateUp() },
+                    onClick = {
+                        navHostController.navigateUp()
+                        mainViewModel.clearCitiesList()
+                    },
                     modifier = Modifier
                         .constrainAs(backButton) {
                             top.linkTo(parent.top)
@@ -83,37 +77,32 @@ fun CityChooseScreen(
         CityChooseScreenContent(
             listOfLargestCities = listOfLargestCities,
             mainViewModel = mainViewModel,
-            navHostController = navHostController
+            navHostController = navHostController,
+            countryId = countryId
         )
     }
 }
 
 @Composable
 fun CityChooseScreenContent(
-    listOfLargestCities: State<Resource<List<CityModel>>>,
+    listOfLargestCities: List<CityModel>,
     mainViewModel: MainViewModel,
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    countryId: String
 ) {
     Surface(
         color = AppTheme.colors.background,
         modifier = Modifier.fillMaxSize()
     ) {
-        when (listOfLargestCities.value.status) {
-            Resource.Status.SUCCESS -> {
-                listOfLargestCities.value.data?.let {
-                    CityChooseSuccessScreen(
-                        items = it,
-                        mainViewModel = mainViewModel,
-                        navHostController = navHostController
-                    )
-                }
-            }
-            Resource.Status.LOADING -> {
-                CityChooseLoadingScreen()
-            }
-            Resource.Status.ERROR -> {
-                log("ERROR - ${listOfLargestCities.value.message}")
-            }
+        if (listOfLargestCities.isEmpty()) {
+            CityChooseLoadingScreen()
+            mainViewModel.getCitiesList(countryId = countryId)
+        } else {
+            CityChooseSuccessScreen(
+                items = listOfLargestCities,
+                mainViewModel = mainViewModel,
+                navHostController = navHostController
+            )
         }
     }
 }
@@ -217,23 +206,10 @@ fun LargeCityListItem(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .clickable(onClick = {
-                mainViewModel.addLocationCity(city = city)
-                val weatherSavingState = mainViewModel.getLocationWeather(
-                    objectId = System.currentTimeMillis(),
-                    objectName = city.name,
-                    latitude = city.lat,
-                    longitude = city.lng
-                )
-                when (weatherSavingState) {
-                    Resource.Status.SUCCESS -> {
-                        navHostController.navigate(Screens.LocationsScreen.routeName) {
-                            launchSingleTop = true
-                            popUpTo(navHostController.graph.startDestinationId)
-                        }
-                    }
-                    Resource.Status.ERROR -> {
-                        log("FETCHING ERROR")
-                    }
+                mainViewModel.addLocationCityAndFetchWeather(city = city)
+                navHostController.navigate(Screens.LocationsScreen.routeName) {
+                    launchSingleTop = true
+                    popUpTo(navHostController.graph.startDestinationId)
                 }
             })
             .fillMaxWidth()

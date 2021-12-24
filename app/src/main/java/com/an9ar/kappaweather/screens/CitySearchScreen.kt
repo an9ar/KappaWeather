@@ -12,34 +12,29 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.navigation.NavHostController
-import com.an9ar.kappaweather.theme.AppTheme
-import com.an9ar.kappaweather.viewmodels.MainViewModel
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavHostController
 import com.an9ar.kappaweather.data.models.CityModel
 import com.an9ar.kappaweather.log
 import com.an9ar.kappaweather.network.utils.Resource
+import com.an9ar.kappaweather.theme.AppTheme
+import com.an9ar.kappaweather.viewmodels.MainViewModel
+import com.google.accompanist.insets.LocalWindowInsets
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import androidx.constraintlayout.compose.ConstraintLayout
-import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.rememberInsetsPaddingValues
 
 @Composable
 fun CitySearchScreen(
@@ -251,23 +246,10 @@ fun SearchedCityListItem(
         modifier = Modifier
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .clickable(onClick = {
-                mainViewModel.addLocationCity(city = city)
-                val weatherSavingState = mainViewModel.getLocationWeather(
-                    objectId = System.currentTimeMillis(),
-                    objectName = city.name,
-                    latitude = city.lat,
-                    longitude = city.lng
-                )
-                when (weatherSavingState) {
-                    Resource.Status.SUCCESS -> {
-                        navHostController.navigate(Screens.LocationsScreen.routeName) {
-                            launchSingleTop = true
-                            popUpTo(navHostController.graph.startDestinationId)
-                        }
-                    }
-                    Resource.Status.ERROR -> {
-                        log("FETCHING ERROR")
-                    }
+                mainViewModel.addLocationCityAndFetchWeather(city = city)
+                navHostController.navigate(Screens.LocationsScreen.routeName) {
+                    launchSingleTop = true
+                    popUpTo(navHostController.graph.startDestinationId)
                 }
             })
             .fillMaxWidth()
