@@ -13,15 +13,14 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val mainViewModel: MainViewModel by viewModels()
+    private val mainViewModel by viewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            KappaWeatherTheme {
-                ProvideWindowInsets {
-                    MainNavScreen(mainViewModel = mainViewModel)
-                }
+            //KappaWeatherTheme {}
+            ProvideWindowInsets {
+                MainNavScreen(mainViewModel = mainViewModel)
             }
         }
     }

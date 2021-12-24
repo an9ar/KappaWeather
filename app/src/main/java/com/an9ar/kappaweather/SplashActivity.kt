@@ -13,22 +13,21 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
 
-    private val mainViewModel: MainViewModel by viewModels()
+    private val mainViewModel by viewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            KappaWeatherTheme {
-                SplashScreen(
-                    mainViewModel = mainViewModel,
-                    onDataReceivingFinish = {
-                        val intent = Intent(this@SplashActivity, MainActivity::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME)
-                        startActivity(intent)
-                        this.finish()
-                    }
-                )
-            }
+            //KappaWeatherTheme {}
+            SplashScreen(
+                mainViewModel = mainViewModel,
+                onDataReceivingFinish = {
+                    val intent = Intent(this@SplashActivity, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME)
+                    startActivity(intent)
+                    this.finish()
+                }
+            )
         }
     }
 }
