@@ -56,7 +56,6 @@ fun CityChooseScreen(
                 IconButton(
                     onClick = {
                         navHostController.navigateUp()
-                        mainViewModel.clearCitiesList()
                     },
                     modifier = Modifier
                         .constrainAs(backButton) {

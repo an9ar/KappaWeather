@@ -30,7 +30,8 @@ fun CountryChooseScreen(
     mainViewModel: MainViewModel,
     navHostController: NavHostController
 ) {
-    val listOfCountries by mainViewModel.countriesList.observeAsState(emptyList())
+    mainViewModel.clearCitiesList()
+    val listOfCountries by mainViewModel.countriesList.observeAsState()
     Scaffold(
         topBar = {
             ConstraintLayout(
@@ -76,14 +77,14 @@ fun CountryChooseScreen(
 
 @Composable
 fun CountryChooseScreenContent(
-    listOfCountries: List<CountryModel>,
+    listOfCountries: List<CountryModel>?,
     navHostController: NavHostController,
     mainViewModel: MainViewModel
 ) {
     Surface(color = AppTheme.colors.background) {
-        if (listOfCountries.isEmpty()) {
+        if (listOfCountries.isNullOrEmpty()) {
             CountryChooseLoadingScreen()
-            mainViewModel.getCountriesList()
+            mainViewModel.fetchCountriesList()
         } else {
             CountryChooseSuccessScreen(items = listOfCountries, navHostController = navHostController)
         }

@@ -16,11 +16,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.an9ar.kappaweather.data.models.CityModel
 import com.an9ar.kappaweather.theme.AppTheme
 import com.an9ar.kappaweather.viewmodels.MainViewModel
-import androidx.constraintlayout.compose.ConstraintLayout
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 
@@ -29,6 +29,7 @@ fun LocationsScreen(
         mainViewModel: MainViewModel,
         navHostController: NavHostController
 ) {
+    mainViewModel.clearCitiesList()
     val locationCities = mainViewModel.locationsList.observeAsState(initial = emptyList())
     Scaffold(
             topBar = {
