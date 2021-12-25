@@ -2,12 +2,13 @@ package com.an9ar.kappaweather.data.db.dao
 
 import androidx.room.*
 import com.an9ar.kappaweather.data.models.CountryModel
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CountriesDao {
 
     @Query("SELECT * FROM countrymodel")
-    suspend fun getCountriesList(): List<CountryModel>
+    fun getCountriesList(): Flow<List<CountryModel>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(country: CountryModel)

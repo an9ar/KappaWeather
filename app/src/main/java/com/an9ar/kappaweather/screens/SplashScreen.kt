@@ -32,7 +32,7 @@ fun SplashScreen(
             onDataReceivingFinish.invoke()
         }
         else -> {
-            mainViewModel.getCountriesList()
+            mainViewModel.fetchCountriesList()
         }
     }
     SplashScreenContent()

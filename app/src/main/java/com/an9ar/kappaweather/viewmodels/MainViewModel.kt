@@ -8,6 +8,7 @@ import com.an9ar.kappaweather.data.models.CountryModel
 import com.an9ar.kappaweather.domain.LocationRepository
 import com.an9ar.kappaweather.domain.WeatherRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,19 +18,25 @@ class MainViewModel @Inject constructor(
     private val weatherRepository: WeatherRepository
 ) : ViewModel() {
 
-    val splashStatus = MutableLiveData<SplashStatus>()
     val countriesList = MutableLiveData<List<CountryModel>>()
+    val splashStatus = MutableLiveData<SplashStatus>()
     val citiesList = MutableLiveData<List<CityModel>>()
 
     val locationsList = locationRepository.getLocationCitiesList()
 
-    fun getCountriesList() {
+    init {
+        viewModelScope.launch {
+            locationRepository.getCountriesList().collect {
+                countriesList.value = it
+            }
+        }
+    }
+
+    fun fetchCountriesList() {
         viewModelScope.launch {
             changeSplashStatus(SplashStatus.LOADING)
             locationRepository.fetchCountriesList()
-            val result = locationRepository.getCountriesList()
             changeSplashStatus(SplashStatus.FINISHED)
-            countriesList.value = result
         }
     }
 
