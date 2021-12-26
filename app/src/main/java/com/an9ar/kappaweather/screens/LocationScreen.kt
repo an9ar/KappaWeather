@@ -30,7 +30,7 @@ fun LocationsScreen(
         navHostController: NavHostController
 ) {
     mainViewModel.clearCitiesList()
-    val locationCities = mainViewModel.locationsList.observeAsState(initial = emptyList())
+    val locationCities = mainViewModel.locationsList.observeAsState()
     Scaffold(
             topBar = {
                 ConstraintLayout(modifier = Modifier
@@ -80,7 +80,7 @@ fun LocationsScreen(
 @Composable
 fun LocationsScreenContent(
         navHostController: NavHostController,
-        selectedCities: List<CityModel>
+        selectedCities: List<CityModel>?
 ) {
     Surface(
             color = AppTheme.colors.background,
@@ -101,7 +101,7 @@ fun LocationsScreenContent(
                 AddNewListItem(navHostController = navHostController)
             }
 
-            if (selectedCities.isNotEmpty()) {
+            if (!selectedCities.isNullOrEmpty()) {
                 stickyHeader {
                     CityListItemHeader(title = "Selected cities")
                 }

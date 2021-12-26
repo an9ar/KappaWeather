@@ -19,15 +19,17 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     val countriesList = MutableLiveData<List<CountryModel>>()
+    val locationsList = MutableLiveData<List<CityModel>>()
     val splashStatus = MutableLiveData<SplashStatus>()
     val citiesList = MutableLiveData<List<CityModel>>()
-
-    val locationsList = locationRepository.getLocationCitiesList()
 
     init {
         viewModelScope.launch {
             locationRepository.getCountriesList().collect {
                 countriesList.value = it
+            }
+            locationRepository.getLocationCitiesList().collect {
+                locationsList.value = it
             }
         }
     }

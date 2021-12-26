@@ -1,6 +1,5 @@
 package com.an9ar.kappaweather.data.repository
 
-import androidx.lifecycle.LiveData
 import com.an9ar.kappaweather.data.db.dao.CitiesDao
 import com.an9ar.kappaweather.data.db.dao.CountriesDao
 import com.an9ar.kappaweather.data.models.CityModel
@@ -68,7 +67,7 @@ class LocationRepositoryImpl @Inject constructor(
         citiesDao.insert(city = city)
     }
 
-    override fun getLocationCitiesList(): LiveData<List<CityModel>> {
+    override fun getLocationCitiesList(): Flow<List<CityModel>> {
         return citiesDao.getCitiesList()
     }
 
