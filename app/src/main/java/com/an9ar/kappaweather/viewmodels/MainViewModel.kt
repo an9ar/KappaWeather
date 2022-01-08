@@ -25,11 +25,15 @@ class MainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            locationRepository.getCountriesList().collect {
-                countriesList.value = it
+            launch {
+                locationRepository.getCountriesList().collect {
+                    countriesList.value = it
+                }
             }
-            locationRepository.getLocationCitiesList().collect {
-                locationsList.value = it
+            launch {
+                locationRepository.getLocationCitiesList().collect {
+                    locationsList.value = it
+                }
             }
         }
     }
