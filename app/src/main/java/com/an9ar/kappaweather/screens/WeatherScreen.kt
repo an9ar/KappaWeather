@@ -28,7 +28,6 @@ import com.an9ar.kappaweather.convertDate
 import com.an9ar.kappaweather.data.models.WeatherModel
 import com.an9ar.kappaweather.data.models.toWeatherType
 import com.an9ar.kappaweather.getDateHours
-import com.an9ar.kappaweather.network.utils.Resource
 import com.an9ar.kappaweather.theme.AppTheme
 import com.an9ar.kappaweather.theme.WeatherColors
 import com.an9ar.kappaweather.ui.Pager
@@ -43,27 +42,16 @@ fun WeatherScreen(
     navHostController: NavHostController,
     mainViewModel: MainViewModel
 ) {
-    val locationsWeatherList = mainViewModel.locationsWeatherlist.observeAsState(
-        initial = Resource(
-            status = Resource.Status.LOADING,
-            data = emptyList(),
-            message = ""
-        )
-    )
+    val locationsWeatherList by mainViewModel.locationsWeatherlist.observeAsState(null)
 
-    when (locationsWeatherList.value.status) {
-        Resource.Status.LOADING -> {
-            WeatherScreenContentLoading()
-        }
-        Resource.Status.SUCCESS -> {
-            locationsWeatherList.value.data?.let {
-                WeatherScreenContentSuccess(
-                    navHostController = navHostController,
-                    mainViewModel = mainViewModel,
-                    locations = it
-                )
-            }
-        }
+    if (locationsWeatherList.isNullOrEmpty()) {
+        WeatherScreenContentLoading()
+    } else {
+        WeatherScreenContentSuccess(
+            navHostController = navHostController,
+            mainViewModel = mainViewModel,
+            locations = locationsWeatherList
+        )
     }
 }
 
@@ -95,7 +83,10 @@ fun WeatherScreenContentSuccess(
         val pagerState = remember { PagerState() }
         Box(modifier = Modifier.fillMaxSize()) {
             Crossfade(targetState = selectedPageColor) {
-                Box(Modifier.fillMaxSize().background(it)) {
+                Box(
+                    Modifier
+                        .fillMaxSize()
+                        .background(it)) {
 
                 }
             }

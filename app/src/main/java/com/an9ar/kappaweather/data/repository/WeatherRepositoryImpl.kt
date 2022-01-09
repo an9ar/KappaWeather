@@ -1,15 +1,13 @@
 package com.an9ar.kappaweather.data.repository
 
-import androidx.lifecycle.LiveData
 import com.an9ar.kappaweather.data.db.dao.WeatherDao
 import com.an9ar.kappaweather.data.models.WeatherModel
 import com.an9ar.kappaweather.domain.WeatherRepository
 import com.an9ar.kappaweather.network.api.WeatherApi
 import com.an9ar.kappaweather.network.dto.toWeatherModel
-import com.an9ar.kappaweather.network.utils.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.runBlocking
-import java.lang.Exception
 import javax.inject.Inject
 
 class WeatherRepositoryImpl @Inject constructor(
@@ -40,10 +38,6 @@ class WeatherRepositoryImpl @Inject constructor(
         weatherDao.insert(location = weatherModel)
     }
 
-    override fun getLocalLocationsWeather(): LiveData<Resource<List<WeatherModel>>> = performGetDBOperation (
-        databaseQuery = {
-            weatherDao.getLocationsList()
-        }
-    )
+    override fun getLocalLocationsWeather(): Flow<List<WeatherModel>> = weatherDao.getLocationsList()
 
 }

@@ -3,12 +3,13 @@ package com.an9ar.kappaweather.data.db.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.an9ar.kappaweather.data.models.WeatherModel
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface WeatherDao {
 
     @Query("SELECT * FROM weathermodel")
-    fun getLocationsList(): LiveData<List<WeatherModel>>
+    fun getLocationsList(): Flow<List<WeatherModel>>
 
     @Query("SELECT * FROM weathermodel WHERE locationId = :locationId")
     fun getLocationById(locationId: String): LiveData<WeatherModel>
