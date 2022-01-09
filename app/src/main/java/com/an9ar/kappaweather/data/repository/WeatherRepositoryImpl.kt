@@ -5,9 +5,7 @@ import com.an9ar.kappaweather.data.models.WeatherModel
 import com.an9ar.kappaweather.domain.WeatherRepository
 import com.an9ar.kappaweather.network.api.WeatherApi
 import com.an9ar.kappaweather.network.dto.toWeatherModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class WeatherRepositoryImpl @Inject constructor(
@@ -32,10 +30,6 @@ class WeatherRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
 
         }
-    }
-
-    override fun insertLocationWeather(weatherModel: WeatherModel) = runBlocking(Dispatchers.IO) {
-        weatherDao.insert(location = weatherModel)
     }
 
     override fun getLocalLocationsWeather(): Flow<List<WeatherModel>> = weatherDao.getLocationsList()
