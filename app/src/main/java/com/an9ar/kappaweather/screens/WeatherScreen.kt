@@ -42,16 +42,18 @@ fun WeatherScreen(
     navHostController: NavHostController,
     mainViewModel: MainViewModel
 ) {
-    val locationsWeatherList by mainViewModel.locationsWeatherlist.observeAsState(null)
+    val locationsWeatherList by mainViewModel.locationsWeatherlist.observeAsState()
 
-    if (locationsWeatherList.isNullOrEmpty()) {
-        WeatherScreenContentLoading()
-    } else {
-        WeatherScreenContentSuccess(
-            navHostController = navHostController,
-            mainViewModel = mainViewModel,
-            locations = locationsWeatherList
-        )
+    locationsWeatherList.run {
+        if (isNullOrEmpty()) {
+            WeatherScreenContentLoading()
+        } else {
+            WeatherScreenContentSuccess(
+                navHostController = navHostController,
+                mainViewModel = mainViewModel,
+                locations = this
+            )
+        }
     }
 }
 
