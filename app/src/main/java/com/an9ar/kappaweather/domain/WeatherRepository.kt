@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface WeatherRepository {
     suspend fun fetchSelectedLocationWeather(objectId: Long, objectName: String, latitude: Double, longitude: Double)
     fun getLocalLocationsWeather(): Flow<List<WeatherModel>>
+    suspend fun clearLocationsWeather()
 }

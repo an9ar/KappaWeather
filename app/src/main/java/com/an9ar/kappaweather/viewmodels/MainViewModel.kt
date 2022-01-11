@@ -92,6 +92,7 @@ class MainViewModel @Inject constructor(
     fun clearLocations() {
         viewModelScope.launch {
             locationRepository.clearLocations()
+            weatherRepository.clearLocationsWeather()
         }
     }
 

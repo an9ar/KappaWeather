@@ -34,4 +34,8 @@ class WeatherRepositoryImpl @Inject constructor(
 
     override fun getLocalLocationsWeather(): Flow<List<WeatherModel>> = weatherDao.getLocationsList()
 
+    override suspend fun clearLocationsWeather() {
+        weatherDao.clearTable()
+    }
+
 }
