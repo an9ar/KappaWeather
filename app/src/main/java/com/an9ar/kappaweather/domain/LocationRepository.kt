@@ -11,5 +11,5 @@ interface LocationRepository {
     suspend fun getCitiesListByCountry(countryId: String): List<CityModel>
     suspend fun getCitiesListBySearch(countryId: String, searchQuery: String): List<CityModel>
     suspend fun addLocationCity(city: CityModel)
-    fun clearLocations()
+    suspend fun clearLocations()
 }

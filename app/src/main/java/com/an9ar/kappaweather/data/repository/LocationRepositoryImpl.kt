@@ -8,9 +8,7 @@ import com.an9ar.kappaweather.domain.LocationRepository
 import com.an9ar.kappaweather.network.api.LocationApi
 import com.an9ar.kappaweather.network.dto.toCityModel
 import com.an9ar.kappaweather.network.dto.toCountryModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class LocationRepositoryImpl @Inject constructor(
@@ -71,7 +69,7 @@ class LocationRepositoryImpl @Inject constructor(
         return citiesDao.getCitiesList()
     }
 
-    override fun clearLocations() = runBlocking(Dispatchers.IO) {
+    override suspend fun clearLocations() {
         citiesDao.clearTable()
     }
 }

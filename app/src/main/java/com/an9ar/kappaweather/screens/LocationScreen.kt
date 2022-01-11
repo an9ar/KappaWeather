@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -39,18 +40,7 @@ fun LocationsScreen(
                         .padding(rememberInsetsPaddingValues(LocalWindowInsets.current.statusBars))
                         .height(AppTheme.sizes.appBarHeight)
                 ) {
-                    val (screenTitle, backButton) = createRefs()
-                    Text(
-                            text = "Locations managing",
-                            style = AppTheme.typography.h6,
-                            color = AppTheme.colors.text,
-                            modifier = Modifier.constrainAs(screenTitle) {
-                                top.linkTo(parent.top)
-                                bottom.linkTo(parent.bottom)
-                                start.linkTo(parent.start)
-                                end.linkTo(parent.end)
-                            }
-                    )
+                    val (backButton, screenTitle, clearButton) = createRefs()
                     IconButton(
                         onClick = { navHostController.navigateUp() },
                         modifier = Modifier
@@ -63,6 +53,32 @@ fun LocationsScreen(
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Back",
+                            tint = AppTheme.colors.uiSurface
+                        )
+                    }
+                    Text(
+                            text = "Locations managing",
+                            style = AppTheme.typography.h6,
+                            color = AppTheme.colors.text,
+                            modifier = Modifier.constrainAs(screenTitle) {
+                                top.linkTo(parent.top)
+                                bottom.linkTo(parent.bottom)
+                                start.linkTo(parent.start)
+                                end.linkTo(parent.end)
+                            }
+                    )
+                    IconButton(
+                        onClick = { mainViewModel.clearLocations() },
+                        modifier = Modifier
+                            .constrainAs(clearButton) {
+                                top.linkTo(parent.top)
+                                bottom.linkTo(parent.bottom)
+                                end.linkTo(parent.end)
+                            }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Clear",
                             tint = AppTheme.colors.uiSurface
                         )
                     }
