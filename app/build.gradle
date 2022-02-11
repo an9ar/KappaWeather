@@ -51,7 +51,7 @@ android {
 }
 
 //Deps versions
-def compose_navigation = "2.4.0-rc01"
+def compose_navigation = "2.5.0-alpha01"
 def compose_activity = "1.4.0"
 def compose_constraint_layout = "1.0.0"
 def accompanist_version = "0.22.0-rc"
